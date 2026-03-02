@@ -1,1 +1,724 @@
-{}
+{
+  "admin": {
+    "panel": "Admin Panel"
+  },
+
+  "nav": {
+    "family": "For Your Family",
+    "business": "For Your Business",
+    "future": "For Your Future",
+    "learn": "Learn in Odia",
+    "book": "Book a Meeting",
+    "tagline": "ଇନ୍ଭେଷ୍ଟ ସହି"
+  },
+
+  "hero": {
+    "state1": {
+      "tag": "For Your Family",
+      "headline": "Your child can go to\nNIT Rourkela.",
+      "subline": "₹2,000 a month starting today makes it possible. We'll show you exactly how.",
+      "cta": "Calculate Your Child's Fund →",
+      "secondary": "See how it works ↓"
+    },
+    "state2": {
+      "tag": "Start Today",
+      "headline": "Start with ₹500.\nThat's it.",
+      "subline": "Less than a movie ticket for two. Less than a kilo of ghee. More than enough to start building your family's future.",
+      "cta": "Start a ₹500 SIP Today →",
+      "secondary": "See what ₹500 becomes ↓"
+    },
+    "state3": {
+      "tag": "Independent & Regulated",
+      "headline": "We know what happened\nwith chit funds.",
+      "subline": "Rose Valley. Saradha. We don't pretend those didn't happen. This is different — and here's exactly why your money is protected.",
+      "cta": "See Why We're Different →",
+      "secondary": "Read our credentials →"
+    },
+    "card1": {
+      "title": "Child's Education Fund",
+      "childAge": "Child's age",
+      "institution": "Dream institution",
+      "monthlySip": "Monthly SIP needed",
+      "years": "Years to goal",
+      "corpus": "Projected corpus",
+      "status": "You're on track ✓",
+      "link": "Calculate for your child →"
+    },
+    "card2": {
+      "title": "What ₹500/month becomes",
+      "row1": "5 Years",
+      "row2": "10 Years",
+      "row3": "20 Years",
+      "disclaimer": "At 12% average annual return",
+      "warning": "Actual returns may vary. Past performance is not a guarantee."
+    },
+    "card3": {
+      "title": "Protected & Regulated",
+      "item1": "AMFI Registered — ARN: XXXXXX",
+      "item2": "Your money goes to SEBI-regulated funds, never to us",
+      "item3": "Check your balance directly with the fund house anytime",
+      "item4": "Physical office in Bhubaneswar — come visit us"
+    }
+  },
+
+  "stats": {
+    "label1": "to start — no minimum beyond this",
+    "label2": "is all it takes to build real wealth",
+    "label3": "potential from ₹500/month at 12%",
+    "label4": "just the power of compounding"
+  },
+
+  "goals": {
+    "header": "What can we help you with?",
+    "subheader": "Most people don't start with a product in mind. They start with a goal.",
+    "card1": {
+      "title": "For Your Family",
+      "subline": "Protecting and growing what matters most",
+      "goal1": "Save for your child's education",
+      "goal2": "Protect your family if something happens to you",
+      "goal3": "Plan for your daughter's future (Sukanya)",
+      "goal4": "Build a family emergency fund",
+      "cta": "Explore Family Planning"
+    },
+    "card2": {
+      "title": "For Your Business",
+      "subline": "Grow your business and protect it",
+      "goal1": "MUDRA and business loans for Odisha MSMEs",
+      "goal2": "Shop insurance, fire and burglary cover",
+      "goal3": "Invest surplus when business is good",
+      "goal4": "Financial planning for irregular income",
+      "cta": "Explore Business Services"
+    },
+    "card3": {
+      "title": "For Your Future",
+      "subline": "Retire with dignity on any salary",
+      "goal1": "NPS for government & PSU employees",
+      "goal2": "Retirement planning from your very first salary",
+      "goal3": "Atal Pension Yojana for informal workers",
+      "goal4": "Building a pension on variable income",
+      "cta": "Plan Your Retirement"
+    }
+  },
+
+  "edu": {
+    "tag": "Most Popular Tool",
+    "headline": "Your child's dream college.\nHow much do you need?",
+    "body": "NIT Rourkela. AIIMS Bhubaneswar. VSSUT Burla. We've calculated what each costs when your child is 18 — and exactly what monthly SIP gets you there.",
+    "cta": "Calculate Your Child's Fund →"
+  },
+
+  "calc": {
+    "quickEstimate": "Quick Estimate",
+    "childAge": "Child's current age",
+    "institution": "Dream institution",
+    "budget": "Your monthly budget",
+    "investing": "Investing {{amount}}/month for {{years}} years",
+    "for": "for",
+    "years": "years",
+    "youllHave": "You'll have:",
+    "target": "{{institution}} fees in {{year}}:",
+    "onTrack": "You're on track ✓",
+    "moreNeeded": "₹{{amount}} more/month needed",
+    "getFullPlan": "Get full education plan →",
+    "email": "Your email",
+    "phone": "Your WhatsApp number",
+    "submit": "Get My Free Plan →",
+    "thankyou": "Thank you! We'll contact you soon.",
+    "success": "Thank you!",
+    "successDesc": "We'll reach out soon.",
+    "successTitle": "Plan submitted!",
+    "hero": {
+      "headline": "Plan your child's education fund",
+      "subline": "Enter your child's age, pick their dream college, and see exactly what you need to start saving today."
+    },
+    "step1": "About your child",
+    "childName": "Child's name (optional)",
+    "childNamePlaceholder": "e.g., Priya",
+    "currentAge": "Current age",
+    "yearsOld": "years",
+    "targetAt18": "Target: when your child turns 18",
+    "yearsAway": "years away",
+    "step2": "Choose their dream institution",
+    "customInst": "Institution name",
+    "customCost": "Estimated cost (₹)",
+    "step3": "Your investment capacity",
+    "monthlyBudget": "Monthly budget",
+    "stepUp": "Increase SIP by 10% every year (Step-Up SIP)",
+    "fund": "fund",
+    "corpusBuilt": "Corpus you'll build",
+    "targetNeeded": "Target needed",
+    "moreMonthly": "more/month closes the gap",
+    "covered": "of target covered",
+    "timeToGoal": "Time to goal",
+    "monthlySip": "Monthly SIP",
+    "totalInvested": "Total invested",
+    "step4": "Get your personalised plan",
+    "yourName": "Your name",
+    "yourEmail": "Your email",
+    "yourPhone": "Your WhatsApp number",
+    "whatsappPlan": "Send my plan on WhatsApp",
+    "submitPlan": "Get My Free Plan →",
+    "planReady": "Your plan is ready!",
+    "planSent": "We'll send it to you shortly.",
+    "discussPlan": "Discuss my plan on WhatsApp",
+    "costRef": "Current education costs (2025-26)",
+    "costUpdated": "Costs updated for 2025-26. Future costs projected at 8% annual inflation.",
+    "whyNow": "Why starting early matters",
+    "whyNowDesc": "₹2,000/month invested at different ages:",
+    "startAt": "Start at age",
+    "whatsappCta": "Need help deciding?",
+    "whatsappCtaDesc": "Chat with us in English or Odia",
+    "chatNow": "Chat Now",
+    "result": {
+      "headline": "'s {{institution}} Fund",
+      "corpus": "Corpus you'll build",
+      "target": "Target needed",
+      "time": "Time to goal",
+      "invested": "Total invested",
+      "covered": "% of target covered"
+    },
+    "getplan": {
+      "headline": "Get your personalised plan",
+      "name": "Your name",
+      "email": "Your email",
+      "phone": "Your WhatsApp number",
+      "whatsapp": "Send my plan on WhatsApp",
+      "submit": "Get My Free Plan →",
+      "success": "Your plan is ready! We'll send it to you shortly."
+    },
+    "why": {
+      "title": "Why starting early matters"
+    },
+    "costs": {
+      "title": "Current education costs (2025-26)",
+      "note": "Costs updated for 2025-26. Future costs projected at 8% annual inflation."
+    }
+  },
+
+  "stories": {
+    "header": "Odishara Artha Katha",
+    "headerOdia": "ଓଡ଼ିଶାର ଅର୍ଥ କଥା",
+    "subtitle": "Stories of real Odishan families — and the financial decisions that changed everything.",
+    "readAll": "Read all stories →",
+    "readMore": "Read story →",
+    "cat1": "Savings vs SIP",
+    "name1": "Mamata",
+    "prof1": "School Teacher, Kendrapara",
+    "preview1": "Mamata saved ₹2,000 every month in her bank account for 5 years. See what she missed — and what she's doing differently now.",
+    "cat2": "Starting from Zero",
+    "name2": "Rabi",
+    "prof2": "Auto Driver, Bhubaneswar",
+    "preview2": "Rabi thought investing was only for salaried people. He earns ₹18,000 a month. Here's what he started with ₹500.",
+    "cat3": "Protection",
+    "name3": "Sushanta",
+    "prof3": "CRPF Jawan, Ganjam",
+    "preview3": "Sushanta sent money home every month. He had no life insurance. This is the conversation his family wishes they'd had.",
+    "story1": {
+      "category": "Savings vs SIP",
+      "name": "Mamata",
+      "profession": "School Teacher, Kendrapara",
+      "preview": "Mamata saved ₹2,000 every month in her bank account for 5 years. See what she missed — and what she's doing differently now."
+    },
+    "story2": {
+      "category": "Starting from Zero",
+      "name": "Rabi",
+      "profession": "Auto Driver, Bhubaneswar",
+      "preview": "Rabi thought investing was only for salaried people. He earns ₹18,000 a month. Here's what he started with ₹500."
+    },
+    "story3": {
+      "category": "Protection",
+      "name": "Sushanta",
+      "profession": "CRPF Jawan, Ganjam",
+      "preview": "Sushanta sent money home every month. He had no life insurance. This is the conversation his family wishes they'd had."
+    },
+    "readStory": "Read story →"
+  },
+
+  "odia": {
+    "headline": "ଆମେ ଓଡ଼ିଆରେ କଥା ହୁଅନ୍ତୁ।",
+    "translation": "Let's talk in Odia.",
+    "body": "Every piece of content on this site is available in Odia. Not Google Translate — actually written in Odia, by people who speak it. Because the best financial advice is the advice you actually understand."
+  },
+
+  "servicesGrid": {
+    "title": "Everything you need, starting at ₹500",
+    "subtitle": "From your first SIP to your family's full financial plan."
+  },
+
+  "services": {
+    "s1": {
+      "name": "SIP / Mutual Funds",
+      "amount": "₹500/month",
+      "desc": "Your money, growing every day"
+    },
+    "s2": {
+      "name": "Term Life Insurance",
+      "amount": "₹500/year",
+      "desc": "₹50 lakh cover for your family"
+    },
+    "s3": {
+      "name": "Health Insurance",
+      "amount": "₹3,000/year",
+      "desc": "One hospital visit shouldn't ruin you"
+    },
+    "s4": {
+      "name": "NPS",
+      "amount": "₹500/month",
+      "desc": "Extra ₹50,000 tax deduction every year"
+    },
+    "s5": {
+      "name": "PPF",
+      "amount": "₹500/year",
+      "desc": "Government guaranteed savings"
+    },
+    "s6": {
+      "name": "Sukanya Samriddhi",
+      "amount": "₹250/year",
+      "desc": "For your daughter's future"
+    },
+    "s7": {
+      "name": "Recurring Deposits",
+      "amount": "₹500/month",
+      "desc": "Safe, steady, simple"
+    },
+    "s8": {
+      "name": "Fixed Deposits",
+      "amount": "Advisory",
+      "desc": "Which FD, which bank, what tenure"
+    },
+    "s9": {
+      "name": "Sovereign Gold Bonds",
+      "amount": "₹5,000",
+      "desc": "Smarter than physical gold"
+    },
+    "s10": {
+      "name": "MUDRA Business Loans",
+      "amount": "Advisory",
+      "desc": "Fuel for your business"
+    },
+    "s11": {
+      "name": "Education Loans",
+      "amount": "Advisory",
+      "desc": "NIT, AIIMS, and beyond"
+    },
+    "s12": {
+      "name": "Atal Pension Yojana",
+      "amount": "₹42/month",
+      "desc": "A guaranteed pension for everyone"
+    },
+    "filter": {
+      "all": "All Services",
+      "family": "For Your Family",
+      "future": "For Your Future",
+      "business": "For Your Business"
+    },
+    "hero": {
+      "headline": "Every service your family needs",
+      "subline": "From your first SIP to your family's complete financial plan — we guide you through it all."
+    },
+    "sip": {
+      "name": "SIP / Mutual Funds",
+      "amount": "₹500/month",
+      "desc": "Your money, growing every day"
+    },
+    "term": {
+      "name": "Term Life Insurance",
+      "amount": "₹500/year",
+      "desc": "₹50 lakh cover for your family"
+    },
+    "health": {
+      "name": "Health Insurance",
+      "amount": "₹3,000/year",
+      "desc": "One hospital visit shouldn't ruin you"
+    },
+    "nps": {
+      "name": "NPS",
+      "amount": "₹500/month",
+      "desc": "Extra ₹50,000 tax deduction every year"
+    },
+    "ppf": {
+      "name": "PPF",
+      "amount": "₹500/year",
+      "desc": "Government guaranteed savings"
+    },
+    "sukanya": {
+      "name": "Sukanya Samriddhi",
+      "amount": "₹250/year",
+      "desc": "For your daughter's future"
+    },
+    "rd": {
+      "name": "Recurring Deposits",
+      "amount": "₹500/month",
+      "desc": "Safe, steady, simple"
+    },
+    "fd": {
+      "name": "Fixed Deposits",
+      "amount": "Advisory",
+      "desc": "Which FD, which bank, what tenure"
+    },
+    "sgb": {
+      "name": "Sovereign Gold Bonds",
+      "amount": "₹5,000",
+      "desc": "Smarter than physical gold"
+    },
+    "mudra": {
+      "name": "MUDRA Business Loans",
+      "amount": "Advisory",
+      "desc": "Fuel for your business"
+    },
+    "edu": {
+      "name": "Education Loans",
+      "amount": "Advisory",
+      "desc": "NIT, AIIMS, and beyond"
+    },
+    "apy": {
+      "name": "Atal Pension Yojana",
+      "amount": "₹42/month",
+      "desc": "A guaranteed pension for everyone"
+    }
+  },
+
+  "svc": {
+    "whoLabel": "Who it's for",
+    "whoKey": "Who it's for",
+    "benefitLabel": "Key benefit",
+    "benefitKey": "Key benefit",
+    "bookCta": "Book a consultation",
+    "whatsappCta": "Ask us on WhatsApp",
+    "family": {
+      "title": "For Your Family"
+    },
+    "future": {
+      "title": "For Your Future"
+    },
+    "business": {
+      "title": "For Your Business"
+    },
+    "fam": {
+      "sip": {
+        "name": "SIP / Mutual Funds",
+        "desc": "Start a SIP with as little as ₹500/month. We help you pick the right funds based on your goals — child's education, emergency fund, or long-term wealth.",
+        "who": "Any family wanting to grow savings beyond a bank account",
+        "benefit": "Potential 12-15% long-term returns with complete liquidity"
+      },
+      "term": {
+        "name": "Term Life Insurance",
+        "desc": "Pure protection for your family. If something happens to you, your family gets ₹50 lakh or more — for a premium as low as ₹500/month.",
+        "who": "Anyone with dependents — spouse, children, or parents",
+        "benefit": "₹50 lakh cover for under ₹600/month for a 30-year-old"
+      },
+      "health": {
+        "name": "Health Insurance",
+        "desc": "One hospital visit can cost ₹2-5 lakh. Health insurance ensures your savings stay protected when medical emergencies strike.",
+        "who": "Every family — especially those without employer coverage",
+        "benefit": "₹5 lakh family floater cover from ₹400/month"
+      },
+      "sukanya": {
+        "name": "Sukanya Samriddhi Yojana",
+        "desc": "Government-backed savings scheme exclusively for your daughter's future. Currently offers ~8% interest with tax benefits under 80C.",
+        "who": "Parents of girls below 10 years of age",
+        "benefit": "8%+ guaranteed returns with full tax exemption"
+      },
+      "ppf": {
+        "name": "Public Provident Fund (PPF)",
+        "desc": "15-year government-guaranteed savings with tax-free returns. One of the safest long-term investments available in India.",
+        "who": "Conservative savers looking for guaranteed, tax-free returns",
+        "benefit": "~7.1% tax-free returns with sovereign guarantee"
+      },
+      "eduLoan": {
+        "name": "Education Loans",
+        "desc": "Planning for NIT, AIIMS, IIT, or private colleges? We help you find the right education loan with the best terms and interest rates.",
+        "who": "Parents planning for higher education in India or abroad",
+        "benefit": "Tax deduction on interest under Section 80E"
+      }
+    },
+    "fut": {
+      "nps": {
+        "name": "National Pension System (NPS)",
+        "desc": "Build a retirement corpus with additional ₹50,000 tax deduction under 80CCD(1B) — over and above the ₹1.5 lakh limit of 80C.",
+        "who": "Salaried professionals and government employees",
+        "benefit": "Extra ₹50,000 tax deduction plus market-linked growth"
+      },
+      "atal": {
+        "name": "Atal Pension Yojana",
+        "desc": "Guaranteed monthly pension of ₹1,000-5,000 after age 60. Designed for workers in the unorganised sector.",
+        "who": "Informal workers, small business owners, daily wage earners",
+        "benefit": "Guaranteed ₹5,000/month pension from just ₹210/month (age 18)"
+      },
+      "rd": {
+        "name": "Recurring Deposits",
+        "desc": "Fixed monthly savings with guaranteed returns. Ideal as a first step for people new to disciplined saving.",
+        "who": "First-time savers wanting zero-risk, fixed returns",
+        "benefit": "Guaranteed returns with flexible tenures from 6 months"
+      },
+      "fd": {
+        "name": "Fixed Deposits",
+        "desc": "We help you compare FD rates across banks and NBFCs to find the best returns for your tenure and amount.",
+        "who": "Anyone with a lump sum looking for safe, guaranteed returns",
+        "benefit": "Up to 9%+ with select NBFCs and senior citizen benefits"
+      },
+      "sgb": {
+        "name": "Sovereign Gold Bonds",
+        "desc": "Invest in gold without storage hassles. Government-issued bonds that track gold prices plus earn 2.5% annual interest.",
+        "who": "Anyone who buys gold — this is smarter than jewellery or coins",
+        "benefit": "Gold price appreciation + 2.5% annual interest, tax-free at maturity"
+      },
+      "ulip": {
+        "name": "ULIP",
+        "desc": "Unit Linked Insurance Plans combine life cover with market-linked investments. Best suited for long-term wealth creation with insurance.",
+        "who": "Investors wanting insurance + investment in a single product",
+        "benefit": "Tax-free maturity under 10(10D) with market-linked returns"
+      }
+    },
+    "biz": {
+      "mudra": {
+        "name": "MUDRA Loans",
+        "desc": "Government-backed business loans up to ₹10 lakh under Shishu, Kishore, and Tarun categories. No collateral needed.",
+        "who": "Small business owners, shopkeepers, and entrepreneurs in Odisha",
+        "benefit": "Collateral-free loans up to ₹10 lakh at competitive rates"
+      },
+      "shop": {
+        "name": "Shop Insurance",
+        "desc": "Protect your shop or business premises against fire, theft, burglary, and natural disasters. Affordable annual premiums.",
+        "who": "Shop owners, small business premises, godown operators",
+        "benefit": "Complete premises protection from ₹2,000/year"
+      },
+      "accident": {
+        "name": "Personal Accident Cover",
+        "desc": "Covers accidental death and disability. Essential for business owners and workers with physical risk exposure.",
+        "who": "Business owners, field workers, delivery personnel",
+        "benefit": "₹10 lakh accidental cover from just ₹300/year"
+      },
+      "home": {
+        "name": "Home Insurance",
+        "desc": "Protect your home structure and contents against fire, floods, earthquakes, and theft.",
+        "who": "Homeowners wanting to protect their biggest asset",
+        "benefit": "Comprehensive cover for structure and contents from ₹1,500/year"
+      },
+      "personal": {
+        "name": "Personal Loans",
+        "desc": "Quick personal loans for business expansion, emergencies, or bridging cash flow gaps. We help you find the best rates.",
+        "who": "Salaried or self-employed individuals needing quick funds",
+        "benefit": "Competitive rates with minimal documentation"
+      }
+    }
+  },
+
+  "trust": {
+    "t1": {
+      "title": "Regulated & Registered",
+      "line1": "AMFI Registered — ARN: XXXXXX",
+      "line2": "IRDAI Licensed",
+      "line3": "SEBI-compliant processes and documentation",
+      "note": "Your money goes to SEBI-regulated funds — never to us"
+    },
+    "t2": {
+      "title": "Based in Bhubaneswar",
+      "line1": "Odisha's own financial advisory",
+      "line2": "Bhubaneswar, Odisha — come visit us",
+      "line3": "Serving families across all 30 districts",
+      "note": "A real office, real people, your language"
+    },
+    "t3": {
+      "title": "Advice in Odia",
+      "line1": "Every service, every guide, in Odia and English",
+      "line2": "Written by native Odia speakers, not machine translated",
+      "line3": "Financial jargon explained in plain language",
+      "note": "Because understanding matters more than impressing"
+    },
+    "reg": {
+      "title": "Regulated & Registered",
+      "line1": "AMFI Registered — ARN: XXXXXX",
+      "line2": "IRDAI Licensed",
+      "note": "Your money goes to SEBI-regulated funds — never to us"
+    },
+    "local": {
+      "title": "Based in Bhubaneswar",
+      "line1": "Odisha's own financial advisory",
+      "line2": "Bhubaneswar, Odisha — come visit us",
+      "note": "A real office, real people, your language"
+    },
+    "odia": {
+      "title": "Advice in Odia",
+      "line1": "Every service, every guide, in Odia and English",
+      "note": "Because understanding matters more than impressing"
+    }
+  },
+
+  "newsletter": {
+    "headline": "Money Katha — Free Odia Newsletter",
+    "subline": "Monthly financial guidance in Odia and English. No jargon. No spam. Real advice for real Odia families.",
+    "name": "Your name",
+    "namePlaceholder": "Your name",
+    "email": "Your email address",
+    "emailPlaceholder": "Your email address",
+    "sendIn": "Send newsletter in:",
+    "subscribe": "Subscribe Free →",
+    "success": "You're on the list. First issue coming soon.",
+    "duplicate": "You're already subscribed! We'll see you in your inbox.",
+    "thankYou": "ଧନ୍ୟବାଦ!",
+    "error": "Something went wrong. Please try again."
+  },
+
+  "footer": {
+    "tagline": "Odisha's bilingual financial advisory platform",
+    "whatsapp": "Chat with us",
+    "ourServices": "Our Services",
+    "learnInOdia": "Learn in Odia — ଶିଖନ୍ତୁ",
+    "aboutTitle": "About",
+    "services": {
+      "header": "Our Services",
+      "mutualFunds": "SIP & Mutual Funds",
+      "sip": "Systematic Investment Plans",
+      "insurance": "Life & Health Insurance",
+      "childEducation": "Child Education Planning",
+      "retirement": "Retirement & NPS",
+      "tax": "Tax Planning",
+      "gold": "Sovereign Gold Bonds"
+    },
+    "learn": {
+      "header": "Learn in Odia — ଶିଖନ୍ତୁ",
+      "sip": "What is a SIP? (ଓଡ଼ିଆ)",
+      "insurance": "What is Insurance? (ଓଡ଼ିଆ)",
+      "stories": "Artha Katha Stories",
+      "glossary": "Financial Glossary",
+      "guides": "Guides & How-To",
+      "education": "Education Cost Guide",
+      "districts": "District Guides",
+      "calculators": "Education Cost Calculator",
+      "whatsapp": "WhatsApp Financial Tips",
+      "videos": "Video Explainers"
+    },
+    "about": {
+      "header": "About",
+      "about": "Our Story",
+      "story": "Our Story",
+      "why": "Why InvestSahi",
+      "team": "Our Team",
+      "contact": "Contact Us",
+      "book": "Book a Meeting",
+      "careers": "Careers",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "group": "↗ Sabiduria Capital Group"
+    },
+    "rights": "All rights reserved.",
+    "copyright": "© 2026 InvestSahi | AMFI ARN: XXXXXX | IRDAI Reg: XXXXXX",
+    "disclaimer": "Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully. InvestSahi is not a bank. Loans are subject to eligibility and credit assessment."
+  },
+
+  "book": {
+    "error": "Something went wrong. Please try again.",
+    "headline": "Let's talk about your financial future",
+    "subline": "Free 30-minute consultation. No pressure. In Odia or English — your choice.",
+    "name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone / WhatsApp Number",
+    "whatHelp": "What do you need help with?",
+    "helpWith": "What do you need help with?",
+    "service": {
+      "sip": "SIP / Mutual Funds",
+      "term": "Term Life Insurance",
+      "health": "Health Insurance",
+      "nps": "NPS / Pension",
+      "education": "Education Planning",
+      "business": "Business Loans & Insurance",
+      "other": "Other / Not Sure"
+    },
+    "incomeLabel": "Your monthly household income",
+    "income": {
+      "below20": "Below ₹20,000",
+      "20to40": "₹20,000 – ₹40,000",
+      "40to75": "₹40,000 – ₹75,000",
+      "above75": "Above ₹75,000"
+    },
+    "income1": "Below ₹20,000",
+    "income2": "₹20,000 – ₹40,000",
+    "income3": "₹40,000 – ₹75,000",
+    "income4": "Above ₹75,000",
+    "contactLabel": "How would you like to connect?",
+    "connect": "How would you like to connect?",
+    "contact": {
+      "whatsapp": "WhatsApp Chat",
+      "phone": "Phone Call",
+      "office": "Visit our office"
+    },
+    "whatsapp": "WhatsApp Chat",
+    "phone_call": "Phone Call",
+    "visit": "Visit our office (Bhubaneswar)",
+    "langLabel": "Language preference",
+    "language": "Language preference",
+    "message": "Anything specific you'd like to discuss? (optional)",
+    "submitting": "Submitting...",
+    "submit": "Book My Free Meeting →",
+    "success": {
+      "headline": "We've received your request!",
+      "subline": "We'll reach out within 24 hours. In the meantime, feel free to chat with us on WhatsApp.",
+      "body": "We'll reach out within 24 hours. In the meantime, feel free to chat with us on WhatsApp.",
+      "whatsapp": "Start chatting now →"
+    },
+    "whatsappMsg": "Hi, I just booked a meeting on InvestSahi. Looking forward to connecting!",
+    "startChat": "Start chatting now →",
+    "expect": {
+      "title": "What to expect",
+      "step1": "We review your details (within 24 hours)",
+      "step2": "We call or WhatsApp you at a time that suits you",
+      "step3": "Free 30-min consultation, no obligation"
+    },
+    "promise": {
+      "title": "Our promise",
+      "1": "No pressure to buy anything",
+      "2": "Advice in Odia or English, your choice",
+      "3": "Same advisor every time, no handoffs"
+    },
+    "office": {
+      "title": "Our Bhubaneswar Office",
+      "address": "Bhubaneswar, Odisha",
+      "phone": "+91 98765 43210",
+      "hours": "Mon-Sat, 10 AM - 6 PM",
+      "map": "Google Maps"
+    }
+  },
+
+  "learn": {
+    "hero": {
+      "headline": "Learn in Odia — ଶିଖନ୍ତୁ",
+      "subline": "Financial knowledge in your language. Plain Odia, plain English. No jargon."
+    },
+    "filter": {
+      "all": "All",
+      "stories": "Stories",
+      "glossary": "Glossary",
+      "guides": "Guides",
+      "schemes": "Government Schemes"
+    },
+    "type": {
+      "story": "Story",
+      "glossary": "Glossary",
+      "guide": "Guide",
+      "whatsapp": "WhatsApp Post",
+      "other": "Other"
+    },
+    "read": "Read →",
+    "empty": {
+      "headline": "Stories coming soon",
+      "subline": "Subscribe to our newsletter to be the first to know when we publish.",
+      "body": "Subscribe to our newsletter to be the first to know when we publish.",
+      "email": "Your email",
+      "subscribe": "Notify me"
+    },
+    "notFound": "Content not found",
+    "backToAll": "Back to all content",
+    "back": "Back",
+    "whatsappCta": "Have questions?",
+    "chatNow": "Chat with us",
+    "related": "Related content",
+    "noRelated": "No related content yet"
+  },
+
+  "notFound": {
+    "odia": "ଏହି ପୃଷ୍ଠା ମିଳିଲା ନାହିଁ",
+    "english": "This page doesn't exist",
+    "back": "Back to Home"
+  }
+}
