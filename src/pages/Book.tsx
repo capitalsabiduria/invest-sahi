@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { WHATSAPP_URL, OFFICE_PHONE, OFFICE_ADDRESS } from '@/config/constants';
 
 const SERVICE_OPTIONS = [
   'book.service.sip',
@@ -174,7 +175,7 @@ const Book = () => {
               <h2 className="font-heading font-bold text-3xl text-foreground mb-2">{t('book.success.headline', 'book.success.headline')}</h2>
               <p className="font-body text-muted-foreground mb-6">{t('book.success.subline', 'book.success.subline')}</p>
               <a
-                href={`https://wa.me/919876543210?text=${encodeURIComponent(t('book.whatsappMsg', 'Hi, I just booked a meeting on InvestSahi. Looking forward to connecting!'))}`}
+                href={`${WHATSAPP_URL}?text=${encodeURIComponent(t('book.whatsappMsg', 'Hi, I just booked a meeting on InvestSahi. Looking forward to connecting!'))}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-8 py-3 rounded-lg text-white font-heading font-semibold text-lg"
@@ -218,11 +219,11 @@ const Book = () => {
           <div className="bg-card rounded-xl p-6 shadow-sm">
             <div className="flex items-center gap-2 mb-3">
               <MapPin className="text-saffron" size={20} />
-              <h3 className="font-heading font-semibold text-foreground">{t('book.office.title', 'Our Bhubaneswar Office')}</h3>
+              <h3 className="font-heading font-semibold text-foreground">{t('book.office.title', `Our ${OFFICE_ADDRESS.split(',')[0]} Office`)}</h3>
             </div>
-            <p className="text-sm text-muted-foreground font-body mb-2">{t('book.office.address', 'Address placeholder, Bhubaneswar, Odisha')}</p>
+            <p className="text-sm text-muted-foreground font-body mb-2">{t('book.office.address', `Address placeholder, ${OFFICE_ADDRESS}`)}</p>
             <div className="flex items-center gap-2 text-sm text-muted-foreground font-body mb-2">
-              <Phone size={14} /> {t('book.office.phone', '+91 98765 43210')}
+              <Phone size={14} /> {t('book.office.phone', OFFICE_PHONE)}
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground font-body mb-4">
               <Clock size={14} /> {t('book.office.hours', 'Mon-Sat, 10 AM - 6 PM')}

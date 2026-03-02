@@ -10,6 +10,7 @@ import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { WHATSAPP_URL } from '@/config/constants';
 
 const RevealSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
   const { ref, visible } = useScrollReveal();
@@ -263,7 +264,7 @@ const LearnDetail = () => {
           <div className="mt-10 bg-green rounded-xl p-6 text-center text-white">
             <MessageCircle className="mx-auto mb-2" size={28} />
             <p className="font-heading font-semibold text-lg mb-2">{t('learn.whatsappCta', 'Have questions?')}</p>
-            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer"
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"
               className="inline-block bg-white text-green font-heading font-semibold px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity">
               {t('learn.chatNow', 'Chat with us')} →
             </a>

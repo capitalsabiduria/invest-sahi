@@ -10,6 +10,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
 import RevealSection from '@/components/RevealSection';
+import { WHATSAPP_URL } from '@/config/constants';
 
 const ICON_MAP: Record<string, React.ElementType> = {
   TrendingUp, Shield, Heart, GraduationCap, Umbrella, PiggyBank, Landmark, Wallet, Car, Briefcase, Home, Sun,
@@ -91,7 +92,7 @@ const ServiceCard = ({ svc, lang }: { svc: ServiceItem; lang: string }) => {
                   {t('svc.bookCta', 'Book a consultation')} →
                 </Link>
                 <a
-                  href="https://wa.me/919876543210"
+                  href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
