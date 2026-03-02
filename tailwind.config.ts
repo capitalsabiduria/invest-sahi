@@ -57,6 +57,26 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        saffron: {
+          DEFAULT: '#E8820C',
+          light: '#FDE8C8',
+        },
+        green: {
+          DEFAULT: '#1B6B3A',
+          light: '#D6EDE0',
+        },
+        sand: '#F5EDD8',
+        stone: '#2C1810',
+        blue: {
+          DEFAULT: '#1A6B9A',
+          light: '#D0E8F5',
+        },
+        amber: '#C45C00',
+      },
+      fontFamily: {
+        heading: ['Mukta', 'sans-serif'],
+        body: ['Hind', 'sans-serif'],
+        odia: ['Noto Sans Oriya', 'sans-serif'],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -65,20 +85,12 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       animation: {
