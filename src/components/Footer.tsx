@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router-dom';
 import { MessageCircle } from 'lucide-react';
+import { WHATSAPP_URL, AMFI_ARN, IRDAI_REG } from '@/config/constants';
 
 const Footer = () => {
   const { t, i18n } = useTranslation();
@@ -53,7 +54,7 @@ const Footer = () => {
             <p className="font-odia text-sm text-blue-light mb-3">ଇନ୍ଭେଷ୍ଟ ସହି</p>
             <p className="text-sm text-white/70 font-body mb-4">{t('footer.tagline', 'footer.tagline')}</p>
             <a
-              href="https://wa.me/919876543210"
+              href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white"
@@ -125,8 +126,8 @@ const Footer = () => {
             © {new Date().getFullYear()} InvestSahi. {t('footer.rights', 'All rights reserved.')}
           </p>
           <div className="flex items-center gap-4 text-xs text-white/50 font-body">
-            <span>ARN: XXXXXX</span>
-            <span>IRDAI: XXXXXX</span>
+            <span>ARN: {AMFI_ARN}</span>
+            <span>IRDAI: {IRDAI_REG}</span>
             <div className="flex rounded-full border border-white/30 overflow-hidden">
               <button
                 onClick={() => switchLang('en')}

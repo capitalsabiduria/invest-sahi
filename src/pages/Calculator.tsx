@@ -15,6 +15,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { INSTITUTIONS } from '@/data/institutions';
 import { calculateProjectedCost, calculateRequiredSIP, calculateSIPCorpus, formatCurrency } from '@/utils/sipCalculator';
+import { WHATSAPP_URL } from '@/config/constants';
 
 const ICON_MAP: Record<string, React.ElementType> = { GraduationCap, Stethoscope, Briefcase, BookOpen };
 
@@ -258,7 +259,7 @@ const Calculator = () => {
                   <p className="font-heading font-semibold text-lg text-foreground">{t('calc.planReady', 'Your plan is ready!')}</p>
                   <p className="text-sm text-muted-foreground font-body mb-4">{t('calc.planSent', "We'll send it to you.")}</p>
                   <a
-                    href={`https://wa.me/919876543210?text=Hi, I'd like to discuss my child's education plan`}
+                    href={`${WHATSAPP_URL}?text=Hi, I'd like to discuss my child's education plan`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-heading font-semibold"
@@ -309,7 +310,7 @@ const Calculator = () => {
             <h3 className="font-heading font-semibold text-lg mb-2">{t('calc.whatsappCta', 'Need help deciding?')}</h3>
             <p className="text-sm text-white/80 font-body mb-3">{t('calc.whatsappCtaDesc', 'Chat with us in English or Odia')}</p>
             <a
-              href="https://wa.me/919876543210"
+              href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-white text-green font-heading font-semibold px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity"

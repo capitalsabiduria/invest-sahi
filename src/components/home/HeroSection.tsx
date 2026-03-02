@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GraduationCap, Clock, Shield, Check } from 'lucide-react';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
+import { AMFI_ARN, IRDAI_REG } from '@/config/constants';
 
 export const heroStates = [
   { tag: 'hero.state1.tag', tagColor: 'bg-saffron', headline: 'hero.state1.headline', subline: 'hero.state1.subline', ctaText: 'hero.state1.cta', ctaColor: 'bg-saffron', secondaryText: 'hero.state1.secondary', cardType: 'education' as const },
@@ -101,11 +102,11 @@ export const TrustCard = () => {
       <div className="flex gap-3">
         <div className="bg-card rounded-lg px-4 py-2 text-center flex-1">
           <span className="text-xs text-muted-foreground font-body">AMFI</span>
-          <p className="font-heading font-semibold text-sm text-foreground">ARN-XXXXX</p>
+          <p className="font-heading font-semibold text-sm text-foreground">ARN-{AMFI_ARN}</p>
         </div>
         <div className="bg-card rounded-lg px-4 py-2 text-center flex-1">
           <span className="text-xs text-muted-foreground font-body">IRDAI</span>
-          <p className="font-heading font-semibold text-sm text-foreground">REG-XXXXX</p>
+          <p className="font-heading font-semibold text-sm text-foreground">REG-{IRDAI_REG}</p>
         </div>
       </div>
     </div>
