@@ -9,16 +9,7 @@ import {
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
-import { useScrollReveal } from '@/hooks/useScrollReveal';
-
-const RevealSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
-  const { ref, visible } = useScrollReveal();
-  return (
-    <motion.div ref={ref} className={className} initial={{ opacity: 0, y: 30 }} animate={visible ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay }}>
-      {children}
-    </motion.div>
-  );
-};
+import RevealSection from '@/components/RevealSection';
 
 const ICON_MAP: Record<string, React.ElementType> = {
   TrendingUp, Shield, Heart, GraduationCap, Umbrella, PiggyBank, Landmark, Wallet, Car, Briefcase, Home, Sun,

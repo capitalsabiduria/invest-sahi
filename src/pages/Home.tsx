@@ -17,22 +17,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-
-// ─── Scroll-reveal wrapper ───
-const RevealSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
-  const { ref, visible } = useScrollReveal();
-  return (
-    <motion.div
-      ref={ref}
-      className={className}
-      initial={{ opacity: 0, y: 30 }}
-      animate={visible ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay }}
-    >
-      {children}
-    </motion.div>
-  );
-};
+import RevealSection from '@/components/RevealSection';
+import { INSTITUTIONS, INSTITUTION_COSTS } from '@/data/institutions';
+import { calculateProjectedCost, calculateRequiredSIP, calculateSIPCorpus, formatCurrency } from '@/utils/sipCalculator';
 
 // ─── SECTION 1: HERO ───
 const heroStates = [
@@ -310,16 +297,6 @@ const GoalCards = ({ lang }: { lang: string }) => {
 };
 
 // ─── SECTION 4: EDUCATION TEASER + MINI CALC ───
-const INSTITUTIONS = ['NIT Rourkela', 'AIIMS Bhubaneswar', 'IIT Bhubaneswar', 'VSSUT Burla', 'SCB Medical', 'Private Engineering', 'MBA'];
-const INSTITUTION_COSTS: Record<string, { base: number; inflationRate: number }> = {
-  'NIT Rourkela': { base: 600000, inflationRate: 0.08 },
-  'AIIMS Bhubaneswar': { base: 400000, inflationRate: 0.08 },
-  'IIT Bhubaneswar': { base: 800000, inflationRate: 0.08 },
-  'VSSUT Burla': { base: 500000, inflationRate: 0.08 },
-  'SCB Medical': { base: 350000, inflationRate: 0.08 },
-  'Private Engineering': { base: 1200000, inflationRate: 0.1 },
-  'MBA': { base: 1500000, inflationRate: 0.1 },
-};
 
 const EducationTeaser = ({ lang }: { lang: string }) => {
   const { t } = useTranslation();
@@ -332,21 +309,19 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
   const [phone, setPhone] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const costInfo = INSTITUTION_COSTS[institution] || INSTITUTION_COSTS['NIT Rourkela'];
+  const baseCost = INSTITUTION_COSTS[institution] || INSTITUTION_COSTS['NIT Rourkela'];
   const calc = useMemo(() => {
-    const r = 0.12 / 12;
-    const n = (18 - childAge) * 12;
-    if (n <= 0) return { projected: 0, target: 0, gap: 0 };
-    const projected = budget * (((Math.pow(1 + r, n) - 1) / r) * (1 + r));
-    const target = costInfo.base * Math.pow(1 + costInfo.inflationRate, 18 - childAge);
+    const months = (18 - childAge) * 12;
+    const years = 18 - childAge;
+    if (months <= 0) return { projected: 0, target: 0, gap: 0 };
+    const projected = calculateSIPCorpus(budget, months);
+    const target = calculateProjectedCost(baseCost, years);
     return { projected: Math.round(projected), target: Math.round(target), gap: Math.round(target - projected) };
-  }, [childAge, institution, budget, costInfo]);
+  }, [childAge, budget, baseCost]);
 
   const onTrack = calc.projected >= calc.target;
   const years = 18 - childAge;
-  const extraNeeded = !onTrack && years > 0 ? Math.round(calc.gap / ((Math.pow(1 + 0.12 / 12, years * 12) - 1) / (0.12 / 12) * (1 + 0.12 / 12))) : 0;
-
-  const formatCurrency = (n: number) => '₹' + n.toLocaleString('en-IN');
+  const extraNeeded = !onTrack && years > 0 ? Math.round(calculateRequiredSIP(calc.gap, years * 12)) : 0;
 
   const handleLeadSubmit = async () => {
     if (!email && !phone) return;
@@ -410,7 +385,7 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {INSTITUTIONS.map((inst) => (
-                    <SelectItem key={inst} value={inst}>{inst}</SelectItem>
+                    <SelectItem key={inst.id} value={inst.name}>{inst.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
