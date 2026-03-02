@@ -6,37 +6,17 @@ import { GraduationCap, Stethoscope, Briefcase, BookOpen, Check, MessageCircle, 
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
-import { useScrollReveal } from '@/hooks/useScrollReveal';
+import RevealSection from '@/components/RevealSection';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Progress } from '@/components/ui/progress';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-
-const RevealSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
-  const { ref, visible } = useScrollReveal();
-  return (
-    <motion.div ref={ref} className={className} initial={{ opacity: 0, y: 30 }} animate={visible ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay }}>
-      {children}
-    </motion.div>
-  );
-};
-
-const INSTITUTIONS = [
-  { id: 'nit', name: 'NIT Rourkela', city: 'Rourkela', type: 'Engineering', baseCost: 600000, icon: 'GraduationCap' },
-  { id: 'aiims', name: 'AIIMS Bhubaneswar', city: 'Bhubaneswar', type: 'Medical', baseCost: 400000, icon: 'Stethoscope' },
-  { id: 'iit', name: 'IIT Bhubaneswar', city: 'Bhubaneswar', type: 'Engineering', baseCost: 800000, icon: 'GraduationCap' },
-  { id: 'vssut', name: 'VSSUT Burla', city: 'Burla', type: 'Engineering', baseCost: 500000, icon: 'GraduationCap' },
-  { id: 'scb', name: 'SCB Medical', city: 'Cuttack', type: 'Medical', baseCost: 350000, icon: 'Stethoscope' },
-  { id: 'private', name: 'Private Engineering', city: 'Various', type: 'Engineering', baseCost: 1200000, icon: 'GraduationCap' },
-  { id: 'mba', name: 'MBA', city: 'Various', type: 'Management', baseCost: 1500000, icon: 'Briefcase' },
-  { id: 'other', name: 'Other', city: '', type: 'Other', baseCost: 800000, icon: 'BookOpen' },
-];
+import { INSTITUTIONS } from '@/data/institutions';
+import { calculateProjectedCost, calculateRequiredSIP, calculateSIPCorpus, formatCurrency } from '@/utils/sipCalculator';
 
 const ICON_MAP: Record<string, React.ElementType> = { GraduationCap, Stethoscope, Briefcase, BookOpen };
-
-const formatCurrency = (n: number) => '₹' + n.toLocaleString('en-IN');
 
 const Calculator = () => {
   const { t } = useTranslation();
@@ -67,22 +47,21 @@ const Calculator = () => {
 
   const calc = useMemo(() => {
     if (yearsToGoal <= 0) return { projected: 0, target: 0, totalInvested: 0, percentCovered: 0 };
-    const r = 0.12 / 12;
     const n = yearsToGoal * 12;
     let projected: number;
     if (stepUp) {
       let total = 0;
       let currentBudget = budget;
       for (let yr = 0; yr < yearsToGoal; yr++) {
-        const sipFV = currentBudget * (((Math.pow(1 + r, 12) - 1) / r) * (1 + r));
+        const sipFV = calculateSIPCorpus(currentBudget, 12);
         total = total * Math.pow(1 + 0.12, 1) + sipFV;
         currentBudget = Math.round(currentBudget * 1.1);
       }
       projected = Math.round(total);
     } else {
-      projected = Math.round(budget * (((Math.pow(1 + r, n) - 1) / r) * (1 + r)));
+      projected = Math.round(calculateSIPCorpus(budget, n));
     }
-    const target = Math.round(baseCost * Math.pow(1.08, yearsToGoal));
+    const target = Math.round(calculateProjectedCost(baseCost, yearsToGoal));
     const totalInvested = stepUp
       ? (() => { let t = 0, b = budget; for (let y = 0; y < yearsToGoal; y++) { t += b * 12; b = Math.round(b * 1.1); } return t; })()
       : budget * n;
@@ -93,7 +72,7 @@ const Calculator = () => {
   const onTrack = calc.projected >= calc.target;
   const gap = calc.target - calc.projected;
   const extraNeeded = !onTrack && yearsToGoal > 0
-    ? Math.round(gap / ((Math.pow(1 + 0.12 / 12, yearsToGoal * 12) - 1) / (0.12 / 12) * (1 + 0.12 / 12)))
+    ? Math.round(calculateRequiredSIP(gap, yearsToGoal * 12))
     : 0;
 
   const handleSubmit = async () => {
@@ -112,8 +91,7 @@ const Calculator = () => {
   const compareAges = [5, 10, 13];
   const compareData = compareAges.map((age) => {
     const n = (18 - age) * 12;
-    const r = 0.12 / 12;
-    return { age, corpus: n > 0 ? Math.round(2000 * (((Math.pow(1 + r, n) - 1) / r) * (1 + r))) : 0 };
+    return { age, corpus: n > 0 ? Math.round(calculateSIPCorpus(2000, n)) : 0 };
   });
 
   return (
@@ -158,7 +136,7 @@ const Calculator = () => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {INSTITUTIONS.map((i) => {
                   const Icon = ICON_MAP[i.icon] || GraduationCap;
-                  const futureCost = Math.round(i.baseCost * Math.pow(1.08, yearsToGoal));
+                  const futureCost = Math.round(calculateProjectedCost(i.baseCost, yearsToGoal));
                   return (
                     <button
                       key={i.id}
