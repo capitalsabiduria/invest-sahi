@@ -4,18 +4,18 @@
   },
 
   "nav": {
-    "family": "For Your Family",
-    "business": "For Your Business",
-    "future": "For Your Future",
-    "learn": "Learn in Odia",
-    "book": "Book a Meeting",
+    "offer": "What We Offer",
+    "plan": "Build Your Free Wealth Plan",
+    "learn": "Money School",
+    "newsletter": "Newsletter",
+    "book": "Book a Free Call",
     "tagline": "ଇନ୍ଭେଷ୍ଟ ସହି"
   },
 
   "hero": {
     "state1": {
       "tag": "For Your Family",
-      "headline": "Your child can go to\nNIT Rourkela.",
+      "headline": "NIT Rourkela. IIT Bhubaneswar. AIIMS. SCB Medical. Whatever your child's dream — we'll show you the monthly SIP to get there.",
       "subline": "₹2,000 a month starting today makes it possible. We'll show you exactly how.",
       "cta": "Calculate Your Child's Fund →",
       "secondary": "See how it works ↓"
@@ -29,8 +29,8 @@
     },
     "state3": {
       "tag": "Independent & Regulated",
-      "headline": "We know what happened\nwith chit funds.",
-      "subline": "Rose Valley. Saradha. We don't pretend those didn't happen. This is different — and here's exactly why your money is protected.",
+      "headline": "We know what happened with chit funds.",
+      "subline": "Rose Valley. Saradha. We remember. Which is why InvestSahi is built on one principle: your money never touches our hands. It goes straight to government-regulated funds. You can verify your balance directly with the fund house, any time, without us.",
       "cta": "See Why We're Different →",
       "secondary": "Read our credentials →"
     },

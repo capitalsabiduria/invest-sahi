@@ -16,7 +16,7 @@ export const EducationCard = ({ lang }: { lang: string }) => {
   const { t } = useTranslation();
   const rows = [
     { label: t('hero.card1.childAge', 'Child Age'), value: '7 yrs' },
-    { label: t('hero.card1.institution', 'Institution'), value: 'NIT Rourkela' },
+    { label: t('hero.card1.institution', 'Dream College'), value: 'NIT / IIT / AIIMS' },
     { label: t('hero.card1.monthlySip', 'Monthly SIP'), value: '₹3,000' },
     { label: t('hero.card1.years', 'Years to Goal'), value: '11' },
     { label: t('hero.card1.corpus', 'Projected Corpus'), value: '₹8,42,000' },
@@ -25,7 +25,7 @@ export const EducationCard = ({ lang }: { lang: string }) => {
     <div className="bg-card rounded-xl shadow-lg p-6">
       <div className="flex items-center gap-2 mb-4">
         <GraduationCap className="text-saffron" size={24} />
-        <h3 className="font-heading font-semibold text-lg text-foreground">{t('hero.card1.title', 'Education Planner')}</h3>
+        <h3 className="font-heading font-semibold text-lg text-foreground">{t('hero.card1.title', "Child's Education Fund")}</h3>
       </div>
       {rows.map((r, i) => (
         <div key={i} className="flex justify-between py-2 border-b border-border last:border-0">
@@ -37,7 +37,7 @@ export const EducationCard = ({ lang }: { lang: string }) => {
         <span className="text-xs bg-green-light text-green px-2 py-0.5 rounded-full font-medium">✓ On Track</span>
       </div>
       <Link to={`/${lang}/calculator`} className="text-sm text-saffron font-medium mt-3 inline-block hover:underline">
-        {t('hero.card1.link', 'Try calculator →')}
+        {t('hero.card1.link', 'Calculate for your child →')}
       </Link>
     </div>
   );
