@@ -7,9 +7,36 @@ import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { AMFI_ARN, IRDAI_REG } from '@/config/constants';
 
 export const heroStates = [
-  { tag: 'hero.state1.tag', tagColor: 'bg-saffron', headline: 'hero.state1.headline', subline: 'hero.state1.subline', ctaText: 'hero.state1.cta', ctaColor: 'bg-saffron', secondaryText: 'hero.state1.secondary', cardType: 'education' as const },
-  { tag: 'hero.state2.tag', tagColor: 'bg-green', headline: 'hero.state2.headline', subline: 'hero.state2.subline', ctaText: 'hero.state2.cta', ctaColor: 'bg-green', secondaryText: 'hero.state2.secondary', cardType: 'growth' as const },
-  { tag: 'hero.state3.tag', tagColor: 'bg-blue', headline: 'hero.state3.headline', subline: 'hero.state3.subline', ctaText: 'hero.state3.cta', ctaColor: 'bg-blue', secondaryText: 'hero.state3.secondary', cardType: 'trust' as const },
+  {
+    tag: 'hero.state1.tag', tagColor: 'bg-saffron',
+    headline: 'hero.state1.headline', subline: 'hero.state1.subline',
+    ctaText: 'hero.state1.cta', ctaColor: 'bg-saffron',
+    secondaryText: 'hero.state1.secondary',
+    cardType: 'education' as const,
+    ctaHref: 'calculator',
+    secondaryHref: 'book',
+    secondaryLabel: 'Book a free call to get clarity →',
+  },
+  {
+    tag: 'hero.state2.tag', tagColor: 'bg-green',
+    headline: 'hero.state2.headline', subline: 'hero.state2.subline',
+    ctaText: 'hero.state2.cta', ctaColor: 'bg-green',
+    secondaryText: 'hero.state2.secondary',
+    cardType: 'growth' as const,
+    ctaHref: 'book',
+    secondaryHref: 'calculator',
+    secondaryLabel: 'See what ₹500 becomes →',
+  },
+  {
+    tag: 'hero.state3.tag', tagColor: 'bg-blue',
+    headline: 'hero.state3.headline', subline: 'hero.state3.subline',
+    ctaText: 'hero.state3.cta', ctaColor: 'bg-blue',
+    secondaryText: 'hero.state3.secondary',
+    cardType: 'trust' as const,
+    ctaHref: 'services',
+    secondaryHref: 'services',
+    secondaryLabel: 'Read our credentials →',
+  },
 ];
 
 export const EducationCard = ({ lang }: { lang: string }) => {
@@ -118,7 +145,7 @@ const HeroSection = ({ lang }: { lang: string }) => {
   const [active, setActive] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => setActive((p) => (p + 1) % heroStates.length), 6000);
+    const timer = setInterval(() => setActive((p) => (p + 1) % heroStates.length), 9000);
     return () => clearInterval(timer);
   }, []);
 
@@ -144,7 +171,7 @@ const HeroSection = ({ lang }: { lang: string }) => {
               <span className={`inline-block px-3 py-1 rounded-full text-white text-xs font-medium font-body mb-4 ${state.tagColor}`}>
                 {t(state.tag, state.tag)}
               </span>
-              <h1 className="font-heading font-bold text-4xl md:text-[56px] leading-tight text-foreground mb-4">
+              <h1 className="font-heading font-bold text-3xl md:text-[40px] leading-tight text-foreground mb-4">
                 {t(state.headline, state.headline)}
               </h1>
               <p className="font-body text-lg text-muted-foreground mb-6 max-w-lg">
@@ -152,25 +179,41 @@ const HeroSection = ({ lang }: { lang: string }) => {
               </p>
               <div className="flex flex-wrap items-center gap-4">
                 <Link
-                  to={`/${lang}/book`}
+                  to={`/${lang}/${state.ctaHref}`}
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className={`${state.ctaColor} text-white font-heading font-semibold px-6 py-3 rounded-lg hover:opacity-90 transition-opacity`}
                 >
                   {t(state.ctaText, state.ctaText)}
                 </Link>
-                <Link to={`/${lang}/learn`} className="text-sm text-muted-foreground font-body hover:text-saffron transition-colors">
-                  {t(state.secondaryText, state.secondaryText)} →
+                <Link
+                  to={`/${lang}/${state.secondaryHref}`}
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  className="text-sm text-muted-foreground font-body hover:text-saffron transition-colors"
+                >
+                  {state.secondaryLabel}
                 </Link>
               </div>
             </motion.div>
           </AnimatePresence>
-          {/* Dots */}
-          <div className="flex gap-2 mt-8">
+          <div className="flex gap-3 mt-8 items-center">
             {heroStates.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className={`w-3 h-3 rounded-full transition-colors ${i === active ? 'bg-saffron' : 'bg-muted'}`}
-              />
+                className="relative h-1.5 rounded-full overflow-hidden transition-all duration-300"
+                style={{ width: i === active ? '48px' : '12px', backgroundColor: i === active ? 'transparent' : '#D4C5B0' }}
+                aria-label={`Slide ${i + 1}`}
+              >
+                {i === active && (
+                  <motion.div
+                    key={active}
+                    className="absolute inset-0 bg-saffron rounded-full origin-left"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 9, ease: 'linear' }}
+                  />
+                )}
+              </button>
             ))}
           </div>
         </div>

@@ -54,7 +54,7 @@ const LearnList = () => {
 
   const filters = [
     { key: 'all', label: t('learn.filter.all', 'All') },
-    { key: 'story', label: t('learn.filter.stories', 'Stories ଆର୍ଥ ସ୍ୱଥ') },
+    { key: 'story', label: t('learn.filter.stories', 'Stories') },
     { key: 'glossary', label: t('learn.filter.glossary', 'Glossary') },
     { key: 'guide', label: t('learn.filter.guides', 'Guides') },
     { key: 'whatsapp_post', label: t('learn.filter.schemes', 'Schemes') },
@@ -96,9 +96,13 @@ const LearnList = () => {
 
       <section className="bg-background py-16 text-center">
         <div className="max-w-3xl mx-auto px-4">
-          <h1 className="font-odia text-3xl md:text-4xl text-foreground mb-1">ଶିଖନ୍ତୁ</h1>
-          <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-3">{t('learn.hero.headline', 'Learn in Odia')}</h2>
-          <p className="font-body text-muted-foreground">{t('learn.hero.subline', 'learn.hero.subline')}</p>
+          <h1 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-3">
+            {t('learn.hero.headline', 'Money School')}
+            <span className="font-odia text-2xl md:text-3xl text-saffron ml-3">— ଅର୍ଥ ବିଦ୍ୟାଳୟ</span>
+          </h1>
+          <p className="font-body text-muted-foreground">
+            {t('learn.hero.subline', 'Your guide to smarter money decisions. In Odia and English.')}
+          </p>
         </div>
       </section>
 
