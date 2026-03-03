@@ -59,13 +59,16 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
 
   const handleSubmit = async () => {
     if (!phone && !name) return;
-    await supabase.from('calculator_leads').insert({
-      child_age: null,
-      target_institution: 'Wealth Building',
-      monthly_sip_needed: monthly,
-      user_monthly_budget: monthly,
-      phone,
-    }).catch(() => {});
+    try {
+      await supabase.from('calculator_leads').insert({
+        child_age: null,
+        target_institution: 'Wealth Building',
+        monthly_sip_needed: monthly,
+        user_monthly_budget: monthly,
+        phone,
+      });
+    } catch {}
+
     setSubmitted(true);
     toast({ title: 'Plan submitted!' });
   };
