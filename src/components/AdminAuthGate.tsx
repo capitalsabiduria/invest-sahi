@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Lock } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
-const ADMIN_PASSWORD = 'Dpskalinga11!!';
+const ADMIN_PASSWORD = 'invest-sahi-2026';
 
 interface AdminAuthGateProps {
   children: React.ReactNode;
