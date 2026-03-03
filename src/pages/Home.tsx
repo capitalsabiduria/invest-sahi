@@ -4,7 +4,6 @@ import Footer from '@/components/Footer';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
 import LandingHero from '@/components/home/LandingHero';
 import HeroSection from '@/components/home/HeroSection';
-import StatsBar from '@/components/home/StatsBar';
 import GoalCards from '@/components/home/GoalCards';
 import EducationTeaser from '@/components/home/EducationTeaser';
 import StoriesSection from '@/components/home/StoriesSection';
@@ -21,7 +20,6 @@ const Home = () => {
       <Navbar />
       <LandingHero lang={currentLang} />
       <HeroSection lang={currentLang} />
-      <StatsBar />
       <GoalCards lang={currentLang} />
       <EducationTeaser lang={currentLang} />
       <StoriesSection lang={currentLang} />
