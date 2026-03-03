@@ -463,6 +463,7 @@ const SeoManager = () => {
   /* data */
   const [pages, setPages] = useState<SeoPage[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   /* filters */
   const [typeFilter, setTypeFilter] = useState<'all' | PageType>('all');
@@ -480,8 +481,20 @@ const SeoManager = () => {
   /* ── fetch ── */
   const fetchPages = useCallback(async () => {
     setLoading(true);
-    const { data } = await (supabase as any).from('seo_pages').select('*').order('updated_at', { ascending: false });
-    setPages((data as SeoPage[]) ?? []);
+    setFetchError(null);
+    const { data, error } = await supabase
+      .from('seo_pages' as any)
+      .select('*')
+      .order('updated_at', { ascending: false });
+    console.log('[SeoManager] fetchPages data:', data);
+    console.log('[SeoManager] fetchPages error:', error);
+    if (error) {
+      console.error('[SeoManager] fetch failed:', error);
+      setFetchError(`${error.message} (code: ${error.code})`);
+      setPages([]);
+    } else {
+      setPages((data as SeoPage[]) ?? []);
+    }
     setLoading(false);
   }, []);
 
@@ -514,8 +527,8 @@ const SeoManager = () => {
   const toggleStatus = async (page: SeoPage) => {
     const next: PageStatus = page.status === 'live' ? 'draft' : 'live';
     setPages((prev) => prev.map((p) => p.id === page.id ? { ...p, status: next } : p));
-    const { error } = await (supabase as any)
-      .from('seo_pages').update({ status: next }).eq('id', page.id);
+    const { error } = await supabase
+      .from('seo_pages' as any).update({ status: next }).eq('id', page.id);
     if (error) {
       setPages((prev) => prev.map((p) => p.id === page.id ? { ...p, status: page.status } : p));
       toast({ title: 'Status update failed', description: error.message, variant: 'destructive' });
@@ -530,7 +543,7 @@ const SeoManager = () => {
 
   /* ── add page ── */
   const handleAdd = async (form: PageForm) => {
-    const { error } = await (supabase as any).from('seo_pages').insert({
+    const { error } = await supabase.from('seo_pages' as any).insert({
       slug: form.slug,
       title: form.title,
       meta_description: form.meta_description,
@@ -550,7 +563,7 @@ const SeoManager = () => {
   /* ── edit page ── */
   const handleEdit = async (form: PageForm) => {
     if (!editPage) return;
-    const { error } = await (supabase as any).from('seo_pages').update({
+    const { error } = await supabase.from('seo_pages' as any).update({
       title: form.title,
       meta_description: form.meta_description,
       type: form.type,
@@ -568,7 +581,7 @@ const SeoManager = () => {
   /* ── delete page ── */
   const handleDelete = async () => {
     if (!deletePage) return;
-    const { error } = await (supabase as any).from('seo_pages').delete().eq('id', deletePage.id);
+    const { error } = await supabase.from('seo_pages' as any).delete().eq('id', deletePage.id);
     if (error) {
       toast({ title: 'Delete failed', description: error.message, variant: 'destructive' });
       return;
@@ -646,8 +659,8 @@ Make all content highly specific and locally relevant to this exact audience. Re
 
       const parsed = JSON.parse(rawJson);
 
-      const { error } = await (supabase as any)
-        .from('seo_pages')
+      const { error } = await supabase
+        .from('seo_pages' as any)
         .update({ content: parsed })
         .eq('id', page.id);
 
@@ -752,6 +765,23 @@ Make all content highly specific and locally relevant to this exact audience. Re
           className="ml-auto text-sm px-3 py-1.5 rounded-lg border border-stone/20 outline-none focus:border-saffron font-body"
         />
       </div>
+
+      {/* Fetch error banner */}
+      {fetchError && (
+        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-body text-red-700">
+          <strong className="font-semibold">Data fetch failed:</strong> {fetchError}
+          <br />
+          <span className="text-xs text-red-500 mt-1 block">
+            Check Supabase RLS policies — the anon role may not have SELECT on seo_pages. See browser console for full error.
+          </span>
+          <button
+            onClick={fetchPages}
+            className="mt-2 text-xs underline hover:no-underline text-red-600"
+          >
+            Retry
+          </button>
+        </div>
+      )}
 
       {/* Table — desktop */}
       <div className="hidden md:block bg-white rounded-xl shadow-sm overflow-hidden">
