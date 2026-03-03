@@ -11,6 +11,7 @@ import Calculator from "./pages/Calculator";
 import Learn from "./pages/Learn";
 import Book from "./pages/Book";
 import Admin from "./pages/admin/Admin";
+import AdminAuthGate from './components/AdminAuthGate';
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,7 +48,7 @@ const App = () => (
             <Route path="/:lang/learn" element={<LangRoute><Learn /></LangRoute>} />
             <Route path="/:lang/learn/:slug" element={<LangRoute><Learn /></LangRoute>} />
             <Route path="/:lang/book" element={<LangRoute><Book /></LangRoute>} />
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin" element={<AdminAuthGate><Admin /></AdminAuthGate>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
