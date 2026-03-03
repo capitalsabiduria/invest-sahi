@@ -130,7 +130,7 @@ const HeroSection = ({ lang }: { lang: string }) => {
   };
 
   return (
-    <section className="min-h-screen bg-background flex items-center">
+    <section className="bg-card py-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-20 grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
         <div className="md:col-span-3">
           <AnimatePresence mode="wait">

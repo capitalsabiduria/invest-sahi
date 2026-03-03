@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
+import LandingHero from '@/components/home/LandingHero';
 import HeroSection from '@/components/home/HeroSection';
 import StatsBar from '@/components/home/StatsBar';
 import GoalCards from '@/components/home/GoalCards';
@@ -18,6 +19,7 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       <Navbar />
+      <LandingHero lang={currentLang} />
       <HeroSection lang={currentLang} />
       <StatsBar />
       <GoalCards lang={currentLang} />
