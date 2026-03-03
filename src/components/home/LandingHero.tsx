@@ -117,10 +117,10 @@ const LandingHero = ({ lang }: { lang: string }) => {
           </span>
 
           <div className="mb-6">
-            <h1 className="font-body font-bold text-4xl md:text-[52px] leading-tight text-foreground mb-0">
+            <h1 className="font-body font-bold text-3xl md:text-[38px] leading-tight text-foreground mb-0">
               {t('landing.headline1', 'Most people wait until they\'re "rich enough" to start investing.')}
             </h1>
-            <h2 className="font-body font-bold text-4xl md:text-[52px] leading-tight text-saffron mt-1">
+            <h2 className="font-body font-bold text-3xl md:text-[38px] leading-tight text-saffron mt-1">
               {t('landing.headline2', 'InvestSahi was built right here in Odisha to prove them wrong.')}
             </h2>
           </div>
