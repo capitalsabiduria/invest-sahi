@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   LayoutDashboard,
@@ -7,6 +7,7 @@ import {
   FileText,
   TrendingUp,
   Settings,
+  Globe,
 } from 'lucide-react';
 import AdminDashboard from './AdminDashboard';
 import AdminBookings from './AdminBookings';
@@ -14,6 +15,8 @@ import AdminSubscribers from './AdminSubscribers';
 import AdminContent from './AdminContent';
 import AdminCalculatorLeads from './AdminCalculatorLeads';
 import AdminSettings from './AdminSettings';
+import SeoManager from '@/components/admin/SeoManager';
+import { supabase } from '@/integrations/supabase/client';
 
 const navItems = [
   { key: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -21,12 +24,22 @@ const navItems = [
   { key: 'subscribers', icon: Users, label: 'Subscribers' },
   { key: 'content', icon: FileText, label: 'Content' },
   { key: 'leads', icon: TrendingUp, label: 'Calculator Leads' },
+  { key: 'seo', icon: Globe, label: 'SEO Pages' },
   { key: 'settings', icon: Settings, label: 'Settings' },
 ];
 
 const Admin = () => {
   const [active, setActive] = useState('dashboard');
+  const [livePageCount, setLivePageCount] = useState<number | null>(null);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    (supabase as any)
+      .from('seo_pages')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'live')
+      .then(({ count }: { count: number | null }) => setLivePageCount(count ?? 0));
+  }, []);
 
   const renderContent = () => {
     switch (active) {
@@ -35,6 +48,7 @@ const Admin = () => {
       case 'subscribers': return <AdminSubscribers />;
       case 'content': return <AdminContent />;
       case 'leads': return <AdminCalculatorLeads />;
+      case 'seo': return <SeoManager />;
       case 'settings': return <AdminSettings />;
       default: return <AdminDashboard />;
     }
@@ -61,6 +75,11 @@ const Admin = () => {
             >
               <item.icon className="h-4 w-4" />
               <span>{item.label}</span>
+              {item.key === 'seo' && livePageCount !== null && livePageCount > 0 && (
+                <span className="ml-auto text-xs font-bold px-1.5 py-0.5 rounded-full bg-green text-white leading-none">
+                  {livePageCount}
+                </span>
+              )}
             </button>
           ))}
         </nav>
