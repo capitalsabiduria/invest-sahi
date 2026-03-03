@@ -37,14 +37,16 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
 
   const calc = useMemo(() => {
     const downPayment = Math.round(propertyBudget * 0.20);
+    const savingsCapped = Math.min(existingSavings, downPayment);
     const remaining = Math.max(0, downPayment - existingSavings);
     const n = years * 12;
     const sipNeeded = remaining > 0 && n > 0
       ? Math.round(remaining / (((Math.pow(1 + 0.01, n) - 1) / 0.01) * 1.01))
       : 0;
-    const projectedCorpus = Math.round(calculateSIPCorpus(sipNeeded || 500, n) + existingSavings);
-    const percentCovered = Math.min(100, Math.round((projectedCorpus / downPayment) * 100));
-    return { downPayment, remaining, sipNeeded, projectedCorpus, percentCovered };
+    // percentCovered = what fraction of the down payment is already
+    // covered by existing savings alone (before any SIP)
+    const percentCovered = Math.min(100, Math.round((savingsCapped / downPayment) * 100));
+    return { downPayment, remaining, sipNeeded, percentCovered };
   }, [propertyBudget, existingSavings, years]);
 
   const formatAmount = (n: number) => {
@@ -127,8 +129,8 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
               <span className="text-sm font-body text-muted-foreground">Budget</span>
               <span className="font-heading font-semibold text-foreground">{formatAmount(propertyBudget)}</span>
             </div>
-            <Slider value={[propertyBudget]} onValueChange={([v]) => setPropertyBudget(v)} min={2000000} max={20000000} step={500000} />
-            <div className="flex justify-between text-xs text-muted-foreground mt-1"><span>₹20L</span><span>₹2Cr</span></div>
+            <Slider value={[propertyBudget]} onValueChange={([v]) => setPropertyBudget(v)} min={2000000} max={100000000} step={2500000} />
+            <div className="flex justify-between text-xs text-muted-foreground mt-1"><span>₹20L</span><span>₹10Cr</span></div>
             <div className="bg-muted rounded-lg px-4 py-3 mt-3">
               <p className="text-sm font-body text-muted-foreground">
                 Down payment needed (20%): <strong className="text-foreground">{formatAmount(calc.downPayment)}</strong>
@@ -143,8 +145,8 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
               <span className="text-sm font-body text-muted-foreground">Current savings</span>
               <span className="font-heading font-semibold text-foreground">{formatAmount(existingSavings)}</span>
             </div>
-            <Slider value={[existingSavings]} onValueChange={([v]) => setExistingSavings(v)} min={0} max={2000000} step={50000} />
-            <div className="flex justify-between text-xs text-muted-foreground mt-1"><span>₹0</span><span>₹20L</span></div>
+            <Slider value={[existingSavings]} onValueChange={([v]) => setExistingSavings(v)} min={0} max={50000000} step={500000} />
+            <div className="flex justify-between text-xs text-muted-foreground mt-1"><span>₹0</span><span>₹5Cr</span></div>
           </div>
 
           {/* Live Result */}
