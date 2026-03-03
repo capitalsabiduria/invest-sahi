@@ -51,10 +51,10 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { key: 'nav.family', href: `/${currentLang}/services` },
-    { key: 'nav.business', href: `/${currentLang}/services` },
-    { key: 'nav.future', href: `/${currentLang}/calculator` },
-    { key: 'nav.learn', href: `/${currentLang}/learn` },
+    { key: 'nav.offer', fallback: 'What We Offer', href: `/${currentLang}/services` },
+    { key: 'nav.plan', fallback: 'Build Your Free Wealth Plan', href: `/${currentLang}/calculator` },
+    { key: 'nav.learn', fallback: 'Money School', href: `/${currentLang}/learn` },
+    { key: 'nav.newsletter', fallback: 'Newsletter', href: `/${currentLang}/newsletter` },
   ];
 
   const LanguagePill = () => (
@@ -112,7 +112,7 @@ const Navbar = () => {
                 to={link.href}
                 className="font-body font-medium text-[15px] text-stone hover:text-saffron transition-colors"
               >
-                {t(link.key, link.key)}
+                {t(link.key, link.fallback)}
               </Link>
             ))}
           </div>
@@ -124,7 +124,7 @@ const Navbar = () => {
               to={`/${currentLang}/book`}
               className="bg-saffron text-white font-heading font-semibold text-sm px-5 py-2 rounded-lg hover:bg-saffron/90 transition-colors"
             >
-              {t('nav.book', 'Book a Meeting')}
+              {t('nav.book', 'Book a Free Call')}
             </Link>
           </div>
 
@@ -155,7 +155,7 @@ const Navbar = () => {
                 onClick={() => setMobileOpen(false)}
                 className="font-heading text-2xl text-stone hover:text-saffron transition-colors"
               >
-                {t(link.key, link.key)}
+                {t(link.key, link.fallback)}
               </Link>
             ))}
             <LanguagePill />
@@ -164,7 +164,7 @@ const Navbar = () => {
               onClick={() => setMobileOpen(false)}
               className="bg-saffron text-white font-heading font-semibold text-lg px-8 py-3 rounded-lg"
             >
-              {t('nav.book', 'Book a Meeting')}
+              {t('nav.book', 'Book a Free Call')}
             </Link>
           </motion.div>
         )}
