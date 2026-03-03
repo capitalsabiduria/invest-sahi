@@ -1,0 +1,250 @@
+import { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { ArrowLeft, MessageCircle, Check } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
+import { Progress } from '@/components/ui/progress';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { formatCurrency, calculateSIPCorpus } from '@/utils/sipCalculator';
+import { WHATSAPP_URL } from '@/config/constants';
+
+interface RetirementCalculatorProps {
+  onBack: () => void;
+}
+
+const RetirementCalculator = ({ onBack }: RetirementCalculatorProps) => {
+  const { toast } = useToast();
+  const [currentAge, setCurrentAge] = useState(30);
+  const [retireAge, setRetireAge] = useState(50);
+  const [monthlyExpenses, setMonthlyExpenses] = useState(40000);
+  const [existingSavings, setExistingSavings] = useState(200000);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const yearsToRetire = Math.max(1, retireAge - currentAge);
+
+  const calc = useMemo(() => {
+    const inflatedMonthly = monthlyExpenses * Math.pow(1.06, yearsToRetire);
+    const corpusNeeded = Math.round(inflatedMonthly * 12 * 25);
+    const grownSavings = Math.round(existingSavings * Math.pow(1.12, yearsToRetire));
+    const remainingCorpus = Math.max(0, corpusNeeded - grownSavings);
+    const n = yearsToRetire * 12;
+    const sipNeeded = remainingCorpus > 0 && n > 0
+      ? Math.round(remainingCorpus / (((Math.pow(1 + 0.01, n) - 1) / 0.01) * 1.01))
+      : 0;
+    const lateN = Math.max(1, (yearsToRetire - 3)) * 12;
+    const lateSipNeeded = remainingCorpus > 0 && lateN > 0
+      ? Math.round(remainingCorpus / (((Math.pow(1 + 0.01, lateN) - 1) / 0.01) * 1.01))
+      : 0;
+    const waitingCost = Math.max(0, lateSipNeeded - sipNeeded);
+    const percentSaved = Math.min(100, Math.round((grownSavings / corpusNeeded) * 100));
+    return { corpusNeeded, sipNeeded, lateSipNeeded, waitingCost, grownSavings, percentSaved, inflatedMonthly };
+  }, [currentAge, retireAge, monthlyExpenses, existingSavings, yearsToRetire]);
+
+  const formatAmount = (n: number) => {
+    if (n >= 10000000) return `₹${(n / 10000000).toFixed(2)} crore`;
+    if (n >= 100000) return `₹${(n / 100000).toFixed(1)} lakh`;
+    return formatCurrency(n);
+  };
+
+  const handleSubmit = async () => {
+    if (!phone && !name) return;
+    await supabase.from('calculator_leads').insert({
+      child_age: currentAge,
+      target_institution: `Retirement at ${retireAge}`,
+      monthly_sip_needed: calc.sipNeeded,
+      user_monthly_budget: calc.sipNeeded,
+      phone,
+    }).catch(() => {});
+    setSubmitted(true);
+    toast({ title: 'Retirement plan submitted!' });
+  };
+
+  const waText = encodeURIComponent(
+    `Hi, I'm ${currentAge} years old and want to retire at ${retireAge}. My monthly expenses are ₹${monthlyExpenses.toLocaleString('en-IN')} and I have ${formatAmount(existingSavings)} in savings. I need a corpus of ${formatAmount(calc.corpusNeeded)}. Please send my retirement plan.`
+  );
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 grid grid-cols-1 lg:grid-cols-5 gap-10">
+      <div className="lg:col-span-3 space-y-6">
+        <button onClick={onBack} className="flex items-center gap-2 text-sm font-body text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft size={16} /> Change Goal
+        </button>
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="space-y-6">
+          {/* Step 1: Current Age */}
+          <div className="bg-card rounded-xl p-6 shadow-sm">
+            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">Step 1: How old are you today?</h2>
+            <div className="flex justify-between mb-2">
+              <span className="text-sm font-body text-muted-foreground">Current age</span>
+              <span className="font-heading font-semibold text-foreground">{currentAge} years</span>
+            </div>
+            <Slider value={[currentAge]} onValueChange={([v]) => { setCurrentAge(v); if (retireAge <= v + 5) setRetireAge(v + 5); }} min={22} max={55} step={1} />
+            <div className="flex justify-between text-xs text-muted-foreground mt-1"><span>22</span><span>55</span></div>
+          </div>
+
+          {/* Step 2: Retirement Age */}
+          <div className="bg-card rounded-xl p-6 shadow-sm">
+            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">Step 2: When do you want to retire?</h2>
+            <div className="flex justify-between mb-2">
+              <span className="text-sm font-body text-muted-foreground">Retire at age</span>
+              <span className="font-heading font-semibold text-foreground">{retireAge} — <span className="text-saffron">{yearsToRetire} years from now</span></span>
+            </div>
+            <Slider value={[retireAge]} onValueChange={([v]) => setRetireAge(v)} min={currentAge + 5} max={65} step={1} />
+            <div className="flex justify-between text-xs text-muted-foreground mt-1"><span>{currentAge + 5}</span><span>65</span></div>
+            <div className="bg-muted rounded-lg px-4 py-3 mt-3">
+              <p className="text-sm font-body text-muted-foreground">
+                Retiring at <strong className="text-foreground">{retireAge}</strong> means <strong className="text-saffron">{65 - retireAge} extra years</strong> of financial freedom compared to retiring at 65.
+              </p>
+            </div>
+          </div>
+
+          {/* Step 3: Monthly Expenses */}
+          <div className="bg-card rounded-xl p-6 shadow-sm">
+            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">Step 3: What are your current monthly expenses?</h2>
+            <div className="flex justify-between mb-2">
+              <span className="text-sm font-body text-muted-foreground">Monthly expenses</span>
+              <span className="font-heading font-semibold text-foreground">{formatCurrency(monthlyExpenses)}/mo</span>
+            </div>
+            <Slider value={[monthlyExpenses]} onValueChange={([v]) => setMonthlyExpenses(v)} min={15000} max={500000} step={5000} />
+            <div className="flex justify-between text-xs text-muted-foreground mt-1"><span>₹15,000</span><span>₹5,00,000</span></div>
+            <div className="bg-muted rounded-lg px-4 py-3 mt-3">
+              <p className="text-sm font-body text-muted-foreground">
+                By the time you retire at <strong className="text-foreground">{retireAge}</strong>, ₹{monthlyExpenses.toLocaleString('en-IN')} today will feel like{' '}
+                <strong className="text-foreground">{formatCurrency(Math.round(calc.inflatedMonthly))}</strong> — because prices double roughly every 12 years at 6% inflation.
+              </p>
+            </div>
+          </div>
+
+          {/* Step 4: Existing Savings */}
+          <div className="bg-card rounded-xl p-6 shadow-sm">
+            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">Step 4: What have you saved so far? (EPF, FDs, savings)</h2>
+            <div className="flex justify-between mb-2">
+              <span className="text-sm font-body text-muted-foreground">Current savings</span>
+              <span className="font-heading font-semibold text-foreground">{formatAmount(existingSavings)}</span>
+            </div>
+            <Slider value={[existingSavings]} onValueChange={([v]) => setExistingSavings(v)} min={0} max={50000000} step={100000} />
+            <div className="flex justify-between text-xs text-muted-foreground mt-1"><span>₹0</span><span>₹5 Cr</span></div>
+          </div>
+
+          {/* Live Result — waiting cost FIRST */}
+          <motion.div
+            className="bg-green rounded-xl p-6 text-white"
+            key={`${calc.corpusNeeded}-${calc.sipNeeded}`}
+            initial={{ opacity: 0.8 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}
+          >
+            <p className="text-sm text-white/70 font-body mb-4">
+              Your retirement at {retireAge} — {yearsToRetire} years to build this
+            </p>
+            {calc.waitingCost > 0 && (
+              <div className="bg-white/15 border border-white/30 rounded-xl px-4 py-4 mb-5">
+                <p className="text-xs text-white/70 uppercase tracking-wide font-body mb-1">Cost of waiting 3 more years</p>
+                <p className="font-heading font-bold text-2xl text-saffron">+{formatCurrency(calc.waitingCost)}/month extra</p>
+                <p className="text-xs text-white/70 font-body mt-1">
+                  Starting today vs. starting at age {currentAge + 3} — same goal, very different monthly commitment.
+                </p>
+              </div>
+            )}
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div>
+                <p className="text-xs text-white/60">Corpus you need</p>
+                <p className="font-heading font-bold text-3xl">{formatAmount(calc.corpusNeeded)}</p>
+              </div>
+              <div>
+                <p className="text-xs text-white/60">Monthly SIP needed</p>
+                <p className="font-heading font-bold text-3xl text-saffron">{formatCurrency(calc.sipNeeded)}/mo</p>
+              </div>
+            </div>
+            <Progress value={calc.percentSaved} className="h-3 bg-white/20 mb-1" />
+            <div className="flex justify-between text-xs text-white/50 font-body mt-1">
+              <span>0%</span>
+              <span>Halfway there</span>
+              <span>Goal reached ✓</span>
+            </div>
+          </motion.div>
+
+          {/* Step 5: Get Plan */}
+          <div className="bg-card rounded-xl p-6 shadow-sm">
+            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">Step 5: Get Your Retirement Roadmap</h2>
+            {!submitted ? (
+              <div className="space-y-3">
+                <Input placeholder="Your name (e.g. Rahul)" value={name} onChange={e => setName(e.target.value)} />
+                <Input type="tel" placeholder="WhatsApp (e.g. 98XXXXXXXX)" value={phone} onChange={e => setPhone(e.target.value)} />
+                <p className="text-xs text-muted-foreground font-body">
+                  We'll send you: exact SIP plan, NPS optimisation for your age, investment split across equity/debt, and a month-by-month roadmap to retirement.
+                </p>
+                <button onClick={handleSubmit}
+                  className="w-full bg-saffron text-white font-heading font-semibold py-3 rounded-lg hover:opacity-90 transition-opacity">
+                  Send My {formatCurrency(calc.sipNeeded)}/mo Retirement Plan →
+                </button>
+                <a href={`${WHATSAPP_URL}?text=${waText}`} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-lg font-heading font-semibold text-white hover:opacity-90 transition-opacity"
+                  style={{ backgroundColor: '#25D366' }}>
+                  <MessageCircle size={18} /> Discuss on WhatsApp instead
+                </a>
+              </div>
+            ) : (
+              <div className="text-center py-6">
+                <Check className="mx-auto text-green mb-2" size={40} />
+                <p className="font-heading font-semibold text-lg text-foreground">Your retirement plan is on its way!</p>
+                <p className="text-sm text-muted-foreground font-body mb-2">We'll call you within 24 hours to walk through it together.</p>
+                <p className="text-sm font-body mb-5">
+                  In the meantime —{' '}
+                  <a href="/en/learn" className="text-saffron underline underline-offset-2 hover:opacity-80 transition-opacity">
+                    read how NPS can cut your SIP by ₹3,000/month →
+                  </a>
+                </p>
+                <a href={`${WHATSAPP_URL}?text=${waText}`} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-heading font-semibold"
+                  style={{ backgroundColor: '#25D366' }}>
+                  <MessageCircle size={20} /> Discuss on WhatsApp
+                </a>
+              </div>
+            )}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Right sidebar */}
+      <div className="lg:col-span-2 space-y-6 lg:sticky lg:top-20 lg:self-start">
+        <div className="bg-card rounded-xl p-5 shadow-sm">
+          <h3 className="font-heading font-semibold text-lg text-foreground mb-3">The 4% Withdrawal Rule</h3>
+          <p className="text-sm font-body text-muted-foreground mb-3">
+            If your corpus earns 12% and inflation runs at 6%, you can safely withdraw 4–6% per year forever. This is why we target 25× your annual expenses.
+          </p>
+          <div className="space-y-2 text-sm">
+            {[
+              { expenses: '₹30,000/mo', corpus: '₹2.7 Cr' },
+              { expenses: '₹50,000/mo', corpus: '₹4.5 Cr' },
+              { expenses: '₹75,000/mo', corpus: '₹6.75 Cr' },
+              { expenses: '₹1,00,000/mo', corpus: '₹9 Cr' },
+            ].map(r => (
+              <div key={r.expenses} className="flex justify-between py-1.5 border-b border-border last:border-0">
+                <span className="font-body text-foreground">{r.expenses} expenses</span>
+                <span className="font-semibold text-saffron">{r.corpus} needed</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="bg-saffron-light rounded-xl p-5">
+          <h3 className="font-heading font-semibold text-lg text-foreground mb-2">NPS: Your retirement head start</h3>
+          <p className="text-sm font-body text-muted-foreground">
+            If you're a government employee or salaried professional, NPS gives an extra ₹50,000 tax deduction under 80CCD(1B) — on top of the standard 80C limit. Most people miss this.
+          </p>
+        </div>
+        <div className="bg-green rounded-xl p-5 text-white text-center">
+          <MessageCircle className="mx-auto mb-2" size={28} />
+          <h3 className="font-heading font-semibold text-lg mb-2">Talk to a retirement planner</h3>
+          <p className="text-sm text-white/80 font-body mb-3">In English or Odia. No jargon.</p>
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"
+            className="inline-block bg-white text-green font-heading font-semibold px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity">
+            Chat Now →
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default RetirementCalculator;
