@@ -209,7 +209,9 @@ const Calculator = () => {
                   <span className="bg-white/20 text-white text-sm px-3 py-1 rounded-full">✓ {t('calc.onTrack', "You're on track!")}</span>
                 ) : (
                   <span className="bg-saffron text-white text-sm px-3 py-1 rounded-full">
-                    {formatCurrency(extraNeeded)} {t('calc.moreMonthly', 'more/month closes the gap')}
+                    {t('calc.moreMonthly', '₹{{amount}} more/month closes the gap', {
+                      amount: extraNeeded.toLocaleString('en-IN'),
+                    })}
                   </span>
                 )}
               </div>

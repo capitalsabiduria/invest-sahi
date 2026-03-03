@@ -112,7 +112,10 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
 
             <div className="bg-muted rounded-lg p-4 mb-4">
               <p className="text-sm text-muted-foreground font-body mb-1">
-                {t('calc.investing', 'Investing')} {formatCurrency(budget)}/mo {t('calc.for', 'for')} {years} {t('calc.years', 'years')}
+                {t('calc.investing', 'Investing {{amount}}/month for {{years}} years', {
+                  amount: formatCurrency(budget),
+                  years: years,
+                })}
               </p>
               <motion.p
                 className="font-heading font-bold text-2xl text-green"
@@ -124,14 +127,19 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
                 {t('calc.youllHave', "You'll have")}: {formatCurrency(calc.projected)}
               </motion.p>
               <p className="text-sm text-muted-foreground font-body mt-1">
-                {t('calc.target', 'Target for')} {institution}: ~{formatCurrency(calc.target)}
+                {t('calc.target', '{{institution}} fees in {{year}}:', {
+                  institution: institution,
+                  year: new Date().getFullYear() + years,
+                })} ~{formatCurrency(calc.target)}
               </p>
               <div className="mt-2">
                 {onTrack ? (
                   <span className="text-xs bg-green-light text-green px-2 py-0.5 rounded-full font-medium">✓ {t('calc.onTrack', 'On track')}</span>
                 ) : (
                   <span className="text-xs bg-saffron-light text-amber px-2 py-0.5 rounded-full font-medium">
-                    {formatCurrency(extraNeeded)} {t('calc.moreNeeded', 'more/month needed')}
+                    {t('calc.moreNeeded', '₹{{amount}} more/month needed', {
+                      amount: extraNeeded.toLocaleString('en-IN'),
+                    })}
                   </span>
                 )}
               </div>
