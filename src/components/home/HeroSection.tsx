@@ -6,6 +6,36 @@ import { GraduationCap, Clock, Shield, Check } from 'lucide-react';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { AMFI_ARN, IRDAI_REG } from '@/config/constants';
 
+const HeroBgDecoration = () => {
+  const spokes = [0, 45, 90, 135, 180, 225, 270, 315];
+  return (
+    <svg
+      width="400" height="400"
+      viewBox="0 0 100 100"
+      fill="none"
+      aria-hidden="true"
+      className="absolute -right-20 top-1/2 -translate-y-1/2 pointer-events-none opacity-[0.06]"
+    >
+      {spokes.map((angle, i) => {
+        const isLong = i % 2 === 0;
+        const len = isLong ? 44 : 32;
+        const rad = (angle * Math.PI) / 180;
+        const x2 = 50 + len * Math.cos(rad);
+        const y2 = 50 + len * Math.sin(rad);
+        return (
+          <line
+            key={angle}
+            x1="50" y1="50" x2={x2} y2={y2}
+            stroke="#E8820C" strokeWidth={isLong ? 2 : 1.5} strokeLinecap="round"
+          />
+        );
+      })}
+      <circle cx="50" cy="50" r="12" fill="#E8820C" />
+      <circle cx="50" cy="50" r="46" stroke="#E8820C" strokeWidth="2" fill="none" />
+    </svg>
+  );
+};
+
 export const heroStates = [
   {
     tag: 'hero.state1.tag', tagColor: 'bg-saffron',
@@ -159,7 +189,9 @@ const HeroSection = ({ lang }: { lang: string }) => {
   return (
     <section className="bg-card py-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-20 grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
-        <div className="md:col-span-3">
+        <div className="md:col-span-3 relative overflow-hidden">
+          <HeroBgDecoration />
+          <div className="relative z-10">
           <AnimatePresence mode="wait">
             <motion.div
               key={active}
@@ -215,6 +247,7 @@ const HeroSection = ({ lang }: { lang: string }) => {
                 )}
               </button>
             ))}
+          </div>
           </div>
         </div>
         <div className="md:col-span-2">
