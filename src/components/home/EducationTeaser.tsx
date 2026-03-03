@@ -12,6 +12,39 @@ import RevealSection from '@/components/RevealSection';
 import { INSTITUTIONS, INSTITUTION_COSTS } from '@/data/institutions';
 import { calculateProjectedCost, calculateRequiredSIP, calculateSIPCorpus, formatCurrency } from '@/utils/sipCalculator';
 
+const ParentDiplomaIllustration = () => (
+  <svg viewBox="0 0 280 150" fill="none" aria-hidden="true" className="w-full max-w-[280px] my-6">
+    {/* Parent figure */}
+    <circle cx="78" cy="44" r="17" fill="#1B6B3A" />
+    <path d="M60 130 L60 74 Q60 61 78 61 Q96 61 96 74 L96 130 Z" fill="#1B6B3A" />
+    {/* Arm reaching to diploma */}
+    <path d="M93 90 Q116 80 132 85" stroke="#1B6B3A" strokeWidth="6" strokeLinecap="round" />
+    {/* Diploma scroll */}
+    <rect x="130" y="72" width="52" height="36" rx="5" fill="#E8820C" />
+    <rect x="130" y="72" width="52" height="11" rx="5" fill="#E8820C" fillOpacity="0.55" />
+    {/* Scroll lines */}
+    <line x1="140" y1="92" x2="172" y2="92" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.7" />
+    <line x1="140" y1="100" x2="166" y2="100" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.7" />
+    {/* Seal */}
+    <circle cx="156" cy="67" r="8" fill="#E8820C" />
+    <circle cx="156" cy="67" r="5" fill="white" fillOpacity="0.45" />
+    {/* Pot */}
+    <path d="M222 130 L218 112 L238 112 L234 130 Z" fill="#1B6B3A" fillOpacity="0.65" />
+    <ellipse cx="228" cy="112" rx="11" ry="3.5" fill="#1B6B3A" fillOpacity="0.75" />
+    {/* Stem */}
+    <path d="M228 112 L228 82" stroke="#1B6B3A" strokeWidth="3.5" strokeLinecap="round" />
+    {/* Left leaf */}
+    <path d="M228 96 Q211 88 209 72 Q224 80 228 93" fill="#1B6B3A" />
+    {/* Right leaf */}
+    <path d="M228 87 Q245 79 248 63 Q232 72 228 84" fill="#1B6B3A" fillOpacity="0.78" />
+    {/* Bloom */}
+    <circle cx="228" cy="80" r="6" fill="#1B6B3A" fillOpacity="0.8" />
+    <circle cx="228" cy="74" r="5" fill="#E8820C" fillOpacity="0.75" />
+    {/* Ground */}
+    <path d="M45 130 L260 130" stroke="#1B6B3A" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.18" />
+  </svg>
+);
+
 const EducationTeaser = ({ lang }: { lang: string }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -66,7 +99,8 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
             {t('edu.tag', 'edu.tag')}
           </span>
           <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-3">{t('edu.headline', 'edu.headline')}</h2>
-          <p className="font-body text-muted-foreground mb-6">{t('edu.body', 'edu.body')}</p>
+          <p className="font-body text-muted-foreground mb-2">{t('edu.body', 'edu.body')}</p>
+          <ParentDiplomaIllustration />
           <div className="space-y-3 mb-6">
             {institutionCosts.map((ic) => (
               <div key={ic.name} className="flex items-center justify-between bg-card rounded-lg px-4 py-3">
