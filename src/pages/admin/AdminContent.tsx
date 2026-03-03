@@ -19,16 +19,23 @@ type ContentItem = {
   slug: string;
   title_en: string | null;
   title_or: string | null;
+  preview_en: string | null;
+  preview_or: string | null;
   body_en: string | null;
   body_or: string | null;
   category: string | null;
+  character_name: string | null;
+  character_profession_en: string | null;
+  character_profession_or: string | null;
   status: string;
   published_at: string | null;
   created_at: string;
 };
 
 const emptyItem = (): Partial<ContentItem> => ({
-  type: 'story', slug: '', title_en: '', title_or: '', body_en: '', body_or: '', category: '', status: 'draft',
+  type: 'story', slug: '', title_en: '', title_or: '', preview_en: '', preview_or: '',
+  body_en: '', body_or: '', category: '', character_name: '',
+  character_profession_en: '', character_profession_or: '', status: 'draft',
 });
 
 const AdminContent = () => {
@@ -204,15 +211,43 @@ const AdminContent = () => {
                 <Label>{editing.status === 'published' ? 'Published' : 'Draft'}</Label>
               </div>
 
+              {editing.type === 'story' && (
+                <div>
+                  <Label className="font-semibold">Character</Label>
+                  <Input placeholder="Character name (e.g. Mamata)"
+                    value={editing.character_name || ''}
+                    onChange={(e) => setEditing({ ...editing, character_name: e.target.value })}
+                    className="mt-1" />
+                  <Input placeholder="Profession (EN) e.g. School Teacher, Kendrapara"
+                    value={editing.character_profession_en || ''}
+                    onChange={(e) => setEditing({ ...editing, character_profession_en: e.target.value })}
+                    className="mt-2" />
+                  <Input placeholder="Profession (Odia)"
+                    value={editing.character_profession_or || ''}
+                    onChange={(e) => setEditing({ ...editing, character_profession_or: e.target.value })}
+                    className="mt-2"
+                    style={{ fontFamily: "'Noto Sans Oriya', sans-serif" }} />
+                </div>
+              )}
+
               <div className="grid grid-cols-1 gap-4">
                 <div>
                   <Label className="font-semibold">English</Label>
                   <Input placeholder="Title (EN)" value={editing.title_en || ''} onChange={(e) => setEditing({ ...editing, title_en: e.target.value, slug: editing.slug || slugify(e.target.value) })} className="mt-1" />
+                  <Input placeholder="Preview (EN) — 1-2 sentences shown on card"
+                    value={editing.preview_en || ''}
+                    onChange={(e) => setEditing({ ...editing, preview_en: e.target.value })}
+                    className="mt-2" />
                   <Textarea placeholder="Body (EN)" value={editing.body_en || ''} onChange={(e) => setEditing({ ...editing, body_en: e.target.value })} className="mt-2 min-h-[200px] font-mono text-sm" />
                 </div>
                 <div>
                   <Label className="font-semibold">Odia</Label>
                   <Input placeholder="Title (OR)" value={editing.title_or || ''} onChange={(e) => setEditing({ ...editing, title_or: e.target.value })} className="mt-1" />
+                  <Input placeholder="Preview (Odia)"
+                    value={editing.preview_or || ''}
+                    onChange={(e) => setEditing({ ...editing, preview_or: e.target.value })}
+                    className="mt-2"
+                    style={{ fontFamily: "'Noto Sans Oriya', sans-serif" }} />
                   <Textarea placeholder="Body (OR)" value={editing.body_or || ''} onChange={(e) => setEditing({ ...editing, body_or: e.target.value })} className="mt-2 min-h-[200px]" style={{ fontFamily: "'Noto Sans Oriya', sans-serif" }} />
                 </div>
               </div>
