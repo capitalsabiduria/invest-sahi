@@ -63,8 +63,8 @@
 
   "landing": {
     "tag": "Odisha's Homegrown Financial Services Platform",
-    "headline1": "Wealth is not about how much you earn.",
-    "headline2": "It's about what you do with it.",
+    "headline1": "Most people wait until they're \"rich enough\" to start investing.",
+    "headline2": "InvestSahi was built right here in Odisha to prove them wrong.",
     "body": "Most people wait until they're \"rich enough\" to start investing. InvestSahi was built right here in Odisha to prove them wrong. Whether you're a teacher in Kendrapara funding your daughter's IIT dream or an HR Manager in Bhubaneswar planning an early retirement — we give you the transparent, SEBI-registered roadmap to get there.",
     "trust1": "SEBI Registered",
     "trust2": "AMFI Certified",
@@ -73,12 +73,12 @@
     "cta2": "Book a free consultation",
     "card": {
       "title": "₹2,500/month SIP",
-      "subtitle": "With 10% annual step-up from ₹500/month",
+      "subtitle": "With 10% annual step-up",
       "row1label": "After 5 years",
       "row2label": "After 10 years",
       "row3label": "After 20 years",
       "disclaimer": "₹2,500/month starting SIP, 10% step-up yearly, 12% annual return. Not guaranteed.",
-      "footer": "Start at ₹500. Step up yearly. Build ₹1 crore."
+      "footer": "Start with a SIP as low as ₹500. Step up yearly. Build ₹1 crore."
     }
   },
 

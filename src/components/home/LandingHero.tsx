@@ -85,7 +85,7 @@ const LandingHero = ({ lang }: { lang: string }) => {
         viewBox="0 0 200 200"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute bottom-[-60px] right-[-60px] w-[480px] h-[480px] pointer-events-none select-none"
+        className="absolute bottom-[-60px] left-[-60px] w-[480px] h-[480px] pointer-events-none select-none"
         style={{ opacity: 0.045, color: '#2C1810', zIndex: 0 }}
       >
         <circle cx="100" cy="100" r="90" stroke="#2C1810" strokeWidth="3"/>
@@ -112,16 +112,18 @@ const LandingHero = ({ lang }: { lang: string }) => {
 
         {/* LEFT — brand story (3/5) */}
         <div className="md:col-span-3">
-          <span className="inline-block bg-saffron text-white text-xs font-medium font-body px-3 py-1 rounded-full mb-5">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-saffron text-white text-sm font-semibold font-body mb-6 tracking-wide">
             {t('landing.tag', "Odisha's Homegrown Financial Services Platform")}
           </span>
 
-          <h1 className="font-heading font-bold text-4xl md:text-[52px] leading-tight text-foreground mb-5">
-            {t('landing.headline1', 'Wealth is not about how much you earn.')}<br />
-            <span className="text-saffron">
-              {t('landing.headline2', "It's about what you do with it.")}
-            </span>
-          </h1>
+          <div className="mb-6">
+            <h1 className="font-body font-bold text-4xl md:text-[52px] leading-tight text-foreground mb-0">
+              {t('landing.headline1', 'Most people wait until they\'re "rich enough" to start investing.')}
+            </h1>
+            <h2 className="font-body font-bold text-4xl md:text-[52px] leading-tight text-saffron mt-1">
+              {t('landing.headline2', 'InvestSahi was built right here in Odisha to prove them wrong.')}
+            </h2>
+          </div>
 
           <p className="font-body text-lg text-muted-foreground max-w-lg mb-6">
             {t('landing.body', 'Most people wait until they\'re "rich enough" to start investing. InvestSahi was built right here in Odisha to prove them wrong.')}
