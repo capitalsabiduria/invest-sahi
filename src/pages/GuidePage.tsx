@@ -137,14 +137,14 @@ export default function GuidePage() {
         return;
       }
 
-      setPage(data as SeoPage);
-      document.title = `${data.title} | InvestSahi`;
+      setPage(data as unknown as SeoPage);
+      document.title = `${(data as any).title} | InvestSahi`;
 
       const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) metaDesc.setAttribute('content', data.meta_description);
+      if (metaDesc) metaDesc.setAttribute('content', (data as any).meta_description);
 
       // Fire-and-forget view count
-      supabase.rpc('increment_seo_view', { page_slug: slug });
+      (supabase.rpc as any)('increment_seo_view', { page_slug: slug });
       setLoading(false);
     }
 
@@ -193,7 +193,7 @@ export default function GuidePage() {
     <>
       <SchemaMarkup page={page} content={content} />
 
-      {/* Header */}
+      {/* Header — #8 shorter button text on mobile */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#F5EDD8] border-b border-[#E8820C]/20 px-4 md:px-8 py-3 flex items-center justify-between">
         <Link to="/" className="text-xl font-heading font-bold">
           <span style={{ color: '#E8820C' }}>Invest</span>
@@ -204,36 +204,38 @@ export default function GuidePage() {
           href={BRAND.social.whatsapp_link}
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-[#E8820C] text-white font-body text-sm px-4 py-2 rounded-lg hover:bg-[#C45C00] transition-colors"
+          className="bg-[#E8820C] text-white font-body text-sm px-4 py-2 rounded-lg hover:bg-[#C45C00] transition-colors whitespace-nowrap"
         >
-          Book a Free Call →
+          <span className="sm:hidden">Book a Call →</span>
+          <span className="hidden sm:inline">Book a Free Call →</span>
         </a>
       </header>
 
-      <main className="pt-16">
+      {/* #10 reduced hero py, #7 pb-20 for sticky bar */}
+      <main className="pt-16 pb-20 md:pb-0">
 
-        {/* Hero */}
-        <section className="bg-[#F5EDD8] py-16 md:py-24 px-4 md:px-8 min-h-[60vh] flex items-center">
+        {/* Hero — #1 smaller headline, #2 stacked CTAs, #10 reduced py */}
+        <section className="bg-[#F5EDD8] py-12 md:py-24 px-4 md:px-8 min-h-[60vh] flex items-center">
           <div className="max-w-6xl mx-auto w-full flex flex-col md:flex-row items-center gap-10">
             <div className="flex-1">
-              <h1 className="font-heading font-bold text-4xl md:text-5xl text-[#2C1810] leading-tight mb-4">
+              <h1 className="font-heading font-bold text-3xl md:text-5xl text-[#2C1810] leading-tight mb-4">
                 {content.hero_headline}
               </h1>
               <p className="font-body text-lg text-[#2C1810] opacity-80 mb-8 max-w-xl">
                 {content.hero_subline}
               </p>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <a
                   href={BRAND.social.whatsapp_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-[#E8820C] text-white font-body px-6 py-3 rounded-lg hover:bg-[#C45C00] transition-colors"
+                  className="w-full sm:w-auto text-center bg-[#E8820C] text-white font-body px-6 py-3 rounded-lg hover:bg-[#C45C00] transition-colors"
                 >
                   Start with ₹500 →
                 </a>
                 <Link
                   to="/#calculator"
-                  className="border-2 border-[#1B6B3A] text-[#1B6B3A] font-body px-6 py-3 rounded-lg hover:bg-[#1B6B3A] hover:text-white transition-colors"
+                  className="w-full sm:w-auto text-center border-2 border-[#1B6B3A] text-[#1B6B3A] font-body px-6 py-3 rounded-lg hover:bg-[#1B6B3A] hover:text-white transition-colors"
                 >
                   Calculate Your Fund →
                 </Link>
@@ -278,7 +280,7 @@ export default function GuidePage() {
           </section>
         )}
 
-        {/* Case Study */}
+        {/* Case Study — #3 verified padding */}
         {content.case_study && (
           <section className="bg-[#F5EDD8] py-14 px-4 md:px-8">
             <div className="max-w-3xl mx-auto">
@@ -326,8 +328,8 @@ export default function GuidePage() {
           </section>
         )}
 
-        {/* Why Section */}
-        <section className="bg-[#F5EDD8] py-14 px-4 md:px-8">
+        {/* Why Section — #6 reduced mobile py */}
+        <section className="bg-[#F5EDD8] py-10 md:py-14 px-4 md:px-8">
           <div className="max-w-4xl mx-auto">
             <h2 className="font-heading font-bold text-2xl md:text-3xl text-[#2C1810] text-center mb-10">
               {content.why_section.heading}
@@ -367,8 +369,8 @@ export default function GuidePage() {
           </section>
         )}
 
-        {/* Services */}
-        <section className="bg-[#F5EDD8] py-14 px-4 md:px-8">
+        {/* Services — #5 badge truncation */}
+        <section className="bg-[#F5EDD8] py-10 md:py-14 px-4 md:px-8">
           <div className="max-w-4xl mx-auto">
             <h2 className="font-heading font-bold text-2xl text-[#2C1810] text-center mb-10">
               What We Help You With
@@ -376,7 +378,7 @@ export default function GuidePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {content.services.map((service, i) => (
                 <div key={i} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="inline-block bg-[#E8820C] text-white font-body text-xs px-3 py-1 rounded-full mb-3">
+                  <div className="inline-block max-w-full truncate bg-[#E8820C] text-white font-body text-xs px-3 py-1 rounded-full mb-3">
                     {service.entry_amount}
                   </div>
                   <h3 className="font-heading font-bold text-[#2C1810] mb-2">{service.name}</h3>
@@ -387,7 +389,7 @@ export default function GuidePage() {
           </div>
         </section>
 
-        {/* FAQs */}
+        {/* FAQs — #4 improved tap targets */}
         {content.faqs && content.faqs.length > 0 && (
           <section className="bg-white py-14 px-4 md:px-8">
             <div className="max-w-3xl mx-auto">
@@ -399,15 +401,15 @@ export default function GuidePage() {
                   <div key={i} className="border border-[#E8820C]/20 rounded-xl overflow-hidden">
                     <button
                       onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                      className="w-full text-left px-6 py-4 flex items-center justify-between bg-[#F5EDD8] hover:bg-[#E8820C]/5 transition-colors"
+                      className="w-full text-left px-4 py-5 min-h-[52px] flex items-center justify-between bg-[#F5EDD8] hover:bg-[#E8820C]/5 transition-colors"
                     >
-                      <span className="font-body font-semibold text-[#2C1810] pr-4">{faq.question}</span>
+                      <span className="font-body font-semibold text-[#2C1810] pr-4 text-sm md:text-base">{faq.question}</span>
                       <span className="text-[#E8820C] flex-shrink-0 text-xl font-bold">
                         {openFaq === i ? '−' : '+'}
                       </span>
                     </button>
                     {openFaq === i && (
-                      <div className="px-6 py-4 bg-white">
+                      <div className="px-4 py-4 bg-white">
                         <p className="font-body text-[#2C1810] opacity-80 leading-relaxed text-sm">{faq.answer}</p>
                       </div>
                     )}
@@ -470,22 +472,36 @@ export default function GuidePage() {
           </div>
         </section>
 
-        {/* Footer */}
+        {/* Footer — #9 break-words */}
         <footer className="bg-[#F5EDD8] py-8 px-4 md:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <p className="font-body text-xs text-[#2C1810] opacity-60 mb-1">
+            <p className="font-body text-xs text-[#2C1810] opacity-60 mb-1 break-words px-4">
               © {new Date().getFullYear()} InvestSahi · Part of Sabiduria Capital Group
             </p>
-            <p className="font-body text-xs text-[#2C1810] opacity-60 mb-1">
+            <p className="font-body text-xs text-[#2C1810] opacity-60 mb-1 break-words px-4">
               {BRAND.registration.amfi_arn} · IRDAI Reg: {BRAND.registration.irdai_reg}
             </p>
-            <p className="font-body text-xs text-[#2C1810] opacity-50">
+            <p className="font-body text-xs text-[#2C1810] opacity-50 break-words px-4">
               {BRAND.address.full} · Based in Bhubaneswar. Serving all of Odisha — in person and online.
             </p>
           </div>
         </footer>
 
       </main>
+
+      {/* #7 WhatsApp sticky bar — mobile only */}
+      <a
+        href={BRAND.social.whatsapp_link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-[#1B6B3A] text-white font-body font-semibold text-base py-4 px-6 flex items-center justify-center gap-3 shadow-lg"
+      >
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <path d="M11 1C5.477 1 1 5.477 1 11c0 1.89.525 3.655 1.438 5.163L1 21l4.837-1.438A9.956 9.956 0 0011 21c5.523 0 10-4.477 10-10S16.523 1 11 1z" fill="white" opacity="0.2" stroke="white" strokeWidth="1.5"/>
+          <path d="M7.5 8.5c.5 1 1.5 2.5 3 3.5s2.5 1.5 3 1.5c.3-.5.8-1.5.5-2-.5-.5-1.5-.5-1.5-.5s-.5 0-1 .5c-.3-.3-1-1-1.5-1.5-.5-.5-.5-1-.5-1s0-1-.5-1.5c-.5-.3-1.5 0-2 .5-.3.5 0 1.5 0 1.5z" fill="white"/>
+        </svg>
+        Chat with us on WhatsApp
+      </a>
     </>
   );
 }
