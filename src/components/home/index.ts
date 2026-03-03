@@ -1,5 +1,4 @@
 export { default as HeroSection } from './HeroSection';
-export { default as StatsBar } from './StatsBar';
 export { default as GoalCards } from './GoalCards';
 export { default as EducationTeaser } from './EducationTeaser';
 export { default as StoriesSection } from './StoriesSection';
