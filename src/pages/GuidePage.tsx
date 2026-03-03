@@ -9,6 +9,8 @@ import { AMFI_ARN, IRDAI_REG, WHATSAPP_URL } from '@/config/constants';
 interface GuideContent {
   hero_headline: string;
   hero_subline: string;
+  story_paragraph?: string;
+  how_it_works?: string;
   why_section: { heading: string; points: string[] };
   services: Array<{ name: string; entry: string; description: string }>;
   trust_note: string;
@@ -213,7 +215,61 @@ const WhySection = ({ content }: { content: GuideContent }) => (
   </section>
 );
 
-/* ── Section 3: Services grid ──────────────────────────────── */
+/* ── Section 3a: Story ─────────────────────────────────────── */
+
+const StorySection = ({ content }: { content: GuideContent }) => {
+  if (!content.story_paragraph) return null;
+  return (
+    <section style={{ background: 'white' }} className="py-16">
+      <div className="max-w-3xl mx-auto px-4 md:px-8">
+        <div className="flex items-start gap-4">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true" className="flex-shrink-0 mt-1">
+            <text x="0" y="40" fontSize="64" fill="#E8820C" opacity="0.15" fontFamily="serif">"</text>
+          </svg>
+          <div>
+            <p className="font-body text-lg text-foreground leading-relaxed italic">
+              {content.story_paragraph}
+            </p>
+            <p className="text-sm text-muted-foreground font-body mt-3">
+              — A story from Odisha. Names changed for privacy.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ── Section 3b: How it works ──────────────────────────────── */
+
+const HowItWorksSection = ({ content }: { content: GuideContent }) => {
+  if (!content.how_it_works) return null;
+  return (
+    <section style={{ background: 'white' }} className="py-10">
+      <div className="max-w-3xl mx-auto px-4 md:px-8 text-center">
+        <h2 className="font-heading font-bold text-2xl text-foreground mb-4">
+          How It Works
+        </h2>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-6">
+          {['Free conversation', 'Your personal plan', 'Start from ₹500'].map((step, i) => (
+            <div key={i} className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-saffron text-white font-heading font-bold text-sm flex items-center justify-center flex-shrink-0">
+                {i + 1}
+              </div>
+              <span className="font-body text-sm text-foreground">{step}</span>
+              {i < 2 && <span className="hidden md:block text-muted-foreground">→</span>}
+            </div>
+          ))}
+        </div>
+        <p className="font-body text-muted-foreground text-base max-w-xl mx-auto">
+          {content.how_it_works}
+        </p>
+      </div>
+    </section>
+  );
+};
+
+/* ── Section 4: Services grid ──────────────────────────────── */
 
 const ServicesSection = ({ content }: { content: GuideContent }) => (
   <section style={{ background: '#F5EDD8' }} className="py-16">
@@ -393,6 +449,8 @@ const GuidePage = () => {
       <GuideHeader />
       <HeroSection content={content} />
       <WhySection content={content} />
+      <StorySection content={content} />
+      <HowItWorksSection content={content} />
       <ServicesSection content={content} />
       <TrustSection content={content} />
       <CtaSection content={content} />
