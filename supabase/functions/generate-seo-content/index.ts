@@ -59,7 +59,7 @@ Make all content highly specific and locally relevant to this exact audience. Re
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
             temperature: 0.7,
-            maxOutputTokens: 1000,
+            maxOutputTokens: 4096,
           }
         })
       }
