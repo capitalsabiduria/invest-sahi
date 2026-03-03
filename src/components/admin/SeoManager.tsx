@@ -493,7 +493,7 @@ const SeoManager = () => {
       setFetchError(`${error.message} (code: ${error.code})`);
       setPages([]);
     } else {
-      setPages((data as SeoPage[]) ?? []);
+      setPages((data as unknown as SeoPage[]) ?? []);
     }
     setLoading(false);
   }, []);

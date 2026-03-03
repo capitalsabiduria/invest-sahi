@@ -58,13 +58,16 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
   const handleSubmit = async () => {
     if (!phone && !name) return;
     const propertyLabel = PROPERTY_TYPES.find(p => p.id === propertyType)?.label || propertyType;
-    await supabase.from('calculator_leads').insert({
-      child_age: null,
-      target_institution: `Home: ${propertyLabel} in ${city || 'Odisha'}`,
-      monthly_sip_needed: calc.sipNeeded,
-      user_monthly_budget: calc.sipNeeded,
-      phone,
-    }).catch(() => {});
+    try {
+      await supabase.from('calculator_leads').insert({
+        child_age: null,
+        target_institution: `Home: ${propertyLabel} in ${city || 'Odisha'}`,
+        monthly_sip_needed: calc.sipNeeded,
+        user_monthly_budget: calc.sipNeeded,
+        phone,
+      });
+    } catch {}
+
     setSubmitted(true);
     toast({ title: 'Plan submitted!' });
   };
