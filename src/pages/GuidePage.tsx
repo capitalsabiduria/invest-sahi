@@ -1,462 +1,491 @@
-import { useEffect, useState, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { supabase } from '@/integrations/supabase/client';
-import { AMFI_ARN, IRDAI_REG, WHATSAPP_URL } from '@/config/constants';
-
-/* ── Types ─────────────────────────────────────────────────── */
+import { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { BRAND } from "@/constants/brand";
 
 interface GuideContent {
   hero_headline: string;
   hero_subline: string;
   story_paragraph?: string;
+  case_study?: {
+    challenge: string;
+    strategy: string;
+    result: string;
+  };
   how_it_works?: string;
-  why_section: { heading: string; points: string[] };
-  services: Array<{ name: string; entry: string; description: string }>;
+  why_section: {
+    heading: string;
+    points: string[];
+  };
+  local_insight?: string;
+  services: Array<{
+    name: string;
+    entry_amount: string;
+    description: string;
+  }>;
+  faqs?: Array<{
+    question: string;
+    answer: string;
+  }>;
   trust_note: string;
   cta_headline: string;
   cta_subline: string;
 }
 
 interface SeoPage {
-  id: string;
-  slug: string;
   title: string;
   meta_description: string;
-  content: GuideContent | null;
-  status: string;
   type: string;
-  view_count: number | null;
-  keywords: string[] | null;
-  created_at: string;
-  updated_at: string;
+  slug: string;
+  content: GuideContent | null;
 }
 
-/* ── Shared SVG atoms ───────────────────────────────────────── */
+function SchemaMarkup({ page, content }: { page: SeoPage; content: GuideContent }) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "FinancialService",
+    "name": BRAND.name,
+    "description": page.meta_description,
+    "url": `https://investsahi.in/guide/${page.slug}`,
+    "telephone": BRAND.contact.phone,
+    "email": BRAND.contact.email,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": BRAND.address.street,
+      "addressLocality": BRAND.address.city,
+      "addressRegion": BRAND.address.state,
+      "postalCode": BRAND.address.pin,
+      "addressCountry": "IN"
+    },
+    "areaServed": {
+      "@type": "State",
+      "name": "Odisha"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Financial Services",
+      "itemListElement": content.services.map(s => ({
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": s.name,
+          "description": s.description
+        }
+      }))
+    },
+    ...(content.faqs && content.faqs.length > 0 && {
+      "mainEntity": content.faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer
+        }
+      }))
+    })
+  };
 
-const SunWheel = ({ size = 160, opacity = 0.15 }: { size?: number; opacity?: number }) => {
-  const spokes = [0, 45, 90, 135, 180, 225, 270, 315];
   return (
-    <svg
-      width={size} height={size}
-      viewBox="0 0 100 100"
-      fill="none"
-      aria-hidden="true"
-    >
-      {spokes.map((angle, i) => {
-        const isLong = i % 2 === 0;
-        const len = isLong ? 44 : 32;
-        const rad = (angle * Math.PI) / 180;
-        const x2 = 50 + len * Math.cos(rad);
-        const y2 = 50 + len * Math.sin(rad);
-        return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+function LoadingSpinner() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#F5EDD8]">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="animate-spin">
+        <circle cx="24" cy="24" r="20" stroke="#E8820C" strokeWidth="3" strokeDasharray="31.4 94.2" />
+        {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
           <line
-            key={angle}
-            x1="50" y1="50" x2={x2} y2={y2}
+            key={i}
+            x1="24" y1="4"
+            x2="24" y2={i % 2 === 0 ? "10" : "8"}
             stroke="#E8820C"
-            strokeWidth={isLong ? 2 : 1.5}
-            strokeLinecap="round"
-            opacity={opacity}
+            strokeWidth="2"
+            transform={`rotate(${angle} 24 24)`}
           />
-        );
-      })}
-      <circle cx="50" cy="50" r="12" fill="#E8820C" opacity={opacity} />
-      <circle cx="50" cy="50" r="46" stroke="#E8820C" strokeWidth="2" fill="none" opacity={opacity} />
-    </svg>
-  );
-};
-
-const CheckCircle = () => (
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true" className="shrink-0">
-    <circle cx="14" cy="14" r="14" fill="#1B6B3A" fillOpacity="0.12" />
-    <circle cx="14" cy="14" r="10" fill="#1B6B3A" fillOpacity="0.18" />
-    <path d="M9 14.5 L12.5 18 L19 11" stroke="#1B6B3A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-const ShieldIcon = () => (
-  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true" className="shrink-0">
-    <path d="M20 4 L34 10 L34 20 C34 28 27 35 20 38 C13 35 6 28 6 20 L6 10 Z" fill="#1A6B9A" fillOpacity="0.15" />
-    <path d="M20 4 L34 10 L34 20 C34 28 27 35 20 38 C13 35 6 28 6 20 L6 10 Z" stroke="#1A6B9A" strokeWidth="2" strokeLinejoin="round" fill="none" />
-    <path d="M13 20.5 L17.5 25 L27 15" stroke="#1A6B9A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-const SmallCheck = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="shrink-0">
-    <circle cx="8" cy="8" r="8" fill="#1B6B3A" fillOpacity="0.15" />
-    <path d="M5 8.5 L7 10.5 L11 6.5" stroke="#1B6B3A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-/* ── Loading spinner ────────────────────────────────────────── */
-
-const LoadingSpinner = () => (
-  <div className="min-h-screen flex items-center justify-center" style={{ background: '#F5EDD8' }}>
-    <div style={{ animation: 'spin 3s linear infinite' }}>
-      <SunWheel size={48} opacity={1} />
-    </div>
-    <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
-  </div>
-);
-
-/* ── 404 page ───────────────────────────────────────────────── */
-
-const NotFoundPage = () => (
-  <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: '#F5EDD8' }}>
-    <span className="font-heading font-bold text-2xl" style={{ color: '#E8820C' }}>Invest</span>
-    <span className="font-heading font-semibold text-2xl" style={{ color: '#2C1810' }}>Sahi</span>
-    <p className="font-heading text-lg mt-4" style={{ color: '#2C1810' }}>Page not found</p>
-    <Link to="/en" className="mt-2 font-body text-sm" style={{ color: '#E8820C' }}>
-      Go to Homepage →
-    </Link>
-  </div>
-);
-
-/* ── Guide header ───────────────────────────────────────────── */
-
-const GuideHeader = () => (
-  <header
-    className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 h-14"
-    style={{ background: 'white', borderBottom: '1px solid #E5E7EB' }}
-  >
-    <Link to="/en" className="flex items-baseline gap-0.5">
-      <span className="font-heading font-bold text-xl" style={{ color: '#E8820C' }}>Invest</span>
-      <span className="font-heading font-semibold text-xl" style={{ color: '#2C1810' }}>Sahi</span>
-      <span className="font-heading text-xs font-medium" style={{ color: '#1B6B3A' }}>.in</span>
-    </Link>
-    <Link
-      to="/en/book"
-      onClick={() => window.scrollTo({ top: 0 })}
-      className="font-heading font-semibold text-sm px-4 py-2 rounded-lg text-white"
-      style={{ background: '#E8820C' }}
-    >
-      Book a Free Call →
-    </Link>
-  </header>
-);
-
-/* ── Section 1: Hero ───────────────────────────────────────── */
-
-const HeroSection = ({ content }: { content: GuideContent }) => (
-  <section
-    className="pt-14"
-    style={{ background: '#F5EDD8', minHeight: '60vh', display: 'flex', alignItems: 'center' }}
-  >
-    <div className="max-w-6xl mx-auto px-6 py-16 w-full grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-      <div>
-        <h1
-          className="font-heading font-bold leading-tight mb-4"
-          style={{ fontSize: 'clamp(2.25rem, 5vw, 3rem)', color: '#2C1810' }}
-        >
-          {content.hero_headline}
-        </h1>
-        <p className="font-body mb-8" style={{ fontSize: '18px', color: '#6B6B6B' }}>
-          {content.hero_subline}
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <Link
-            to="/en/book"
-            onClick={() => window.scrollTo({ top: 0 })}
-            className="font-heading font-semibold px-6 py-3 rounded-lg text-white transition-opacity hover:opacity-90"
-            style={{ background: '#E8820C' }}
-          >
-            Start with ₹500 →
-          </Link>
-          <Link
-            to="/en/calculator"
-            onClick={() => window.scrollTo({ top: 0 })}
-            className="font-heading font-semibold px-6 py-3 rounded-lg transition-opacity hover:opacity-80"
-            style={{ border: '2px solid #1B6B3A', color: '#1B6B3A', background: 'transparent' }}
-          >
-            Calculate Your Fund →
-          </Link>
-        </div>
-      </div>
-      <div className="hidden md:flex items-center justify-center">
-        <SunWheel size={280} opacity={0.18} />
-      </div>
-    </div>
-  </section>
-);
-
-/* ── Section 2: Why section ────────────────────────────────── */
-
-const WhySection = ({ content }: { content: GuideContent }) => (
-  <section style={{ background: 'white' }} className="py-16">
-    <div className="max-w-3xl mx-auto px-6">
-      <motion.h2
-        className="font-heading font-bold text-center mb-10"
-        style={{ fontSize: '28px', color: '#2C1810' }}
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        {content.why_section.heading}
-      </motion.h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {content.why_section.points.map((point, i) => (
-          <motion.div
-            key={i}
-            className="rounded-xl p-5 flex flex-col items-start gap-3"
-            style={{ background: '#F5EDD8' }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: i * 0.12 }}
-          >
-            <CheckCircle />
-            <p className="font-body" style={{ fontSize: '16px', color: '#2C1810' }}>{point}</p>
-          </motion.div>
         ))}
-      </div>
+      </svg>
     </div>
-  </section>
-);
-
-/* ── Section 3a: Story ─────────────────────────────────────── */
-
-const StorySection = ({ content }: { content: GuideContent }) => {
-  if (!content.story_paragraph) return null;
-  return (
-    <section style={{ background: 'white' }} className="py-16">
-      <div className="max-w-3xl mx-auto px-4 md:px-8">
-        <div className="flex items-start gap-4">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true" className="flex-shrink-0 mt-1">
-            <text x="0" y="40" fontSize="64" fill="#E8820C" opacity="0.15" fontFamily="serif">"</text>
-          </svg>
-          <div>
-            <p className="font-body text-lg text-foreground leading-relaxed italic">
-              {content.story_paragraph}
-            </p>
-            <p className="text-sm text-muted-foreground font-body mt-3">
-              — A story from Odisha. Names changed for privacy.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
   );
-};
+}
 
-/* ── Section 3b: How it works ──────────────────────────────── */
-
-const HowItWorksSection = ({ content }: { content: GuideContent }) => {
-  if (!content.how_it_works) return null;
-  return (
-    <section style={{ background: 'white' }} className="py-10">
-      <div className="max-w-3xl mx-auto px-4 md:px-8 text-center">
-        <h2 className="font-heading font-bold text-2xl text-foreground mb-4">
-          How It Works
-        </h2>
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-6">
-          {['Free conversation', 'Your personal plan', 'Start from ₹500'].map((step, i) => (
-            <div key={i} className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-saffron text-white font-heading font-bold text-sm flex items-center justify-center flex-shrink-0">
-                {i + 1}
-              </div>
-              <span className="font-body text-sm text-foreground">{step}</span>
-              {i < 2 && <span className="hidden md:block text-muted-foreground">→</span>}
-            </div>
-          ))}
-        </div>
-        <p className="font-body text-muted-foreground text-base max-w-xl mx-auto">
-          {content.how_it_works}
-        </p>
-      </div>
-    </section>
-  );
-};
-
-/* ── Section 4: Services grid ──────────────────────────────── */
-
-const ServicesSection = ({ content }: { content: GuideContent }) => (
-  <section style={{ background: '#F5EDD8' }} className="py-16">
-    <div className="max-w-5xl mx-auto px-6">
-      <h2 className="font-heading font-bold text-center mb-10" style={{ fontSize: '28px', color: '#2C1810' }}>
-        What We Offer
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {content.services.map((svc, i) => (
-          <motion.div
-            key={i}
-            className="bg-white rounded-xl shadow-sm p-5 flex flex-col gap-2 transition-shadow hover:shadow-md cursor-default"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: i * 0.1 }}
-          >
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="font-heading font-semibold text-base" style={{ color: '#2C1810' }}>
-                {svc.name}
-              </h3>
-              <span
-                className="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full text-white"
-                style={{ background: '#E8820C' }}
-              >
-                {svc.entry}
-              </span>
-            </div>
-            <p className="font-body text-sm" style={{ color: '#6B6B6B' }}>{svc.description}</p>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-/* ── Section 4: Trust note ─────────────────────────────────── */
-
-const TrustSection = ({ content }: { content: GuideContent }) => (
-  <section style={{ background: '#EAF4FB' }} className="py-14">
-    <div className="max-w-3xl mx-auto px-6">
-      <div className="flex items-start gap-4 mb-6">
-        <ShieldIcon />
-        <p className="font-body text-base leading-relaxed" style={{ color: '#2C1810' }}>
-          {content.trust_note}
-        </p>
-      </div>
-      <div className="flex flex-wrap gap-3">
-        {['SEBI Registered', 'AMFI Certified', 'IRDAI Licensed'].map((badge) => (
-          <span
-            key={badge}
-            className="flex items-center gap-1.5 font-body text-sm px-3 py-1.5 rounded-full"
-            style={{ background: 'white', color: '#2C1810', border: '1px solid #D0E8F5' }}
-          >
-            <SmallCheck />
-            {badge}
-          </span>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-/* ── Section 5: CTA block ──────────────────────────────────── */
-
-const CtaSection = ({ content }: { content: GuideContent }) => (
-  <section style={{ background: '#E8820C' }} className="py-16">
-    <div className="max-w-2xl mx-auto px-6 text-center">
-      <h2 className="font-heading font-bold mb-3" style={{ fontSize: '32px', color: 'white' }}>
-        {content.cta_headline}
-      </h2>
-      <p className="font-body mb-8" style={{ color: 'rgba(255,255,255,0.85)' }}>
-        {content.cta_subline}
-      </p>
-      <div className="flex flex-wrap justify-center gap-3">
-        <Link
-          to="/en/book"
-          onClick={() => window.scrollTo({ top: 0 })}
-          className="font-heading font-semibold px-6 py-3 rounded-lg transition-opacity hover:opacity-90"
-          style={{ background: 'white', color: '#E8820C' }}
-        >
-          Book a Free Call
-        </Link>
-        <a
-          href={WHATSAPP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-heading font-semibold px-6 py-3 rounded-lg transition-opacity hover:opacity-90"
-          style={{ border: '2px solid white', color: 'white', background: 'transparent' }}
-        >
-          WhatsApp Us
-        </a>
-      </div>
-    </div>
-  </section>
-);
-
-/* ── Guide footer ───────────────────────────────────────────── */
-
-const GuideFooter = () => (
-  <footer style={{ background: '#F5EDD8' }} className="py-5 text-center">
-    <p className="font-body text-xs" style={{ color: '#6B6B6B' }}>
-      © 2025 InvestSahi · Part of Sabiduria Capital Group · AMFI ARN-{AMFI_ARN} · IRDAI REG-{IRDAI_REG}
-    </p>
-  </footer>
-);
-
-/* ── Main page component ───────────────────────────────────── */
-
-const GuidePage = () => {
+export default function GuidePage() {
   const { slug } = useParams<{ slug: string }>();
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState<SeoPage | null>(null);
+  const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const didFireView = useRef(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!slug) { setNotFound(true); setLoading(false); return; }
+    if (!slug) return;
 
-    (async () => {
-      const { data, error } = await (supabase as any)
-        .from('seo_pages')
-        .select('*')
+    async function fetchPage() {
+      const { data, error } = await supabase
+        .from('seo_pages' as any)
+        .select('title, meta_description, type, slug, content')
         .eq('slug', slug)
         .eq('status', 'live')
         .maybeSingle();
 
       if (error || !data) {
         setNotFound(true);
-      } else {
-        setPage(data as SeoPage);
+        setLoading(false);
+        return;
       }
+
+      setPage(data as SeoPage);
+      document.title = `${data.title} | InvestSahi`;
+
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute('content', data.meta_description);
+
+      // Fire-and-forget view count
+      supabase.rpc('increment_seo_view', { page_slug: slug });
       setLoading(false);
-    })();
+    }
+
+    fetchPage();
   }, [slug]);
 
-  /* fire-and-forget view increment (once per mount) */
-  useEffect(() => {
-    if (page && !didFireView.current) {
-      didFireView.current = true;
-      (supabase as any).rpc('increment_seo_view', { page_slug: page.slug });
-    }
-  }, [page]);
-
-  /* set meta tags */
-  useEffect(() => {
-    if (!page) return;
-    document.title = page.title;
-    let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
-    if (!meta) {
-      meta = document.createElement('meta');
-      meta.name = 'description';
-      document.head.appendChild(meta);
-    }
-    meta.content = page.meta_description;
-  }, [page]);
-
   if (loading) return <LoadingSpinner />;
-  if (notFound || !page) return <NotFoundPage />;
 
-  const content = page.content;
-  if (!content) {
-    /* page exists but no content yet — show minimal holding state */
+  if (notFound || !page) {
     return (
-      <div className="min-h-screen" style={{ background: '#F5EDD8' }}>
-        <GuideHeader />
-        <div className="pt-14 flex items-center justify-center min-h-screen">
-          <p className="font-heading text-lg" style={{ color: '#2C1810' }}>Content coming soon.</p>
-        </div>
-        <GuideFooter />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F5EDD8] gap-6 px-4">
+        <Link to="/" className="text-2xl font-heading font-bold">
+          <span style={{ color: '#E8820C' }}>Invest</span>
+          <span style={{ color: '#2C1810' }}>Sahi</span>
+          <span style={{ color: '#1B6B3A', fontSize: '0.6em' }}>.in</span>
+        </Link>
+        <h1 className="font-heading font-bold text-2xl text-[#2C1810]">Page not found</h1>
+        <p className="font-body text-[#2C1810] opacity-70">This page doesn't exist or hasn't been published yet.</p>
+        <Link to="/" className="bg-[#E8820C] text-white font-body px-6 py-3 rounded-lg hover:bg-[#C45C00] transition-colors">
+          Go to Homepage
+        </Link>
+      </div>
+    );
+  }
+
+  const content = page.content as GuideContent | null;
+
+  if (!content) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F5EDD8] gap-4 px-4">
+        <Link to="/" className="text-2xl font-heading font-bold">
+          <span style={{ color: '#E8820C' }}>Invest</span>
+          <span style={{ color: '#2C1810' }}>Sahi</span>
+          <span style={{ color: '#1B6B3A', fontSize: '0.6em' }}>.in</span>
+        </Link>
+        <h1 className="font-heading font-bold text-xl text-[#2C1810]">Content coming soon</h1>
+        <p className="font-body text-[#2C1810] opacity-70">We're working on this page. Check back shortly.</p>
+        <Link to="/" className="bg-[#E8820C] text-white font-body px-6 py-3 rounded-lg hover:bg-[#C45C00] transition-colors">
+          Go to Homepage
+        </Link>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
-      <GuideHeader />
-      <HeroSection content={content} />
-      <WhySection content={content} />
-      <StorySection content={content} />
-      <HowItWorksSection content={content} />
-      <ServicesSection content={content} />
-      <TrustSection content={content} />
-      <CtaSection content={content} />
-      <GuideFooter />
-    </div>
-  );
-};
+    <>
+      <SchemaMarkup page={page} content={content} />
 
-export default GuidePage;
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#F5EDD8] border-b border-[#E8820C]/20 px-4 md:px-8 py-3 flex items-center justify-between">
+        <Link to="/" className="text-xl font-heading font-bold">
+          <span style={{ color: '#E8820C' }}>Invest</span>
+          <span style={{ color: '#2C1810' }}>Sahi</span>
+          <span style={{ color: '#1B6B3A', fontSize: '0.6em' }}>.in</span>
+        </Link>
+        <a
+          href={BRAND.social.whatsapp_link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-[#E8820C] text-white font-body text-sm px-4 py-2 rounded-lg hover:bg-[#C45C00] transition-colors"
+        >
+          Book a Free Call →
+        </a>
+      </header>
+
+      <main className="pt-16">
+
+        {/* Hero */}
+        <section className="bg-[#F5EDD8] py-16 md:py-24 px-4 md:px-8 min-h-[60vh] flex items-center">
+          <div className="max-w-6xl mx-auto w-full flex flex-col md:flex-row items-center gap-10">
+            <div className="flex-1">
+              <h1 className="font-heading font-bold text-4xl md:text-5xl text-[#2C1810] leading-tight mb-4">
+                {content.hero_headline}
+              </h1>
+              <p className="font-body text-lg text-[#2C1810] opacity-80 mb-8 max-w-xl">
+                {content.hero_subline}
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <a
+                  href={BRAND.social.whatsapp_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-[#E8820C] text-white font-body px-6 py-3 rounded-lg hover:bg-[#C45C00] transition-colors"
+                >
+                  Start with ₹500 →
+                </a>
+                <Link
+                  to="/#calculator"
+                  className="border-2 border-[#1B6B3A] text-[#1B6B3A] font-body px-6 py-3 rounded-lg hover:bg-[#1B6B3A] hover:text-white transition-colors"
+                >
+                  Calculate Your Fund →
+                </Link>
+              </div>
+            </div>
+            <div className="flex-shrink-0 opacity-15">
+              <svg width="180" height="180" viewBox="0 0 180 180" fill="none">
+                <circle cx="90" cy="90" r="12" fill="#E8820C" />
+                {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
+                  <line
+                    key={i}
+                    x1="90" y1="22"
+                    x2="90" y2={i % 2 === 0 ? "38" : "32"}
+                    stroke="#E8820C"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    transform={`rotate(${angle} 90 90)`}
+                  />
+                ))}
+                <circle cx="90" cy="90" r="70" stroke="#E8820C" strokeWidth="2" fill="none" />
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        {/* Story */}
+        {content.story_paragraph && (
+          <section className="bg-white py-14 px-4 md:px-8">
+            <div className="max-w-3xl mx-auto">
+              <div className="flex items-start gap-4">
+                <div className="text-6xl text-[#E8820C] opacity-20 font-serif leading-none flex-shrink-0 mt-[-8px]">"</div>
+                <div>
+                  <p className="font-body text-lg text-[#2C1810] leading-relaxed italic">
+                    {content.story_paragraph}
+                  </p>
+                  <p className="font-body text-sm text-[#2C1810] opacity-50 mt-3">
+                    — A story from Odisha. Names changed for privacy.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Case Study */}
+        {content.case_study && (
+          <section className="bg-[#F5EDD8] py-14 px-4 md:px-8">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="font-heading font-bold text-2xl text-[#2C1810] mb-8 text-center">
+                How We Helped — A Real Example
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[
+                  { label: 'The Challenge', text: content.case_study.challenge, color: '#C45C00' },
+                  { label: 'What We Did', text: content.case_study.strategy, color: '#1A6B9A' },
+                  { label: 'The Result', text: content.case_study.result, color: '#1B6B3A' },
+                ].map((item) => (
+                  <div key={item.label} className="bg-white rounded-xl p-6 shadow-sm">
+                    <div className="font-heading font-bold text-sm mb-2" style={{ color: item.color }}>
+                      {item.label}
+                    </div>
+                    <p className="font-body text-[#2C1810] text-sm leading-relaxed">{item.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* How It Works */}
+        {content.how_it_works && (
+          <section className="bg-white py-12 px-4 md:px-8">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="font-heading font-bold text-2xl text-[#2C1810] mb-6">How It Works</h2>
+              <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
+                {['Free conversation', 'Your personal plan', 'Start from ₹500'].map((step, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[#E8820C] text-white font-heading font-bold text-sm flex items-center justify-center flex-shrink-0">
+                      {i + 1}
+                    </div>
+                    <span className="font-body text-sm text-[#2C1810]">{step}</span>
+                    {i < 2 && <span className="hidden md:block text-[#2C1810] opacity-30">→</span>}
+                  </div>
+                ))}
+              </div>
+              <p className="font-body text-[#2C1810] opacity-75 text-base max-w-xl mx-auto">
+                {content.how_it_works}
+              </p>
+            </div>
+          </section>
+        )}
+
+        {/* Why Section */}
+        <section className="bg-[#F5EDD8] py-14 px-4 md:px-8">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="font-heading font-bold text-2xl md:text-3xl text-[#2C1810] text-center mb-10">
+              {content.why_section.heading}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {content.why_section.points.map((point, i) => (
+                <div key={i} className="bg-white rounded-xl p-6 shadow-sm">
+                  <div className="w-8 h-8 rounded-full bg-[#1B6B3A]/10 flex items-center justify-center mb-3">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M3 8l3.5 3.5L13 4.5" stroke="#1B6B3A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                  <p className="font-body text-[#2C1810] text-sm leading-relaxed">{point}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Local Insight */}
+        {content.local_insight && (
+          <section className="py-12 px-4 md:px-8" style={{ backgroundColor: '#EAF4FB' }}>
+            <div className="max-w-3xl mx-auto flex items-start gap-4">
+              <div className="flex-shrink-0 mt-1">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                  <circle cx="14" cy="14" r="13" stroke="#1A6B9A" strokeWidth="1.5" />
+                  <path d="M14 9v5M14 17v2" stroke="#1A6B9A" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </div>
+              <div>
+                <div className="font-heading font-bold text-sm text-[#1A6B9A] mb-2 uppercase tracking-wide">
+                  Local Insight
+                </div>
+                <p className="font-body text-[#2C1810] leading-relaxed">{content.local_insight}</p>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Services */}
+        <section className="bg-[#F5EDD8] py-14 px-4 md:px-8">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="font-heading font-bold text-2xl text-[#2C1810] text-center mb-10">
+              What We Help You With
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {content.services.map((service, i) => (
+                <div key={i} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="inline-block bg-[#E8820C] text-white font-body text-xs px-3 py-1 rounded-full mb-3">
+                    {service.entry_amount}
+                  </div>
+                  <h3 className="font-heading font-bold text-[#2C1810] mb-2">{service.name}</h3>
+                  <p className="font-body text-[#2C1810] opacity-75 text-sm leading-relaxed">{service.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQs */}
+        {content.faqs && content.faqs.length > 0 && (
+          <section className="bg-white py-14 px-4 md:px-8">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="font-heading font-bold text-2xl text-[#2C1810] text-center mb-10">
+                Frequently Asked Questions
+              </h2>
+              <div className="space-y-3">
+                {content.faqs.map((faq, i) => (
+                  <div key={i} className="border border-[#E8820C]/20 rounded-xl overflow-hidden">
+                    <button
+                      onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                      className="w-full text-left px-6 py-4 flex items-center justify-between bg-[#F5EDD8] hover:bg-[#E8820C]/5 transition-colors"
+                    >
+                      <span className="font-body font-semibold text-[#2C1810] pr-4">{faq.question}</span>
+                      <span className="text-[#E8820C] flex-shrink-0 text-xl font-bold">
+                        {openFaq === i ? '−' : '+'}
+                      </span>
+                    </button>
+                    {openFaq === i && (
+                      <div className="px-6 py-4 bg-white">
+                        <p className="font-body text-[#2C1810] opacity-80 leading-relaxed text-sm">{faq.answer}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Trust */}
+        <section className="bg-[#EAF4FB] py-12 px-4 md:px-8">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="flex justify-center mb-4">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                <path d="M18 3L4 9v10c0 8.3 6 16 14 18 8-2 14-9.7 14-18V9L18 3z" fill="#1A6B9A" opacity="0.15" stroke="#1A6B9A" strokeWidth="1.5" />
+                <path d="M12 18l4 4 8-8" stroke="#1A6B9A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <p className="font-body text-[#2C1810] mb-6 max-w-xl mx-auto">{content.trust_note}</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              {['SEBI Registered', 'AMFI Certified', 'IRDAI Licensed'].map(badge => (
+                <div key={badge} className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <circle cx="7" cy="7" r="6" fill="#1B6B3A" opacity="0.15" />
+                    <path d="M4 7l2 2 4-4" stroke="#1B6B3A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span className="font-body text-xs text-[#2C1810] font-medium">{badge}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="bg-[#E8820C] py-16 px-4 md:px-8 text-center">
+          <div className="max-w-2xl mx-auto">
+            <h2 className="font-heading font-bold text-3xl text-white mb-3">
+              {content.cta_headline}
+            </h2>
+            <p className="font-body text-white opacity-90 mb-8">{content.cta_subline}</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a
+                href={BRAND.social.whatsapp_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white text-[#E8820C] font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#F5EDD8] transition-colors"
+              >
+                Book a Free Call
+              </a>
+              <a
+                href={BRAND.social.whatsapp_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="border-2 border-white text-white font-body px-6 py-3 rounded-lg hover:bg-white hover:text-[#E8820C] transition-colors"
+              >
+                WhatsApp Us
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="bg-[#F5EDD8] py-8 px-4 md:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <p className="font-body text-xs text-[#2C1810] opacity-60 mb-1">
+              © {new Date().getFullYear()} InvestSahi · Part of Sabiduria Capital Group
+            </p>
+            <p className="font-body text-xs text-[#2C1810] opacity-60 mb-1">
+              {BRAND.registration.amfi_arn} · IRDAI Reg: {BRAND.registration.irdai_reg}
+            </p>
+            <p className="font-body text-xs text-[#2C1810] opacity-50">
+              {BRAND.address.full} · Based in Bhubaneswar. Serving all of Odisha — in person and online.
+            </p>
+          </div>
+        </footer>
+
+      </main>
+    </>
+  );
+}
