@@ -16,11 +16,14 @@ import { useToast } from '@/hooks/use-toast';
 import { INSTITUTIONS } from '@/data/institutions';
 import { calculateProjectedCost, calculateRequiredSIP, calculateSIPCorpus, formatCurrency } from '@/utils/sipCalculator';
 import { WHATSAPP_URL } from '@/config/constants';
+import GoalSelector, { type GoalType } from '@/components/calculator/GoalSelector';
+import BasicWealthCalculator from '@/components/calculator/BasicWealthCalculator';
 
 const ICON_MAP: Record<string, React.ElementType> = { GraduationCap, Stethoscope, Briefcase, BookOpen };
 
 const Calculator = () => {
   const { t } = useTranslation();
+  const [selectedGoal, setSelectedGoal] = useState<GoalType | null>(null);
   const { lang } = useParams<{ lang: string }>();
   const currentLang = lang || 'en';
   const { toast } = useToast();
@@ -99,13 +102,45 @@ const Calculator = () => {
     <div className="min-h-screen">
       <Navbar />
 
-      <section className="bg-green py-16 text-center">
-        <div className="max-w-3xl mx-auto px-4">
-          <h1 className="font-heading font-bold text-4xl text-white mb-3">{t('calc.hero.headline', 'calc.hero.headline')}</h1>
-          <p className="font-body text-white/80">{t('calc.hero.subline', 'calc.hero.subline')}</p>
-        </div>
-      </section>
+      {/* Goal not yet selected — show Goal Selector */}
+      {selectedGoal === null && (
+        <>
+          <section className="bg-green py-16 text-center">
+            <div className="max-w-3xl mx-auto px-4">
+              <h1 className="font-heading font-bold text-4xl text-white mb-3">
+                {t('goals.page.heading', 'Build Your Wealth Plan')}
+              </h1>
+              <p className="font-body text-white/80">
+                {t('goals.page.subheading', "Tell us your goal — we'll show you exactly how to get there.")}
+              </p>
+            </div>
+          </section>
+          <GoalSelector onGoalSelect={setSelectedGoal} />
+        </>
+      )}
 
+      {/* Education goal — existing full calculator */}
+      {selectedGoal === 'education' && (
+        <>
+          <section className="bg-green py-16 text-center">
+            <div className="max-w-3xl mx-auto px-4">
+              <h1 className="font-heading font-bold text-4xl text-white mb-3">
+                {t('calc.hero.headline', 'Education Planning Calculator')}
+              </h1>
+              <p className="font-body text-white/80">
+                {t('calc.hero.subline', "Name the college. We'll show you the monthly SIP to get there.")}
+              </p>
+            </div>
+          </section>
+          {/* ← Change Goal button */}
+          <div className="max-w-7xl mx-auto px-4 md:px-8 pt-6">
+            <button
+              onClick={() => setSelectedGoal(null)}
+              className="flex items-center gap-2 text-sm font-body text-muted-foreground hover:text-foreground transition-colors"
+            >
+              ← {t('goals.calc.back', 'Change Goal')}
+            </button>
+          </div>
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 grid grid-cols-1 lg:grid-cols-5 gap-10">
         <div className="lg:col-span-3 space-y-8">
           {/* Step 1 */}
@@ -322,6 +357,16 @@ const Calculator = () => {
           </div>
         </div>
       </div>
+        </>
+      )}
+
+      {/* Home / Retirement / Wealth goals */}
+      {selectedGoal !== null && selectedGoal !== 'education' && (
+        <BasicWealthCalculator
+          goal={selectedGoal}
+          onBack={() => setSelectedGoal(null)}
+        />
+      )}
 
       <Footer />
       <WhatsAppFAB />

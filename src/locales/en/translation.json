@@ -118,6 +118,31 @@
       "goal3": "Atal Pension Yojana for informal workers",
       "goal4": "Building a pension on variable income",
       "cta": "Plan Your Retirement"
+    },
+    "heading": "What is your primary focus right now?",
+    "subheading": "We'll build a personalised plan around your goal.",
+    "hint": "Not sure? Start with Building Wealth — you can always refine later.",
+    "home": { "title": "Buying a Home", "subtitle": "Plan your down payment and EMI budget" },
+    "education": { "title": "Child's Education", "subtitle": "Fund NIT, IIT, AIIMS — name the college" },
+    "retirement": { "title": "Early Retirement", "subtitle": "Build the corpus to retire on your terms" },
+    "wealth": { "title": "Building Wealth", "subtitle": "Grow your savings systematically" },
+    "page": {
+      "heading": "Build Your Wealth Plan",
+      "subheading": "Tell us your goal — we'll show you exactly how to get there."
+    },
+    "calc": {
+      "back": "Change Goal",
+      "monthly": "Monthly SIP Amount",
+      "years": "Investment Period",
+      "years_label": "years",
+      "rate_note": "Assumed return: 12% per annum (historical equity average). Not guaranteed.",
+      "corpus_label": "Estimated Corpus",
+      "invested": "Total Invested",
+      "gained": "Wealth Gained",
+      "cta": "Get a Personalised Plan on WhatsApp →",
+      "home": { "heading": "Plan Your Home Purchase" },
+      "retirement": { "heading": "Plan Your Early Retirement" },
+      "wealth": { "heading": "Build Your Wealth Systematically" }
     }
   },
 
