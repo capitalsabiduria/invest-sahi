@@ -97,8 +97,13 @@ export type Database = {
           body_en: string | null
           body_or: string | null
           category: string | null
+          character_name: string | null
+          character_profession_en: string | null
+          character_profession_or: string | null
           created_at: string | null
           id: string
+          preview_en: string | null
+          preview_or: string | null
           published_at: string | null
           slug: string
           status: string | null
@@ -110,8 +115,13 @@ export type Database = {
           body_en?: string | null
           body_or?: string | null
           category?: string | null
+          character_name?: string | null
+          character_profession_en?: string | null
+          character_profession_or?: string | null
           created_at?: string | null
           id?: string
+          preview_en?: string | null
+          preview_or?: string | null
           published_at?: string | null
           slug: string
           status?: string | null
@@ -123,8 +133,13 @@ export type Database = {
           body_en?: string | null
           body_or?: string | null
           category?: string | null
+          character_name?: string | null
+          character_profession_en?: string | null
+          character_profession_or?: string | null
           created_at?: string | null
           id?: string
+          preview_en?: string | null
+          preview_or?: string | null
           published_at?: string | null
           slug?: string
           status?: string | null
