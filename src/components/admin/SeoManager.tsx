@@ -598,73 +598,28 @@ const SeoManager = () => {
     setGeneratingId(page.id);
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: `You are a financial content writer for InvestSahi, Odisha's first bilingual financial advisory platform for middle-class Odia families. Generate SEO page content in JSON format ONLY. No markdown, no explanation, no code fences — just raw valid JSON.
-
-Brand voice rules:
-- Warm, peer-like tone. Never corporate or jargon-heavy.
-- Always mention ₹500 as the entry point somewhere natural.
-- Reference specific Odisha locations, institutions, or communities naturally.
-- Never promise guaranteed returns.
-- Acknowledge chit fund fear briefly in trust_note.
-- Keep language simple enough for a Class 10 educated reader.
-
-Return ONLY this JSON structure with no other text:
-{
-  "hero_headline": "compelling, specific headline for this page's audience (max 12 words)",
-  "hero_subline": "1-2 warm sentences explaining what this page offers (max 30 words)",
-  "why_section": {
-    "heading": "Why InvestSahi for [specific audience/location]",
-    "points": ["specific point 1 (max 15 words)", "specific point 2 (max 15 words)", "specific point 3 (max 15 words)"]
-  },
-  "services": [
-    { "name": "most relevant service 1", "entry": "₹XXX/month or year", "description": "one warm sentence (max 20 words)" },
-    { "name": "most relevant service 2", "entry": "₹XXX/month or year", "description": "one warm sentence (max 20 words)" },
-    { "name": "most relevant service 3", "entry": "₹XXX/month or year", "description": "one warm sentence (max 20 words)" }
-  ],
-  "trust_note": "1-2 sentences about SEBI regulation and why this is different from chit funds (max 35 words)",
-  "cta_headline": "action-oriented, specific to audience (max 10 words)",
-  "cta_subline": "warm, encouraging closing line (max 20 words)"
-}`,
-          messages: [
-            {
-              role: 'user',
-              content: `Generate content for this InvestSahi SEO/guide page:
-
-Page type: ${page.type}
-Slug: ${page.slug}
-Title: ${page.title}
-Meta description: ${page.meta_description}
-Keywords: ${page.keywords?.join(', ')}
-
-Make all content highly specific and locally relevant to this exact audience. Reference their specific financial situation, concerns, and goals.`,
-            },
-          ],
-        }),
+      const { data, error: fnError } = await supabase.functions.invoke('generate-seo-content', {
+        body: {
+          type: page.type,
+          slug: page.slug,
+          title: page.title,
+          meta_description: page.meta_description,
+          keywords: page.keywords,
+        },
       });
 
-      const data = await response.json();
+      if (fnError) throw new Error(fnError.message);
+      if (data?.error) throw new Error(data.error);
 
-      if (!response.ok) {
-        throw new Error(data.error?.message ?? `API error ${response.status}`);
-      }
+      const parsed = data?.content;
+      if (!parsed) throw new Error('Edge Function returned empty content');
 
-      const rawJson = data.content?.[0]?.text;
-      if (!rawJson) throw new Error('Empty response from API');
-
-      const parsed = JSON.parse(rawJson);
-
-      const { error } = await supabase
+      const { error: dbError } = await supabase
         .from('seo_pages' as any)
         .update({ content: parsed })
         .eq('id', page.id);
 
-      if (error) throw new Error(error.message);
+      if (dbError) throw new Error(dbError.message);
 
       setPages((prev) =>
         prev.map((p) => p.id === page.id ? { ...p, content: parsed } : p)
