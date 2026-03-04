@@ -176,41 +176,103 @@ export type Database = {
         }
         Relationships: []
       }
+      page_versions: {
+        Row: {
+          audience_style: string
+          content: Json | null
+          created_at: string | null
+          id: string
+          language: string
+          page_id: string
+          status: string
+          updated_at: string | null
+          url_suffix: string
+          view_count: number | null
+        }
+        Insert: {
+          audience_style: string
+          content?: Json | null
+          created_at?: string | null
+          id?: string
+          language: string
+          page_id: string
+          status?: string
+          updated_at?: string | null
+          url_suffix?: string
+          view_count?: number | null
+        }
+        Update: {
+          audience_style?: string
+          content?: Json | null
+          created_at?: string | null
+          id?: string
+          language?: string
+          page_id?: string
+          status?: string
+          updated_at?: string | null
+          url_suffix?: string
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_versions_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "seo_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       seo_pages: {
         Row: {
+          audience_style: string
           content: Json | null
           created_at: string
           id: string
           keywords: string[] | null
+          language: string
           meta_description: string | null
+          meta_description_or_formal: string | null
+          meta_description_or_mixed: string | null
           slug: string
           status: string
+          status_override: string | null
           title: string | null
           type: string
           updated_at: string
           view_count: number
         }
         Insert: {
+          audience_style?: string
           content?: Json | null
           created_at?: string
           id?: string
           keywords?: string[] | null
+          language?: string
           meta_description?: string | null
+          meta_description_or_formal?: string | null
+          meta_description_or_mixed?: string | null
           slug: string
           status?: string
+          status_override?: string | null
           title?: string | null
           type: string
           updated_at?: string
           view_count?: number
         }
         Update: {
+          audience_style?: string
           content?: Json | null
           created_at?: string
           id?: string
           keywords?: string[] | null
+          language?: string
           meta_description?: string | null
+          meta_description_or_formal?: string | null
+          meta_description_or_mixed?: string | null
           slug?: string
           status?: string
+          status_override?: string | null
           title?: string | null
           type?: string
           updated_at?: string
@@ -224,6 +286,14 @@ export type Database = {
     }
     Functions: {
       increment_seo_view: { Args: { page_slug: string }; Returns: undefined }
+      increment_version_view: {
+        Args: {
+          p_audience_style: string
+          p_language: string
+          p_page_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

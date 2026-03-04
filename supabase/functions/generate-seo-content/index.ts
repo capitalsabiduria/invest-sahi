@@ -146,9 +146,9 @@ Every field must contain content that could only apply to this specific page. No
     let parsed;
     try {
       parsed = JSON.parse(cleaned);
-    } catch (parseError) {
+    } catch (parseError: unknown) {
       console.error('[generate-seo-content] JSON parse failed. Raw text:', rawText);
-      throw new Error(`Failed to parse Gemini response as JSON: ${parseError.message}`);
+      throw new Error(`Failed to parse Gemini response as JSON: ${(parseError as Error).message}`);
     }
 
     if (!parsed.hero_headline || !parsed.why_section || !parsed.services || !parsed.faqs || !parsed.meta_description) {
@@ -160,10 +160,10 @@ Every field must contain content that could only apply to this specific page. No
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('[generate-seo-content] error:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: (error as Error).message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

@@ -158,12 +158,12 @@ export default function GuidePage() {
         return;
       }
 
-      setPage({ ...pageData, content: versionData.content as GuideContent });
+      setPage({ ...pageData, content: versionData.content as unknown as GuideContent });
       document.title = `${pageData.title} | InvestSahi`;
 
       const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) {
-        const generatedMeta = (versionData.content as GuideContent)?.meta_description;
+        const generatedMeta = (versionData.content as unknown as GuideContent)?.meta_description;
         metaDesc.setAttribute('content', generatedMeta || pageData.meta_description);
       }
 
