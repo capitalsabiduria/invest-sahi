@@ -1,13 +1,11 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { BRAND } from "@/constants/brand";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
-import { useActiveSection } from "@/hooks/useActiveSection";
 import GuideSkeletonLoader from "@/components/guide/GuideSkeletonLoader";
 import ScrollProgressBar from "@/components/guide/ScrollProgressBar";
 import BackToTopButton from "@/components/guide/BackToTopButton";
-import ActiveSectionPill from "@/components/guide/ActiveSectionPill";
 
 interface GuideContent {
   hero_headline: string;
@@ -98,24 +96,6 @@ export default function GuidePage() {
 
   const { progress, showBackToTop, scrollToTop } = useScrollProgress();
 
-  // Build section ids based on available content for active section tracking
-  const sectionIds = useMemo(() => {
-    if (!page?.content) return [];
-    const content = page.content as GuideContent;
-    const ids = ['guide-hero'];
-    if (content.story_paragraph) ids.push('guide-story');
-    if (content.case_study) ids.push('guide-case-study');
-    if (content.how_it_works) ids.push('guide-how-it-works');
-    ids.push('guide-why');
-    if (content.local_insight) ids.push('guide-local-insight');
-    ids.push('guide-services');
-    if (content.faqs && content.faqs.length > 0) ids.push('guide-faqs');
-    ids.push('guide-trust', 'guide-cta');
-    return ids;
-  }, [page]);
-
-  const activeSection = useActiveSection(sectionIds);
-
   useEffect(() => {
     if (!slug) return;
 
@@ -188,7 +168,6 @@ export default function GuidePage() {
     <>
       <SchemaMarkup page={page} content={content} />
       <ScrollProgressBar progress={progress} />
-      <ActiveSectionPill label={activeSection} />
       <BackToTopButton visible={showBackToTop} onClick={scrollToTop} />
 
       {/* Header */}
@@ -198,15 +177,13 @@ export default function GuidePage() {
           <span className="text-foreground">Sahi</span>
           <span className="text-secondary text-[0.6em]">.in</span>
         </Link>
-        <a
-          href={BRAND.social.whatsapp_link}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          to="/en/book"
           className="bg-primary text-primary-foreground font-body text-sm px-4 py-2 rounded-lg hover:scale-105 transition-all duration-200 whitespace-nowrap"
         >
           <span className="sm:hidden">Book a Call →</span>
           <span className="hidden sm:inline">Book a Free Call →</span>
-        </a>
+        </Link>
       </header>
 
       <main className="pt-16 pb-20 md:pb-0 animate-fade-in">
@@ -366,12 +343,19 @@ export default function GuidePage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {content.services.map((service, i) => (
-                <div key={i} className="bg-card rounded-xl p-6 shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-200">
-                  <div className="inline-block max-w-full truncate bg-primary text-primary-foreground font-body text-xs px-3 py-1 rounded-full mb-3">
-                    {service.entry_amount}
+                <div key={i} className="bg-card rounded-xl p-6 shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+                  <div>
+                    <h3 className="font-heading font-bold text-foreground mb-2">{service.name}</h3>
+                    <p className="font-body text-foreground opacity-75 text-sm leading-relaxed">{service.description}</p>
                   </div>
-                  <h3 className="font-heading font-bold text-foreground mb-2">{service.name}</h3>
-                  <p className="font-body text-foreground opacity-75 text-sm leading-relaxed">{service.description}</p>
+                  <a
+                    href={BRAND.social.whatsapp_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 w-full text-center bg-background hover:bg-primary text-primary hover:text-primary-foreground font-body text-sm font-semibold py-2.5 px-4 rounded-lg transition-colors duration-200 border border-primary"
+                  >
+                    Book Free Consultation →
+                  </a>
                 </div>
               ))}
             </div>
@@ -447,14 +431,12 @@ export default function GuidePage() {
             </h2>
             <p className="font-body text-primary-foreground opacity-90 mb-8">{content.cta_subline}</p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a
-                href={BRAND.social.whatsapp_link}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/en/book"
                 className="bg-card text-primary font-body font-semibold px-6 py-3 rounded-lg hover:scale-105 transition-all duration-200"
               >
                 Book a Free Call
-              </a>
+              </Link>
               <a
                 href={BRAND.social.whatsapp_link}
                 target="_blank"
