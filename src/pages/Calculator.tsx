@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import SEO from '@/components/SEO';
 import { motion } from 'framer-motion';
 import { GraduationCap, Stethoscope, Briefcase, BookOpen, Check, MessageCircle, Clock, Wallet, PiggyBank } from 'lucide-react';
 import Navbar from '@/components/Navbar';
@@ -100,6 +101,12 @@ const Calculator = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="SIP & Education Planning Calculators"
+        description="Calculate how much you need to save for your child's NIT Rourkela or AIIMS education. Free SIP and compound interest calculators."
+        url={`/${currentLang}/calculators`}
+        lang={currentLang as 'en' | 'or'}
+      />
       <Navbar />
 
       {/* Goal not yet selected — show Goal Selector */}

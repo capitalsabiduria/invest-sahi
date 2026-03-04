@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router-dom';
+import SEO from '@/components/SEO';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Home, Sun, Briefcase, TrendingUp, Shield, Heart, GraduationCap,
@@ -155,6 +156,12 @@ const Services = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Financial Services — SIP, Insurance, NPS, and more"
+        description="Explore InvestSahi's financial services — start a SIP from ₹500, get term insurance, plan for retirement with NPS. Serving Odisha families."
+        url={`/${currentLang}/services`}
+        lang={currentLang as 'en' | 'or'}
+      />
       <Navbar />
       <section className="bg-background py-20 text-center">
         <div className="max-w-3xl mx-auto px-4">
