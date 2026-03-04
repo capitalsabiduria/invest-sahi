@@ -87,7 +87,7 @@ const ServiceCard = ({ svc, lang }: { svc: ServiceItem; lang: string; }) => {
                 <Link
                   to={`/${lang}/book`}
                   onClick={(e) => e.stopPropagation()}
-                  className="flex-1 text-center bg-saffron text-white text-sm font-heading font-semibold px-3 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
+                  className="flex-1 text-center bg-saffron text-white text-xs font-semibold px-3 py-2 rounded-full hover:opacity-90 transition-opacity"
                 >
                   {t('svc.bookCta', 'Schedule a Free Consultation')} →
                 </Link>
@@ -96,15 +96,15 @@ const ServiceCard = ({ svc, lang }: { svc: ServiceItem; lang: string; }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex-1 flex items-center justify-center gap-1.5 text-sm font-medium text-white bg-green px-3 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
+                  className="flex-1 flex items-center justify-center gap-1 text-xs font-medium border border-green text-green px-3 py-2 rounded-full hover:bg-green hover:text-white transition-all"
                 >
-                  <MessageCircle size={15} /> {t('svc.whatsappCta', '💬 Chat Now on WhatsApp')}
+                  <MessageCircle size={13} /> {t('svc.whatsappCta', 'Chat Now on WhatsApp')}
                 </a>
               </div>
               <Link
                 to={`/${lang}/learn/${svc.guideSlug}`}
                 onClick={(e) => e.stopPropagation()}
-                className="inline-block mt-2 text-sm font-body hover:underline"
+                className="inline-flex items-center gap-1 mt-2.5 text-sm font-semibold hover:underline"
                 style={{ color: '#1A6B9A' }}
               >
                 {t('svc.guideCta', 'Read our guide')} →

@@ -31,7 +31,7 @@ const GUIDE_PLACEHOLDERS = [
 export async function seedGuides() {
   const rows = GUIDE_PLACEHOLDERS.map((g) => ({
     slug: g.slug,
-    type: 'guide',
+    type: 'glossary',
     status: 'published',
     category: g.category,
     title_en: g.title_en,
