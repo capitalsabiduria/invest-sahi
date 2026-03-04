@@ -8,272 +8,229 @@ import Color from '@tiptap/extension-color';
 import { TextStyle } from '@tiptap/extension-text-style';
 import Highlight from '@tiptap/extension-highlight';
 import Placeholder from '@tiptap/extension-placeholder';
-import Strike from '@tiptap/extension-strike';
-import CodeBlock from '@tiptap/extension-code-block';
-import Blockquote from '@tiptap/extension-blockquote';
-import HorizontalRule from '@tiptap/extension-horizontal-rule';
-import OrderedList from '@tiptap/extension-ordered-list';
-import BulletList from '@tiptap/extension-bullet-list';
-import { Label } from '@/components/ui/label';
+import { marked } from 'marked';
+import { useEffect, useState, useCallback } from 'react';
 import {
-  Bold, Italic, Underline as UnderlineIcon, Strikethrough, Link as LinkIcon,
-  Unlink, List, ListOrdered, AlignLeft, AlignCenter, AlignRight,
-  Undo, Redo, Image as ImageIcon, Code, Quote, Minus,
+  Bold, Italic, Underline as UnderlineIcon, Strikethrough,
+  Heading1, Heading2, Heading3, List, ListOrdered,
+  AlignLeft, AlignCenter, AlignRight, Quote, Code,
+  Link as LinkIcon, Image as ImageIcon, Highlighter,
+  Undo, Redo, Minus,
 } from 'lucide-react';
-import { useState, useEffect, useCallback } from 'react';
 
-interface RichEditorProps {
+type Props = {
   value: string;
   onChange: (html: string) => void;
   placeholder?: string;
   isOdia?: boolean;
   label: string;
+};
+
+function isMarkdown(str: string): boolean {
+  return str.length > 0 && !/<[a-z][\s\S]*>/i.test(str);
 }
 
-const ToolbarButton = ({
-  onClick,
-  isActive = false,
-  title,
-  children,
+function ToolbarButton({
+  onClick, active, title, children,
 }: {
   onClick: () => void;
-  isActive?: boolean;
+  active?: boolean;
   title: string;
   children: React.ReactNode;
-}) => (
-  <button
-    type="button"
-    onClick={onClick}
-    title={title}
-    className={`p-1.5 rounded hover:bg-stone/10 text-stone/60 text-xs font-medium transition-colors ${
-      isActive ? 'bg-saffron/10 text-saffron' : ''
-    }`}
-  >
-    {children}
-  </button>
-);
+}) {
+  return (
+    <button
+      type="button"
+      onMouseDown={(e) => { e.preventDefault(); onClick(); }}
+      title={title}
+      className={`p-1.5 rounded transition-colors ${
+        active
+          ? 'bg-saffron/15 text-saffron'
+          : 'text-stone/60 hover:bg-stone/10 hover:text-stone'
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
 
-const RichEditor = ({ value, onChange, placeholder, isOdia, label }: RichEditorProps) => {
-  const [embedHtml, setEmbedHtml] = useState('');
-  const [showEmbedArea, setShowEmbedArea] = useState(false);
+function Divider() {
+  return <span className="w-px h-5 bg-stone/15 mx-0.5 inline-block" />;
+}
+
+export default function RichEditor({ value, onChange, placeholder, isOdia, label }: Props) {
+  const [wordCount, setWordCount] = useState(0);
+  const [linkUrl, setLinkUrl] = useState('');
+  const [showLinkInput, setShowLinkInput] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+  const [showImageInput, setShowImageInput] = useState(false);
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-        strike: false,
-        codeBlock: false,
-        blockquote: false,
-        horizontalRule: false,
-        orderedList: false,
-        bulletList: false,
-      }),
+      StarterKit,
       Underline,
-      Strike,
-      CodeBlock,
-      Blockquote,
-      HorizontalRule,
-      OrderedList,
-      BulletList,
-      Link.configure({ openOnClick: false }),
-      Image,
+      Link.configure({ openOnClick: false, HTMLAttributes: { class: 'text-blue underline' } }),
+      Image.configure({ HTMLAttributes: { class: 'max-w-full rounded-lg my-2' } }),
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       TextStyle,
       Color,
       Highlight.configure({ multicolor: false }),
-      Placeholder.configure({ placeholder: placeholder || 'Write content here…' }),
+      Placeholder.configure({ placeholder: placeholder || 'Start writing…' }),
     ],
-    content: value,
+    content: '',
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
+      const text = editor.getText();
+      setWordCount(text.trim() ? text.trim().split(/\s+/).length : 0);
     },
     editorProps: {
       attributes: {
-        class: 'outline-none min-h-[280px] prose prose-sm max-w-none focus:outline-none',
+        class: 'outline-none min-h-[300px] px-4 py-3 prose prose-sm max-w-none focus:outline-none',
+        ...(isOdia ? { style: "font-family: 'Noto Sans Oriya', sans-serif; font-size: 15px;" } : {}),
       },
     },
   });
 
-  // Sync external value changes (e.g. from AI generation)
+  // Convert incoming value (markdown or HTML) and set editor content
   useEffect(() => {
-    if (!editor) return;
-    const current = editor.getHTML();
-    if (current !== value) {
-      editor.commands.setContent(value || '', false);
+    if (!editor || editor.isDestroyed) return;
+    if (!value) return;
+
+    const html = isMarkdown(value) ? marked(value) as string : value;
+    if (editor.getHTML() !== html) {
+      editor.commands.setContent(html, false);
+      const text = editor.getText();
+      setWordCount(text.trim() ? text.trim().split(/\s+/).length : 0);
     }
   }, [value, editor]);
 
-  const addLink = useCallback(() => {
-    if (!editor) return;
-    const url = window.prompt('Enter URL:');
-    if (url) {
-      editor.chain().focus().setLink({ href: url }).run();
-    }
-  }, [editor]);
+  const setLink = useCallback(() => {
+    if (!linkUrl) return;
+    editor?.chain().focus().setLink({ href: linkUrl }).run();
+    setLinkUrl('');
+    setShowLinkInput(false);
+  }, [editor, linkUrl]);
 
-  const addImage = useCallback(() => {
-    if (!editor) return;
-    const url = window.prompt('Enter image URL:');
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
-  }, [editor]);
-
-  const addGif = useCallback(() => {
-    if (!editor) return;
-    const url = window.prompt('Enter GIF URL:');
-    if (url) {
-      editor.chain().focus().setImage({ src: url, alt: 'gif' }).run();
-    }
-  }, [editor]);
-
-  const insertEmbed = useCallback(() => {
-    if (!editor || !embedHtml.trim()) return;
-    editor.chain().focus().insertContent(embedHtml).run();
-    setEmbedHtml('');
-    setShowEmbedArea(false);
-  }, [editor, embedHtml]);
+  const insertImage = useCallback(() => {
+    if (!imageUrl) return;
+    editor?.chain().focus().setImage({ src: imageUrl }).run();
+    setImageUrl('');
+    setShowImageInput(false);
+  }, [editor, imageUrl]);
 
   if (!editor) return null;
 
   return (
-    <div className="space-y-1">
-      <Label className="font-semibold">{label}</Label>
-      <div className="border border-stone/20 rounded-lg overflow-hidden focus-within:border-saffron/50 transition-colors">
-        {/* Toolbar */}
-        <div className="border-b border-stone/10 bg-stone/5 px-2 py-1 space-y-1">
-          {/* Row 1 — Block formatting */}
-          <div className="flex flex-wrap gap-0.5">
-            <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} isActive={editor.isActive('heading', { level: 1 })} title="Heading 1">
-              H1
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} isActive={editor.isActive('heading', { level: 2 })} title="Heading 2">
-              H2
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} isActive={editor.isActive('heading', { level: 3 })} title="Heading 3">
-              H3
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().setParagraph().run()} isActive={editor.isActive('paragraph')} title="Normal text">
-              P
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().toggleBlockquote().run()} isActive={editor.isActive('blockquote')} title="Blockquote">
-              <Quote size={13} />
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().toggleCodeBlock().run()} isActive={editor.isActive('codeBlock')} title="Code Block">
-              <Code size={13} />
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Horizontal Rule">
-              <Minus size={13} />
-            </ToolbarButton>
-          </div>
+    <div className="border border-stone/20 rounded-lg overflow-hidden flex flex-col">
 
-          {/* Row 2 — Inline formatting */}
-          <div className="flex flex-wrap gap-0.5 items-center">
-            <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} isActive={editor.isActive('bold')} title="Bold">
-              <Bold size={13} />
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().toggleItalic().run()} isActive={editor.isActive('italic')} title="Italic">
-              <Italic size={13} />
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().toggleUnderline().run()} isActive={editor.isActive('underline')} title="Underline">
-              <UnderlineIcon size={13} />
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().toggleStrike().run()} isActive={editor.isActive('strike')} title="Strikethrough">
-              <Strikethrough size={13} />
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().toggleHighlight().run()} isActive={editor.isActive('highlight')} title="Highlight">
-              <span className="text-[11px] font-bold bg-yellow-200 px-0.5 rounded">H</span>
-            </ToolbarButton>
-            {/* Text colour picker */}
-            <span className="inline-flex items-center p-1 rounded hover:bg-stone/10" title="Text colour">
-              <label className="cursor-pointer flex items-center gap-0.5 text-stone/60 text-xs font-medium">
-                <span className="text-[11px]">A</span>
-                <input
-                  type="color"
-                  className="w-4 h-4 rounded border-0 cursor-pointer"
-                  onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
-                  title="Text colour"
-                />
-              </label>
-            </span>
-            <ToolbarButton onClick={addLink} isActive={editor.isActive('link')} title="Add Link">
-              <LinkIcon size={13} />
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().unsetLink().run()} title="Remove Link">
-              <Unlink size={13} />
-            </ToolbarButton>
-          </div>
-
-          {/* Row 3 — Lists & alignment */}
-          <div className="flex flex-wrap gap-0.5">
-            <ToolbarButton onClick={() => editor.chain().focus().toggleBulletList().run()} isActive={editor.isActive('bulletList')} title="Bullet List">
-              <List size={13} />
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().toggleOrderedList().run()} isActive={editor.isActive('orderedList')} title="Ordered List">
-              <ListOrdered size={13} />
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().setTextAlign('left').run()} isActive={editor.isActive({ textAlign: 'left' })} title="Align Left">
-              <AlignLeft size={13} />
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().setTextAlign('center').run()} isActive={editor.isActive({ textAlign: 'center' })} title="Align Center">
-              <AlignCenter size={13} />
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().setTextAlign('right').run()} isActive={editor.isActive({ textAlign: 'right' })} title="Align Right">
-              <AlignRight size={13} />
-            </ToolbarButton>
-          </div>
-
-          {/* Row 4 — Media & embeds */}
-          <div className="flex flex-wrap gap-0.5">
-            <ToolbarButton onClick={addImage} title="Insert Image">
-              <ImageIcon size={13} />
-            </ToolbarButton>
-            <ToolbarButton onClick={addGif} title="Insert GIF">
-              <span className="text-[11px] font-bold">GIF</span>
-            </ToolbarButton>
-            <ToolbarButton onClick={() => setShowEmbedArea((v) => !v)} isActive={showEmbedArea} title="Insert iframe/embed">
-              <span className="text-[11px] font-bold">&lt;/&gt;</span>
-            </ToolbarButton>
-          </div>
-
-          {/* Embed area */}
-          {showEmbedArea && (
-            <div className="flex gap-1.5 pt-1">
-              <textarea
-                className="flex-1 text-xs border border-stone/20 rounded p-1.5 min-h-[48px] resize-none font-mono focus:outline-none focus:border-saffron/50"
-                placeholder="Paste embed HTML (iframe, etc.)"
-                value={embedHtml}
-                onChange={(e) => setEmbedHtml(e.target.value)}
-              />
-              <button
-                type="button"
-                onClick={insertEmbed}
-                className="px-3 py-1 bg-saffron text-white text-xs rounded font-medium hover:bg-saffron/90 self-end"
-              >
-                Insert
-              </button>
-            </div>
-          )}
-
-          {/* Row 5 — History */}
-          <div className="flex flex-wrap gap-0.5">
-            <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo">
-              <Undo size={13} />
-            </ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().redo().run()} title="Redo">
-              <Redo size={13} />
-            </ToolbarButton>
-          </div>
-        </div>
-
-        {/* Editor content area */}
-        <EditorContent
-          editor={editor}
-          className="p-3"
-          style={isOdia ? { fontFamily: "'Noto Sans Oriya', sans-serif" } : undefined}
-        />
+      {/* Label + word count */}
+      <div className="flex items-center justify-between px-3 py-1.5 bg-stone/5 border-b border-stone/10">
+        <span className="text-xs font-semibold text-stone/60 uppercase tracking-wide">{label}</span>
+        <span className="text-[10px] text-stone/40">{wordCount} words</span>
       </div>
+
+      {/* Toolbar */}
+      <div className="flex flex-wrap items-center gap-0.5 px-2 py-1.5 bg-white border-b border-stone/10">
+
+        {/* History */}
+        <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo"><Undo size={14} /></ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().redo().run()} title="Redo"><Redo size={14} /></ToolbarButton>
+        <Divider />
+
+        {/* Block type */}
+        <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} active={editor.isActive('heading', { level: 1 })} title="Heading 1"><Heading1 size={14} /></ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} active={editor.isActive('heading', { level: 2 })} title="Heading 2"><Heading2 size={14} /></ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} active={editor.isActive('heading', { level: 3 })} title="Heading 3"><Heading3 size={14} /></ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().setParagraph().run()} active={editor.isActive('paragraph')} title="Normal text">
+          <span className="text-[11px] font-medium">¶</span>
+        </ToolbarButton>
+        <Divider />
+
+        {/* Inline formatting */}
+        <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive('bold')} title="Bold"><Bold size={14} /></ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().toggleItalic().run()} active={editor.isActive('italic')} title="Italic"><Italic size={14} /></ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().toggleUnderline().run()} active={editor.isActive('underline')} title="Underline"><UnderlineIcon size={14} /></ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().toggleStrike().run()} active={editor.isActive('strike')} title="Strikethrough"><Strikethrough size={14} /></ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().toggleHighlight().run()} active={editor.isActive('highlight')} title="Highlight"><Highlighter size={14} /></ToolbarButton>
+        <Divider />
+
+        {/* Lists */}
+        <ToolbarButton onClick={() => editor.chain().focus().toggleBulletList().run()} active={editor.isActive('bulletList')} title="Bullet list"><List size={14} /></ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().toggleOrderedList().run()} active={editor.isActive('orderedList')} title="Ordered list"><ListOrdered size={14} /></ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().toggleBlockquote().run()} active={editor.isActive('blockquote')} title="Blockquote"><Quote size={14} /></ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().toggleCode().run()} active={editor.isActive('code')} title="Inline code"><Code size={14} /></ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Horizontal rule"><Minus size={14} /></ToolbarButton>
+        <Divider />
+
+        {/* Alignment */}
+        <ToolbarButton onClick={() => editor.chain().focus().setTextAlign('left').run()} active={editor.isActive({ textAlign: 'left' })} title="Align left"><AlignLeft size={14} /></ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().setTextAlign('center').run()} active={editor.isActive({ textAlign: 'center' })} title="Align center"><AlignCenter size={14} /></ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().setTextAlign('right').run()} active={editor.isActive({ textAlign: 'right' })} title="Align right"><AlignRight size={14} /></ToolbarButton>
+        <Divider />
+
+        {/* Text colour */}
+        <label title="Text colour" className="p-1.5 rounded hover:bg-stone/10 cursor-pointer flex items-center">
+          <span className="text-[11px] font-bold text-stone/60">A</span>
+          <input
+            type="color"
+            className="w-0 h-0 opacity-0 absolute"
+            onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
+          />
+        </label>
+        <Divider />
+
+        {/* Link */}
+        <ToolbarButton onClick={() => { setShowLinkInput(v => !v); setShowImageInput(false); }} active={editor.isActive('link')} title="Insert link"><LinkIcon size={14} /></ToolbarButton>
+        {editor.isActive('link') && (
+          <ToolbarButton onClick={() => editor.chain().focus().unsetLink().run()} title="Remove link">
+            <span className="text-[10px] font-medium">✕link</span>
+          </ToolbarButton>
+        )}
+
+        {/* Image / GIF */}
+        <ToolbarButton onClick={() => { setShowImageInput(v => !v); setShowLinkInput(false); }} title="Insert image or GIF"><ImageIcon size={14} /></ToolbarButton>
+
+      </div>
+
+      {/* Link input */}
+      {showLinkInput && (
+        <div className="flex items-center gap-2 px-3 py-2 bg-stone/5 border-b border-stone/10">
+          <input
+            type="url"
+            value={linkUrl}
+            onChange={(e) => setLinkUrl(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') setLink(); }}
+            placeholder="https://..."
+            className="text-xs flex-1 px-2 py-1 rounded border border-stone/20 outline-none focus:border-saffron/50"
+            autoFocus
+          />
+          <button onClick={setLink} className="text-xs px-3 py-1 rounded bg-saffron text-white font-medium">Insert</button>
+          <button onClick={() => setShowLinkInput(false)} className="text-xs text-stone/40 hover:text-stone">✕</button>
+        </div>
+      )}
+
+      {/* Image / GIF input */}
+      {showImageInput && (
+        <div className="flex items-center gap-2 px-3 py-2 bg-stone/5 border-b border-stone/10">
+          <input
+            type="url"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') insertImage(); }}
+            placeholder="Paste image or GIF URL…"
+            className="text-xs flex-1 px-2 py-1 rounded border border-stone/20 outline-none focus:border-saffron/50"
+            autoFocus
+          />
+          <button onClick={insertImage} className="text-xs px-3 py-1 rounded bg-saffron text-white font-medium">Insert</button>
+          <button onClick={() => setShowImageInput(false)} className="text-xs text-stone/40 hover:text-stone">✕</button>
+        </div>
+      )}
+
+      {/* Editor content area */}
+      <div className="bg-white flex-1">
+        <EditorContent editor={editor} />
+      </div>
+
     </div>
   );
-};
-
-export default RichEditor;
+}
