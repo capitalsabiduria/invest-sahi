@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
 import { motion } from 'framer-motion';
 import { BookOpen, ArrowLeft, MessageCircle } from 'lucide-react';
 import Navbar from '@/components/Navbar';
@@ -160,7 +159,7 @@ const LearnList = () => {
                     <h3 className="font-heading font-semibold text-lg text-foreground mb-1">{getTitle(item)}</h3>
                     {item.category && <span className="text-xs text-muted-foreground font-body mb-2">{item.category}</span>}
                     <p className="text-sm font-body text-muted-foreground line-clamp-2 flex-1">
-                      {(currentLang === 'or' ? item.preview_or : item.preview_en) || getBody(item).slice(0, 120)}
+                      {(currentLang === 'or' ? item.preview_or : item.preview_en) || getBody(item).replace(/<[^>]+>/g, '').slice(0, 120)}
                     </p>
                     <div className="flex gap-2 mt-3">
                       {item.title_en && <span className="text-xs border border-border rounded px-2 py-0.5 text-muted-foreground">EN</span>}
@@ -265,9 +264,10 @@ const LearnDetail = () => {
           </div>
 
           <h1 className={`font-heading font-bold text-3xl text-foreground mb-6 ${viewLang === 'or' ? 'font-odia' : ''}`}>{title}</h1>
-          <div className={`prose prose-lg max-w-none font-body text-foreground leading-relaxed ${viewLang === 'or' ? 'font-odia' : ''}`}>
-            <ReactMarkdown>{body || ''}</ReactMarkdown>
-          </div>
+          <div
+            className={`prose prose-lg max-w-none font-body text-foreground leading-relaxed ${viewLang === 'or' ? 'font-odia' : ''}`}
+            dangerouslySetInnerHTML={{ __html: body || '' }}
+          />
 
           <div className="mt-10 bg-green rounded-xl p-6 text-center text-white">
             <MessageCircle className="mx-auto mb-2" size={28} />

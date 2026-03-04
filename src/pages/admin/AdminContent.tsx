@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { ChevronLeft, ChevronRight, Plus, X, Trash2, Pencil } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import MarkdownEditor from '@/components/admin/MarkdownEditor';
+import RichEditor from '@/components/admin/RichEditor';
 
 const TYPES = ['story', 'glossary', 'guide', 'whatsapp_post'] as const;
 const PAGE_SIZE = 20;
@@ -56,7 +56,7 @@ const AdminContent = () => {
   const [editing, setEditing] = useState<Partial<ContentItem> | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [aiPrompt, setAiPrompt] = useState('');
-  const [generating, setGenerating] = useState(false);
+  const [generatingStage, setGeneratingStage] = useState<null | 'english' | 'odia'>(null);
 
   const fetchItems = useCallback(async () => {
     let query = supabase.from('content_items').select('*', { count: 'exact' });
@@ -110,7 +110,8 @@ const AdminContent = () => {
 
   const handleGenerateContent = async () => {
     if (!aiPrompt.trim() || !editing) return;
-    setGenerating(true);
+    setGeneratingStage('english');
+    const stageTimer = setTimeout(() => setGeneratingStage('odia'), 4000);
     try {
       const { data, error } = await supabase.functions.invoke('generate-content-item', {
         body: {
@@ -132,11 +133,12 @@ const AdminContent = () => {
         slug: prev?.slug || slugify(data.title_en),
       }));
       setAiPrompt('');
-      toast.success('Content generated — review and save when ready');
+      toast.success('Content generated — review and edit, then save');
     } catch (err: any) {
       toast.error(`Generation failed: ${err.message}`);
     } finally {
-      setGenerating(false);
+      clearTimeout(stageTimer);
+      setGeneratingStage(null);
     }
   };
 
@@ -147,7 +149,7 @@ const AdminContent = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold font-heading">Content</h1>
-        <Button onClick={() => setEditing(emptyItem())} className="bg-saffron hover:bg-saffron/90 text-white">
+        <Button onClick={() => { setEditing(emptyItem()); setAiPrompt(''); }} className="bg-saffron hover:bg-saffron/90 text-white">
           <Plus className="h-4 w-4 mr-2" /> New Content
         </Button>
       </div>
@@ -256,15 +258,14 @@ const AdminContent = () => {
       {editing && (
         <div className="fixed inset-0 z-50 flex justify-end">
           <div className="absolute inset-0 bg-black/30" onClick={() => setEditing(null)} />
-          <div className="relative w-full max-w-[860px] bg-white shadow-xl overflow-y-auto p-6 space-y-5">
+          <div className="relative w-full max-w-[920px] bg-white shadow-xl overflow-y-auto p-6 space-y-5">
 
-            {/* Panel header */}
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-bold font-heading">{editing.id ? 'Edit Content' : 'New Content'}</h2>
               <Button variant="ghost" size="icon" onClick={() => setEditing(null)}><X className="h-4 w-4" /></Button>
             </div>
 
-            {/* Row 1 — Type + Category */}
+            {/* Type + Category */}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label className="text-xs text-stone/50 uppercase tracking-wide">Type</Label>
@@ -286,7 +287,7 @@ const AdminContent = () => {
               </div>
             </div>
 
-            {/* Row 2 — Slug + Status */}
+            {/* Slug + Status */}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label className="text-xs text-stone/50 uppercase tracking-wide">Slug</Label>
@@ -310,7 +311,7 @@ const AdminContent = () => {
             <div className="bg-purple-50 border border-purple-100 rounded-xl p-4 space-y-3">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold text-purple-800">✨ Generate with AI</span>
-                <span className="text-xs text-purple-400">Gemini 2.5 Flash · generates EN + OR titles, previews, and full bodies</span>
+                <span className="text-xs text-purple-400">Gemini 2.5 Flash · two sequential calls · EN then OR</span>
               </div>
               <textarea
                 value={aiPrompt}
@@ -320,12 +321,14 @@ const AdminContent = () => {
               />
               <button
                 onClick={handleGenerateContent}
-                disabled={generating || !aiPrompt.trim()}
+                disabled={generatingStage !== null || !aiPrompt.trim()}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white disabled:opacity-50 transition-opacity"
                 style={{ background: '#7C3AED' }}
               >
-                {generating
-                  ? <><span className="inline-block w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" /> Generating…</>
+                {generatingStage === 'english'
+                  ? <><span className="inline-block w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" /> Generating English…</>
+                  : generatingStage === 'odia'
+                  ? <><span className="inline-block w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" /> Generating Odia…</>
                   : '✨ Generate EN + OR Content'
                 }
               </button>
@@ -387,18 +390,18 @@ const AdminContent = () => {
               </div>
             </div>
 
-            {/* Body editors — side by side */}
+            {/* Rich editors side by side */}
             <div className="grid grid-cols-2 gap-4">
-              <MarkdownEditor
+              <RichEditor
                 label="Body · English"
                 value={editing.body_en || ''}
-                onChange={(v) => setEditing({ ...editing, body_en: v })}
-                placeholder={"Write in markdown.\n## Heading\n**bold**, _italic_\n- bullet point\n> important callout"}
+                onChange={(html) => setEditing({ ...editing, body_en: html })}
+                placeholder="Write or generate English content…"
               />
-              <MarkdownEditor
+              <RichEditor
                 label="Body · Odia"
                 value={editing.body_or || ''}
-                onChange={(v) => setEditing({ ...editing, body_or: v })}
+                onChange={(html) => setEditing({ ...editing, body_or: html })}
                 placeholder="ଓଡ଼ିଆ ବିଷୟବସ୍ତୁ ଲେଖନ୍ତୁ…"
                 isOdia
               />
