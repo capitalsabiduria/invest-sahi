@@ -102,8 +102,12 @@ const Calculator = () => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="SIP & Education Planning Calculators"
-        description="Calculate how much you need to save for your child's NIT Rourkela or AIIMS education. Free SIP and compound interest calculators."
+        title={currentLang === 'or'
+          ? "SIP ଏବଂ ଶିକ୍ଷା ଯୋଜନା Calculator"
+          : "SIP & Education Planning Calculators"}
+        description={currentLang === 'or'
+          ? "ଆପଣଙ୍କ ସନ୍ତାନର NIT Rourkela ବା AIIMS ଶିକ୍ଷା ପାଇଁ କେତେ ସଞ୍ଚୟ ଦରକାର ହିସାବ କରନ୍ତୁ। ମାଗଣା SIP calculator।"
+          : "Calculate how much you need to save for your child's NIT Rourkela or AIIMS education. Free SIP and compound interest calculators."}
         url={`/${currentLang}/calculators`}
         lang={currentLang as 'en' | 'or'}
       />

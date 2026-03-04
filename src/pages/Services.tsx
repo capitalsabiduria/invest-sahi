@@ -157,8 +157,12 @@ const Services = () => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Financial Services — SIP, Insurance, NPS, and more"
-        description="Explore InvestSahi's financial services — start a SIP from ₹500, get term insurance, plan for retirement with NPS. Serving Odisha families."
+        title={currentLang === 'or'
+          ? "ଆର୍ଥିକ ସେବା — SIP, Insurance, NPS ଏବଂ ଅଧିକ"
+          : "Financial Services — SIP, Insurance, NPS, and more"}
+        description={currentLang === 'or'
+          ? "InvestSahi ର ଆର୍ଥିକ ସେବା ଦେଖନ୍ତୁ — ₹500 ରୁ SIP ଆରମ୍ଭ କରନ୍ତୁ, term insurance ନିଅନ୍ତୁ, NPS ସହ ଅବସର ଯୋଜନା କରନ୍ତୁ।"
+          : "Explore InvestSahi's financial services — start a SIP from ₹500, get term insurance, plan for retirement with NPS. Serving Odisha families."}
         url={`/${currentLang}/services`}
         lang={currentLang as 'en' | 'or'}
       />
