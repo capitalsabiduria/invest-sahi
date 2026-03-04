@@ -59,3 +59,13 @@
     font-family: 'Mukta', sans-serif;
   }
 }
+
+@layer utilities {
+  /* Odia script requires more vertical space for matras */
+  .font-body:lang(or),
+  [lang="or"] p,
+  [lang="or"] span,
+  [lang="or"] div {
+    line-height: 1.7;
+  }
+}
