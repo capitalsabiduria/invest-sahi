@@ -127,25 +127,27 @@ export default function GuidePage() {
   const baseSlug = isOdiaFormal ? slug!.replace(/-odia$/, '') : slug!;
 
   const t = {
-    caseStudyHeading: language === 'or' ? 'ଆମେ କିପରି ସାହାଯ୍ୟ କଲୁ — ଏକ ବାସ୍ତବ ଉଦାହରଣ' : 'How We Helped — A Real Example',
-    challenge: language === 'or' ? 'ଆହ୍ୱାନ' : 'The Challenge',
-    whatWeDid: language === 'or' ? 'ଆମେ ଯାହା କଲୁ' : 'What We Did',
-    result: language === 'or' ? 'ଫଳାଫଳ' : 'The Result',
-    howItWorks: language === 'or' ? 'ଏହା କିପରି କାମ କରେ' : 'How It Works',
-    freeConversation: language === 'or' ? 'ମାଗଣା କଥାବାର୍ତ୍ତା' : 'Free conversation',
-    personalPlan: language === 'or' ? 'ଆପଣଙ୍କ ଯୋଜନା' : 'Your personal plan',
-    startFrom: language === 'or' ? '₹500 ରୁ ଆରମ୍ଭ' : 'Start from ₹500',
-    servicesHeading: language === 'or' ? 'ଆମେ ଆପଣଙ୍କୁ କେଉଁ ବିଷୟରେ ସାହାଯ୍ୟ କରୁ' : 'What We Help You With',
-    faqHeading: language === 'or' ? 'ସାଧାରଣ ପ୍ରଶ୍ନ' : 'Frequently Asked Questions',
-    bookConsultation: language === 'or' ? 'ମାଗଣା ପରାମର୍ଶ ବୁକ୍ କରନ୍ତୁ →' : 'Book Free Consultation →',
-    bookCall: language === 'or' ? 'ମାଗଣା କଲ୍ ବୁକ୍ କରନ୍ତୁ' : 'Book a Free Call',
-    whatsapp: language === 'or' ? 'WhatsApp କରନ୍ତୁ' : 'WhatsApp Us',
-    heroCtaPrimary: language === 'or' ? 'ମାଗଣା ପରାମର୍ଶ ବୁକ୍ କରନ୍ତୁ →' : 'Book Free Consultation →',
-    heroCtaSecondary: language === 'or' ? 'SIP କ୍ୟାଲକୁଲେଟର ଦେଖନ୍ତୁ →' : 'Try the SIP Calculator →',
-    storyAttribution: language === 'or' ? '— ଓଡ଼ିଶାର ଏକ କାହାଣୀ। ଗୋପନୀୟତା ପାଇଁ ନାମ ପରିବର୍ତ୍ତନ କରାଯାଇଛି।' : '— A story from Odisha. Names changed for privacy.',
-    localInsightLabel: language === 'or' ? 'ସ୍ଥାନୀୟ ଜ୍ଞାନ' : 'Local Insight',
-    chatWhatsapp: language === 'or' ? 'WhatsApp ରେ କଥା ହୁଅନ୍ତୁ' : 'Chat with us on WhatsApp',
+    caseStudyHeading: audience_style === 'pure_odia' ? 'ଆମେ କିପରି ସାହାଯ୍ୟ କଲୁ — ଏକ ବାସ୍ତବ ଉଦାହରଣ' : 'How We Helped — A Real Example',
+    challenge: audience_style === 'pure_odia' ? 'ଆହ୍ୱାନ' : 'The Challenge',
+    whatWeDid: audience_style === 'pure_odia' ? 'ଆମେ ଯାହା କଲୁ' : 'What We Did',
+    result: audience_style === 'pure_odia' ? 'ଫଳାଫଳ' : 'The Result',
+    howItWorks: audience_style === 'pure_odia' ? 'ଏହା କିପରି କାମ କରେ' : 'How It Works',
+    freeConversation: audience_style === 'pure_odia' ? 'ମାଗଣା କଥାବାର୍ତ୍ତା' : 'Free conversation',
+    personalPlan: audience_style === 'pure_odia' ? 'ଆପଣଙ୍କ ଯୋଜନା' : 'Your personal plan',
+    startFrom: audience_style === 'pure_odia' ? '₹500 ରୁ ଆରମ୍ଭ' : 'Start from ₹500',
+    servicesHeading: audience_style === 'pure_odia' ? 'ଆମେ ଆପଣଙ୍କୁ କେଉଁ ବିଷୟରେ ସାହାଯ୍ୟ କରୁ' : 'What We Help You With',
+    faqHeading: audience_style === 'pure_odia' ? 'ସାଧାରଣ ପ୍ରଶ୍ନ' : 'Frequently Asked Questions',
+    bookConsultation: audience_style === 'pure_odia' ? 'ମାଗଣା ପରାମର୍ଶ ବୁକ୍ କରନ୍ତୁ →' : 'Book Free Consultation →',
+    bookCall: audience_style === 'pure_odia' ? 'ମାଗଣା କଲ୍ ବୁକ୍ କରନ୍ତୁ' : 'Book a Free Call',
+    whatsapp: audience_style === 'pure_odia' ? 'WhatsApp କରନ୍ତୁ' : 'WhatsApp Us',
+    heroCtaPrimary: audience_style === 'pure_odia' ? 'ମାଗଣା ପରାମର୍ଶ ବୁକ୍ କରନ୍ତୁ →' : 'Book Free Consultation →',
+    heroCtaSecondary: audience_style === 'pure_odia' ? 'SIP କ୍ୟାଲକୁଲେଟର ଦେଖନ୍ତୁ →' : 'Try the SIP Calculator →',
+    storyAttribution: audience_style === 'pure_odia' ? '— ଓଡ଼ିଶାର ଏକ କାହାଣୀ। ଗୋପନୀୟତା ପାଇଁ ନାମ ପରିବର୍ତ୍ତନ କରାଯାଇଛି।' : '— A story from Odisha. Names changed for privacy.',
+    localInsightLabel: audience_style === 'pure_odia' ? 'ସ୍ଥାନୀୟ ଜ୍ଞାନ' : 'Local Insight',
+    chatWhatsapp: audience_style === 'pure_odia' ? 'WhatsApp ରେ କଥା ହୁଅନ୍ତୁ' : 'Chat with us on WhatsApp',
   };
+
+  const BOOKING_FORM_URL = `/${language}/book`;
 
   useEffect(() => {
     if (!slug) return;
@@ -239,11 +241,11 @@ export default function GuidePage() {
           <span style={{ color: '#2C1810' }}>Sahi</span>
           <span style={{ color: '#1B6B3A', fontSize: '0.6em' }}>.in</span>
         </Link>
-        <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
+        <Link to={BOOKING_FORM_URL}
           className="bg-[#E8820C] text-white font-body text-sm px-4 py-2 rounded-lg hover:bg-[#C45C00] transition-colors">
           <span className="sm:hidden">Book a Call →</span>
           <span className="hidden sm:inline">Book a Free Call →</span>
-        </a>
+        </Link>
       </header>
 
       <main className="pt-16 pb-20 md:pb-0" lang={language}>
@@ -453,10 +455,10 @@ export default function GuidePage() {
             <h2 className="font-heading font-bold text-3xl text-white mb-3">{content.cta_headline}</h2>
             <p className="font-body text-white opacity-90 mb-8">{content.cta_subline}</p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
+              <Link to={BOOKING_FORM_URL}
                 className="bg-white text-[#E8820C] font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#F5EDD8] transition-colors">
                 {t.bookCall}
-              </a>
+              </Link>
               <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
                 className="border-2 border-white text-white font-body px-6 py-3 rounded-lg hover:bg-white hover:text-[#E8820C] transition-colors">
                 {t.whatsapp}
