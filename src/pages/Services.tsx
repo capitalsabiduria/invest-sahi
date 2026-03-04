@@ -96,7 +96,7 @@ const ServiceCard = ({ svc, lang }: { svc: ServiceItem; lang: string; }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex-1 flex items-center justify-center gap-1 text-xs font-medium border border-green text-green px-3 py-2 rounded-full hover:bg-green hover:text-white transition-all"
+                  className="flex-1 flex items-center justify-center gap-1 text-xs font-medium border border-green bg-green text-white px-3 py-2 rounded-full hover:bg-transparent hover:text-green transition-all"
                 >
                   <MessageCircle size={13} /> {t('svc.whatsappCta', 'Chat Now on WhatsApp')}
                 </a>
