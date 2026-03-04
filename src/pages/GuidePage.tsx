@@ -177,15 +177,13 @@ export default function GuidePage() {
           <span className="text-foreground">Sahi</span>
           <span className="text-secondary text-[0.6em]">.in</span>
         </Link>
-        <a
-          href={BRAND.social.whatsapp_link}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          to="/en/book"
           className="bg-primary text-primary-foreground font-body text-sm px-4 py-2 rounded-lg hover:scale-105 transition-all duration-200 whitespace-nowrap"
         >
           <span className="sm:hidden">Book a Call →</span>
           <span className="hidden sm:inline">Book a Free Call →</span>
-        </a>
+        </Link>
       </header>
 
       <main className="pt-16 pb-20 md:pb-0 animate-fade-in">
@@ -433,14 +431,12 @@ export default function GuidePage() {
             </h2>
             <p className="font-body text-primary-foreground opacity-90 mb-8">{content.cta_subline}</p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a
-                href={BRAND.social.whatsapp_link}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/en/book"
                 className="bg-card text-primary font-body font-semibold px-6 py-3 rounded-lg hover:scale-105 transition-all duration-200"
               >
                 Book a Free Call
-              </a>
+              </Link>
               <a
                 href={BRAND.social.whatsapp_link}
                 target="_blank"
