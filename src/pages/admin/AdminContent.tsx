@@ -3,12 +3,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { ChevronLeft, ChevronRight, Plus, X, Trash2, Pencil } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, X, Trash2, Pencil, Sparkles, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import RichEditor from '@/components/admin/RichEditor';
+import { toast } from 'sonner';
 
 const TYPES = ['story', 'glossary', 'guide', 'whatsapp_post'] as const;
 const PAGE_SIZE = 20;
@@ -47,6 +48,8 @@ const AdminContent = () => {
   const [search, setSearch] = useState('');
   const [editing, setEditing] = useState<Partial<ContentItem> | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [aiPrompt, setAiPrompt] = useState('');
+  const [generating, setGenerating] = useState(false);
 
   const fetchItems = useCallback(async () => {
     let query = supabase.from('content_items').select('*', { count: 'exact' });
@@ -94,6 +97,34 @@ const AdminContent = () => {
     await supabase.from('content_items').delete().eq('id', deleteId);
     setDeleteId(null);
     fetchItems();
+  };
+
+  const handleGenerateContent = async () => {
+    if (!aiPrompt.trim()) return;
+    setGenerating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-content-item', {
+        body: {
+          type: editing?.type,
+          category: editing?.category,
+          slug: editing?.slug,
+          prompt: aiPrompt,
+        },
+      });
+      if (error || !data) throw new Error(error?.message || 'Generation failed');
+      setEditing(prev => ({
+        ...prev!,
+        title_en: data.title_en,
+        title_or: data.title_or,
+        body_en: data.body_en,
+        body_or: data.body_or,
+      }));
+      toast.success('Content generated successfully');
+    } catch (err: any) {
+      toast.error(`Generation failed: ${err.message}`);
+    } finally {
+      setGenerating(false);
+    }
   };
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
@@ -178,7 +209,7 @@ const AdminContent = () => {
       {editing && (
         <div className="fixed inset-0 z-50 flex justify-end">
           <div className="absolute inset-0 bg-black/30" onClick={() => setEditing(null)} />
-          <div className="relative w-full max-w-[480px] bg-white shadow-xl overflow-y-auto p-6">
+          <div className="relative w-full max-w-[780px] bg-white shadow-xl overflow-y-auto p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-bold font-heading">{editing.id ? 'Edit Content' : 'New Content'}</h2>
               <Button variant="ghost" size="icon" onClick={() => setEditing(null)}><X className="h-4 w-4" /></Button>
@@ -230,25 +261,71 @@ const AdminContent = () => {
                 </div>
               )}
 
+              {/* AI Generation section */}
+              <div className="bg-purple-50 border border-purple-100 rounded-xl p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-purple-500" />
+                  <span className="font-semibold text-sm text-purple-700">Generate with AI</span>
+                </div>
+                <Input
+                  placeholder="Topic / prompt — e.g. 'SIP basics for a first-time investor in Bhubaneswar'"
+                  value={aiPrompt}
+                  onChange={(e) => setAiPrompt(e.target.value)}
+                  className="bg-white border-purple-200 focus:border-purple-400"
+                />
+                <div className="flex items-center gap-3">
+                  <Button
+                    type="button"
+                    onClick={handleGenerateContent}
+                    disabled={generating || !aiPrompt.trim()}
+                    className="bg-saffron hover:bg-saffron/90 text-white"
+                  >
+                    {generating ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Generating…
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-4 w-4 mr-2" />
+                        Generate EN + OR Content
+                      </>
+                    )}
+                  </Button>
+                  <p className="text-xs text-purple-500">
+                    Generates titles, English body, and Odia body based on type, category, and your prompt above.
+                  </p>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 gap-4">
-                <div>
+                <div className="space-y-3">
                   <Label className="font-semibold">English</Label>
-                  <Input placeholder="Title (EN)" value={editing.title_en || ''} onChange={(e) => setEditing({ ...editing, title_en: e.target.value, slug: editing.slug || slugify(e.target.value) })} className="mt-1" />
+                  <Input placeholder="Title (EN)" value={editing.title_en || ''} onChange={(e) => setEditing({ ...editing, title_en: e.target.value, slug: editing.slug || slugify(e.target.value) })} />
                   <Input placeholder="Preview (EN) — 1-2 sentences shown on card"
                     value={editing.preview_en || ''}
-                    onChange={(e) => setEditing({ ...editing, preview_en: e.target.value })}
-                    className="mt-2" />
-                  <Textarea placeholder="Body (EN)" value={editing.body_en || ''} onChange={(e) => setEditing({ ...editing, body_en: e.target.value })} className="mt-2 min-h-[200px] font-mono text-sm" />
+                    onChange={(e) => setEditing({ ...editing, preview_en: e.target.value })} />
+                  <RichEditor
+                    label="Body (EN)"
+                    value={editing.body_en || ''}
+                    onChange={(html) => setEditing({ ...editing, body_en: html })}
+                    placeholder="Write or generate English content…"
+                  />
                 </div>
-                <div>
+                <div className="space-y-3">
                   <Label className="font-semibold">Odia</Label>
-                  <Input placeholder="Title (OR)" value={editing.title_or || ''} onChange={(e) => setEditing({ ...editing, title_or: e.target.value })} className="mt-1" />
+                  <Input placeholder="Title (OR)" value={editing.title_or || ''} onChange={(e) => setEditing({ ...editing, title_or: e.target.value })} style={{ fontFamily: "'Noto Sans Oriya', sans-serif" }} />
                   <Input placeholder="Preview (Odia)"
                     value={editing.preview_or || ''}
                     onChange={(e) => setEditing({ ...editing, preview_or: e.target.value })}
-                    className="mt-2"
                     style={{ fontFamily: "'Noto Sans Oriya', sans-serif" }} />
-                  <Textarea placeholder="Body (OR)" value={editing.body_or || ''} onChange={(e) => setEditing({ ...editing, body_or: e.target.value })} className="mt-2 min-h-[200px]" style={{ fontFamily: "'Noto Sans Oriya', sans-serif" }} />
+                  <RichEditor
+                    label="Body (OR)"
+                    value={editing.body_or || ''}
+                    onChange={(html) => setEditing({ ...editing, body_or: html })}
+                    placeholder="ଓଡ଼ିଆ ବିଷୟବସ୍ତୁ ଲେଖନ୍ତୁ…"
+                    isOdia
+                  />
                 </div>
               </div>
 

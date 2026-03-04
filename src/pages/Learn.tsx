@@ -261,9 +261,10 @@ const LearnDetail = () => {
           </div>
 
           <h1 className={`font-heading font-bold text-3xl text-foreground mb-6 ${viewLang === 'or' ? 'font-odia' : ''}`}>{title}</h1>
-          <div className={`prose max-w-none font-body text-foreground leading-relaxed whitespace-pre-wrap ${viewLang === 'or' ? 'font-odia' : ''}`}>
-            {body}
-          </div>
+          <div
+            className={`prose prose-lg max-w-none font-body text-foreground leading-relaxed ${viewLang === 'or' ? 'font-odia' : ''}`}
+            dangerouslySetInnerHTML={{ __html: body || '' }}
+          />
 
           <div className="mt-10 bg-green rounded-xl p-6 text-center text-white">
             <MessageCircle className="mx-auto mb-2" size={28} />
