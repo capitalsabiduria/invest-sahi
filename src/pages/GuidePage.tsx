@@ -126,6 +126,27 @@ export default function GuidePage() {
   const audience_style = !isOdia ? 'standard' : isOdiaFormal ? 'pure_odia' : 'mixed';
   const baseSlug = isOdiaFormal ? slug!.replace(/-odia$/, '') : slug!;
 
+  const t = {
+    caseStudyHeading: language === 'or' ? 'ଆମେ କିପରି ସାହାଯ୍ୟ କଲୁ — ଏକ ବାସ୍ତବ ଉଦାହରଣ' : 'How We Helped — A Real Example',
+    challenge: language === 'or' ? 'ଆହ୍ୱାନ' : 'The Challenge',
+    whatWeDid: language === 'or' ? 'ଆମେ ଯାହା କଲୁ' : 'What We Did',
+    result: language === 'or' ? 'ଫଳାଫଳ' : 'The Result',
+    howItWorks: language === 'or' ? 'ଏହା କିପରି କାମ କରେ' : 'How It Works',
+    freeConversation: language === 'or' ? 'ମାଗଣା କଥାବାର୍ତ୍ତା' : 'Free conversation',
+    personalPlan: language === 'or' ? 'ଆପଣଙ୍କ ଯୋଜନା' : 'Your personal plan',
+    startFrom: language === 'or' ? '₹500 ରୁ ଆରମ୍ଭ' : 'Start from ₹500',
+    servicesHeading: language === 'or' ? 'ଆମେ ଆପଣଙ୍କୁ କେଉଁ ବିଷୟରେ ସାହାଯ୍ୟ କରୁ' : 'What We Help You With',
+    faqHeading: language === 'or' ? 'ସାଧାରଣ ପ୍ରଶ୍ନ' : 'Frequently Asked Questions',
+    bookConsultation: language === 'or' ? 'ମାଗଣା ପରାମର୍ଶ ବୁକ୍ କରନ୍ତୁ →' : 'Book Free Consultation →',
+    bookCall: language === 'or' ? 'ମାଗଣା କଲ୍ ବୁକ୍ କରନ୍ତୁ' : 'Book a Free Call',
+    whatsapp: language === 'or' ? 'WhatsApp କରନ୍ତୁ' : 'WhatsApp Us',
+    heroCtaPrimary: language === 'or' ? 'ମାଗଣା ପରାମର୍ଶ ବୁକ୍ କରନ୍ତୁ →' : 'Book Free Consultation →',
+    heroCtaSecondary: language === 'or' ? 'SIP କ୍ୟାଲକୁଲେଟର ଦେଖନ୍ତୁ →' : 'Try the SIP Calculator →',
+    storyAttribution: language === 'or' ? '— ଓଡ଼ିଶାର ଏକ କାହାଣୀ। ଗୋପନୀୟତା ପାଇଁ ନାମ ପରିବର୍ତ୍ତନ କରାଯାଇଛି।' : '— A story from Odisha. Names changed for privacy.',
+    localInsightLabel: language === 'or' ? 'ସ୍ଥାନୀୟ ଜ୍ଞାନ' : 'Local Insight',
+    chatWhatsapp: language === 'or' ? 'WhatsApp ରେ କଥା ହୁଅନ୍ତୁ' : 'Chat with us on WhatsApp',
+  };
+
   useEffect(() => {
     if (!slug) return;
 
@@ -240,12 +261,14 @@ export default function GuidePage() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
                   className="w-full sm:w-auto text-center bg-[#E8820C] text-white font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#C45C00] transition-colors duration-200">
-                  Book Free Consultation →
+                  {t.heroCtaPrimary}
                 </a>
-                <a href="/#calculator"
-                  className="w-full sm:w-auto text-center border-2 border-[#1B6B3A] text-[#1B6B3A] font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#1B6B3A] hover:text-white transition-colors duration-200">
-                  Try the SIP Calculator →
-                </a>
+                <button
+                  onClick={() => { window.location.href = `/${language}/calculator`; }}
+                  className="w-full sm:w-auto text-center border-2 border-[#1B6B3A] text-[#1B6B3A] font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#1B6B3A] hover:text-white transition-colors duration-200"
+                >
+                  {t.heroCtaSecondary}
+                </button>
               </div>
             </div>
             <div className="flex-shrink-0 opacity-15">
@@ -270,7 +293,7 @@ export default function GuidePage() {
                 <div className="text-6xl text-[#E8820C] opacity-20 font-serif leading-none flex-shrink-0 mt-[-8px]">"</div>
                 <div>
                   <p className="font-body text-lg text-[#2C1810] leading-relaxed italic">{content.story_paragraph}</p>
-                  <p className="font-body text-sm text-[#2C1810] opacity-50 mt-3">— A story from Odisha. Names changed for privacy.</p>
+                  <p className="font-body text-sm text-[#2C1810] opacity-50 mt-3">{t.storyAttribution}</p>
                 </div>
               </div>
             </div>
@@ -281,12 +304,12 @@ export default function GuidePage() {
         {content.case_study && (
           <section className="bg-[#F5EDD8] py-14 px-4 md:px-8">
             <div className="max-w-3xl mx-auto">
-              <h2 className="font-heading font-bold text-2xl text-[#2C1810] mb-8 text-center">How We Helped — A Real Example</h2>
+              <h2 className="font-heading font-bold text-2xl text-[#2C1810] mb-8 text-center">{t.caseStudyHeading}</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {[
-                  { label: 'The Challenge', text: content.case_study.challenge, color: '#C45C00' },
-                  { label: 'What We Did', text: content.case_study.strategy, color: '#1A6B9A' },
-                  { label: 'The Result', text: content.case_study.result, color: '#1B6B3A' },
+                  { label: t.challenge, text: content.case_study.challenge, color: '#C45C00' },
+                  { label: t.whatWeDid, text: content.case_study.strategy, color: '#1A6B9A' },
+                  { label: t.result, text: content.case_study.result, color: '#1B6B3A' },
                 ].map(item => (
                   <div key={item.label} className="bg-white rounded-xl p-6 shadow-sm">
                     <div className="font-heading font-bold text-sm mb-2" style={{ color: item.color }}>{item.label}</div>
@@ -302,9 +325,9 @@ export default function GuidePage() {
         {content.how_it_works && (
           <section className="bg-white py-12 px-4 md:px-8">
             <div className="max-w-3xl mx-auto text-center">
-              <h2 className="font-heading font-bold text-2xl text-[#2C1810] mb-6">How It Works</h2>
+              <h2 className="font-heading font-bold text-2xl text-[#2C1810] mb-6">{t.howItWorks}</h2>
               <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
-                {['Free conversation', 'Your personal plan', 'Start from ₹500'].map((step, i) => (
+                {[t.freeConversation, t.personalPlan, t.startFrom].map((step, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-[#E8820C] text-white font-heading font-bold text-sm flex items-center justify-center flex-shrink-0">{i + 1}</div>
                     <span className="font-body text-sm text-[#2C1810]">{step}</span>
@@ -347,7 +370,7 @@ export default function GuidePage() {
                 </svg>
               </div>
               <div>
-                <div className="font-heading font-bold text-sm text-[#1A6B9A] mb-2 uppercase tracking-wide">Local Insight</div>
+                <div className="font-heading font-bold text-sm text-[#1A6B9A] mb-2 uppercase tracking-wide">{t.localInsightLabel}</div>
                 <p className="font-body text-[#2C1810] leading-relaxed">{content.local_insight}</p>
               </div>
             </div>
@@ -357,7 +380,7 @@ export default function GuidePage() {
         {/* Services */}
         <section className="bg-[#F5EDD8] py-14 px-4 md:px-8">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-heading font-bold text-2xl text-[#2C1810] text-center mb-10">What We Help You With</h2>
+            <h2 className="font-heading font-bold text-2xl text-[#2C1810] text-center mb-10">{t.servicesHeading}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {content.services.map((service, i) => (
                 <div key={i} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1 flex flex-col justify-between">
@@ -367,7 +390,7 @@ export default function GuidePage() {
                   </div>
                   <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
                     className="mt-5 w-full text-center bg-[#F5EDD8] hover:bg-[#E8820C] text-[#E8820C] hover:text-white font-body text-sm font-semibold py-2.5 px-4 rounded-lg transition-colors duration-200 border border-[#E8820C]">
-                    Book Free Consultation →
+                    {t.bookConsultation}
                   </a>
                 </div>
               ))}
@@ -379,7 +402,7 @@ export default function GuidePage() {
         {content.faqs && content.faqs.length > 0 && (
           <section className="bg-white py-14 px-4 md:px-8">
             <div className="max-w-3xl mx-auto">
-              <h2 className="font-heading font-bold text-2xl text-[#2C1810] text-center mb-10">Frequently Asked Questions</h2>
+              <h2 className="font-heading font-bold text-2xl text-[#2C1810] text-center mb-10">{t.faqHeading}</h2>
               <div className="space-y-3">
                 {content.faqs.map((faq, i) => (
                   <div key={i} className="border border-[#E8820C]/20 rounded-xl overflow-hidden">
@@ -432,11 +455,11 @@ export default function GuidePage() {
             <div className="flex flex-wrap justify-center gap-4">
               <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
                 className="bg-white text-[#E8820C] font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#F5EDD8] transition-colors">
-                Book a Free Call
+                {t.bookCall}
               </a>
               <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
                 className="border-2 border-white text-white font-body px-6 py-3 rounded-lg hover:bg-white hover:text-[#E8820C] transition-colors">
-                WhatsApp Us
+                {t.whatsapp}
               </a>
             </div>
           </div>
@@ -460,7 +483,7 @@ export default function GuidePage() {
           <path d="M11 1C5.477 1 1 5.477 1 11c0 1.89.525 3.655 1.438 5.163L1 21l4.837-1.438A9.956 9.956 0 0011 21c5.523 0 10-4.477 10-10S16.523 1 11 1z" fill="white" opacity="0.2" stroke="white" strokeWidth="1.5"/>
           <path d="M7.5 8.5c.5 1 1.5 2.5 3 3.5s2.5 1.5 3 1.5c.3-.5.8-1.5.5-2-.5-.5-1.5-.5-1.5-.5s-.5 0-1 .5c-.3-.3-1-1-1.5-1.5-.5-.5-.5-1-.5-1s0-1-.5-1.5c-.5-.3-1.5 0-2 .5-.3.5 0 1.5 0 1.5z" fill="white"/>
         </svg>
-        Chat with us on WhatsApp
+        {t.chatWhatsapp}
       </a>
     </>
   );
