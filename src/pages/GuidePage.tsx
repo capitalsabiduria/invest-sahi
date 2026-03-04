@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { BRAND } from "@/constants/brand";
+import SEO from "@/components/SEO";
 
 interface GuideContent {
   meta_description?: string;
@@ -42,8 +43,8 @@ interface SeoPage {
   content: GuideContent | null;
 }
 
-function SchemaMarkup({ page, content, baseSlug }: { page: SeoPage; content: GuideContent; baseSlug: string }) {
-  const schema = {
+function buildSchema({ page, content, baseSlug }: { page: SeoPage; content: GuideContent; baseSlug: string }) {
+  return {
     "@context": "https://schema.org",
     "@type": "FinancialService",
     "name": BRAND.name,
@@ -76,13 +77,6 @@ function SchemaMarkup({ page, content, baseSlug }: { page: SeoPage; content: Gui
       }))
     })
   };
-
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  );
 }
 
 function LoadingSpinner() {
@@ -182,29 +176,6 @@ export default function GuidePage() {
       }
 
       setPage({ ...pageData, content: versionData.content as unknown as GuideContent });
-      document.title = `${pageData.title} | InvestSahi`;
-
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) {
-        const generatedMeta = (versionData.content as unknown as GuideContent)?.meta_description;
-        metaDesc.setAttribute('content', generatedMeta || pageData.meta_description);
-      }
-
-      // Inject hreflang tags
-      const existingHreflang = document.querySelectorAll('link[hreflang]');
-      existingHreflang.forEach(el => el.remove());
-      const hreflangs = [
-        { lang: 'en-IN', href: `https://investsahi.in/en/${baseSlug}` },
-        { lang: 'or-IN', href: `https://investsahi.in/or/${baseSlug}` },
-        { lang: 'x-default', href: `https://investsahi.in/en/${baseSlug}` },
-      ];
-      hreflangs.forEach(({ lang, href }) => {
-        const link = document.createElement('link');
-        link.setAttribute('rel', 'alternate');
-        link.setAttribute('hreflang', lang);
-        link.setAttribute('href', href);
-        document.head.appendChild(link);
-      });
 
       await supabase.rpc('increment_version_view', {
         p_page_id: pageData.id,
@@ -232,7 +203,14 @@ export default function GuidePage() {
 
   return (
     <>
-      <SchemaMarkup page={page} content={content} baseSlug={baseSlug} />
+      <SEO
+        title={page.title}
+        description={(content as GuideContent).meta_description || page.meta_description}
+        url={`/${language}/${slug}`}
+        lang={language as 'en' | 'or'}
+        slug={baseSlug}
+        schema={buildSchema({ page, content: content as GuideContent, baseSlug })}
+      />
 
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#F5EDD8] border-b border-[#E8820C]/20 px-4 md:px-8 py-3 flex items-center justify-between">
