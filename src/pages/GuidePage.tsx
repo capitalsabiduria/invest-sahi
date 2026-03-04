@@ -375,12 +375,19 @@ export default function GuidePage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {content.services.map((service, i) => (
-                <div key={i} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="inline-block bg-[#E8820C] text-white font-body text-xs px-3 py-1 rounded-full mb-3">
-                    {service.entry_amount}
+                <div key={i} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="font-heading font-bold text-[#2C1810] mb-2">{service.name}</h3>
+                    <p className="font-body text-[#2C1810] opacity-75 text-sm leading-relaxed">{service.description}</p>
                   </div>
-                  <h3 className="font-heading font-bold text-[#2C1810] mb-2">{service.name}</h3>
-                  <p className="font-body text-[#2C1810] opacity-75 text-sm leading-relaxed">{service.description}</p>
+                  <a
+                    href={BRAND.social.whatsapp_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 w-full text-center bg-[#F5EDD8] hover:bg-[#E8820C] text-[#E8820C] hover:text-white font-body text-sm font-semibold py-2.5 px-4 rounded-lg transition-colors duration-200 border border-[#E8820C]"
+                  >
+                    Book Free Consultation →
+                  </a>
                 </div>
               ))}
             </div>
