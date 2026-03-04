@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import SEO from '@/components/SEO';
 import { motion } from 'framer-motion';
 import { GraduationCap, Stethoscope, Briefcase, BookOpen, Check, MessageCircle, Clock, Wallet, PiggyBank } from 'lucide-react';
 import Navbar from '@/components/Navbar';
@@ -100,6 +101,16 @@ const Calculator = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title={currentLang === 'or'
+          ? "SIP ଏବଂ ଶିକ୍ଷା ଯୋଜନା Calculator"
+          : "SIP & Education Planning Calculators"}
+        description={currentLang === 'or'
+          ? "ଆପଣଙ୍କ ସନ୍ତାନର NIT Rourkela ବା AIIMS ଶିକ୍ଷା ପାଇଁ କେତେ ସଞ୍ଚୟ ଦରକାର ହିସାବ କରନ୍ତୁ। ମାଗଣା SIP calculator।"
+          : "Calculate how much you need to save for your child's NIT Rourkela or AIIMS education. Free SIP and compound interest calculators."}
+        url={`/${currentLang}/calculators`}
+        lang={currentLang as 'en' | 'or'}
+      />
       <Navbar />
 
       {/* Goal not yet selected — show Goal Selector */}

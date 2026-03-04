@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
+import { Helmet } from 'react-helmet-async';
 import { supabase } from "@/integrations/supabase/client";
 import { BRAND } from "@/constants/brand";
+import SEO from "@/components/SEO";
 
 interface GuideContent {
   meta_description?: string;
@@ -42,13 +44,13 @@ interface SeoPage {
   content: GuideContent | null;
 }
 
-function SchemaMarkup({ page, content, baseSlug }: { page: SeoPage; content: GuideContent; baseSlug: string }) {
+function SchemaMarkup({ page, content, baseSlug, currentUrl }: { page: SeoPage; content: GuideContent; baseSlug: string; currentUrl: string }) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "FinancialService",
     "name": BRAND.name,
     "description": content.meta_description || page.meta_description,
-    "url": `https://investsahi.in/en/${baseSlug}`,
+    "url": currentUrl,
     "telephone": BRAND.contact.phone,
     "email": BRAND.contact.email,
     "address": {
@@ -76,12 +78,10 @@ function SchemaMarkup({ page, content, baseSlug }: { page: SeoPage; content: Gui
       }))
     })
   };
-
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
+    <Helmet>
+      <script type="application/ld+json">{JSON.stringify(schema)}</script>
+    </Helmet>
   );
 }
 
@@ -182,29 +182,6 @@ export default function GuidePage() {
       }
 
       setPage({ ...pageData, content: versionData.content as unknown as GuideContent });
-      document.title = `${pageData.title} | InvestSahi`;
-
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) {
-        const generatedMeta = (versionData.content as unknown as GuideContent)?.meta_description;
-        metaDesc.setAttribute('content', generatedMeta || pageData.meta_description);
-      }
-
-      // Inject hreflang tags
-      const existingHreflang = document.querySelectorAll('link[hreflang]');
-      existingHreflang.forEach(el => el.remove());
-      const hreflangs = [
-        { lang: 'en-IN', href: `https://investsahi.in/en/${baseSlug}` },
-        { lang: 'or-IN', href: `https://investsahi.in/or/${baseSlug}` },
-        { lang: 'x-default', href: `https://investsahi.in/en/${baseSlug}` },
-      ];
-      hreflangs.forEach(({ lang, href }) => {
-        const link = document.createElement('link');
-        link.setAttribute('rel', 'alternate');
-        link.setAttribute('hreflang', lang);
-        link.setAttribute('href', href);
-        document.head.appendChild(link);
-      });
 
       await supabase.rpc('increment_version_view', {
         p_page_id: pageData.id,
@@ -217,6 +194,36 @@ export default function GuidePage() {
 
     fetchPage();
   }, [slug]);
+
+  useEffect(() => {
+    const hreflangs = [
+      { lang: 'en-IN', href: `https://investsahi.in/en/${baseSlug}` },
+      { lang: 'or', href: `https://investsahi.in/or/${baseSlug}` },
+      { lang: 'or-IN', href: `https://investsahi.in/or/${baseSlug}-odia` },
+      { lang: 'x-default', href: `https://investsahi.in/en/${baseSlug}` },
+    ];
+
+    const injected: HTMLLinkElement[] = [];
+    hreflangs.forEach(({ lang, href }) => {
+      const link = document.createElement('link');
+      link.setAttribute('rel', 'alternate');
+      link.setAttribute('hreflang', lang);
+      link.setAttribute('href', href);
+      document.head.appendChild(link);
+      injected.push(link);
+    });
+
+    const existingCanonical = document.querySelector('link[rel="canonical"]');
+    if (existingCanonical) existingCanonical.remove();
+    const canonical = document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', `https://investsahi.in${location.pathname}`);
+    document.head.appendChild(canonical);
+
+    return () => {
+      injected.forEach(el => el.remove());
+    };
+  }, [baseSlug, location.pathname]);
 
   if (loading) return <LoadingSpinner />;
   if (notFound || !page) return <NotFound />;
@@ -232,7 +239,14 @@ export default function GuidePage() {
 
   return (
     <>
-      <SchemaMarkup page={page} content={content} baseSlug={baseSlug} />
+      <SEO
+        title={page.title}
+        description={(content as GuideContent).meta_description || page.meta_description}
+        url={`/${language}/${slug}`}
+        lang={language as 'en' | 'or'}
+        slug={baseSlug}
+      />
+      <SchemaMarkup page={page} content={content as GuideContent} baseSlug={baseSlug} currentUrl={`https://investsahi.in${location.pathname}`} />
 
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#F5EDD8] border-b border-[#E8820C]/20 px-4 md:px-8 py-3 flex items-center justify-between">
