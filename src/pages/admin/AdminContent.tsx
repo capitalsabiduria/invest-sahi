@@ -102,10 +102,11 @@ const AdminContent = () => {
 
     if (error) {
       console.error('[AdminContent] Save failed:', error);
-      alert(`Save failed: ${error.message}`);
+      toast.error(`Save failed: ${error.message}`);
       return;
     }
 
+    toast.success(publish ? 'Published!' : 'Draft saved');
     setEditing(null);
     fetchItems();
   };
@@ -414,13 +415,13 @@ const AdminContent = () => {
               <RichEditor
                 label="Body · English"
                 value={editing.body_en || ''}
-                onChange={(html) => setEditing({ ...editing, body_en: html })}
+                onChange={(html) => setEditing(prev => ({ ...prev!, body_en: html }))}
                 placeholder="Write or generate English content…"
               />
               <RichEditor
                 label="Body · Odia"
                 value={editing.body_or || ''}
-                onChange={(html) => setEditing({ ...editing, body_or: html })}
+                onChange={(html) => setEditing(prev => ({ ...prev!, body_or: html }))}
                 placeholder="ଓଡ଼ିଆ ବିଷୟବସ୍ତୁ ଲେଖନ୍ତୁ…"
                 isOdia
               />

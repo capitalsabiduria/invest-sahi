@@ -67,7 +67,7 @@ export default function RichEditor({ value, onChange, placeholder, isOdia, label
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
       Underline,
       Link.configure({ openOnClick: false, HTMLAttributes: { class: 'text-blue underline' } }),
       Image.configure({ HTMLAttributes: { class: 'max-w-full rounded-lg my-2' } }),
