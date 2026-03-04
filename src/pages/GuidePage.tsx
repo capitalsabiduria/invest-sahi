@@ -203,16 +203,16 @@ export default function GuidePage() {
                   href={BRAND.social.whatsapp_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto text-center bg-primary text-primary-foreground font-body px-6 py-3 rounded-lg hover:scale-105 transition-all duration-200"
+                  className="w-full sm:w-auto text-center bg-[#E8820C] text-white font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#C45C00] transition-colors duration-200"
                 >
-                  Start with ₹500 →
+                  Book Free Consultation →
                 </a>
-                <Link
-                  to="/#calculator"
-                  className="w-full sm:w-auto text-center border-2 border-secondary text-secondary font-body px-6 py-3 rounded-lg hover:bg-secondary hover:text-secondary-foreground transition-all duration-200"
+                <a
+                  href="/#calculator"
+                  className="w-full sm:w-auto text-center border-2 border-[#1B6B3A] text-[#1B6B3A] font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#1B6B3A] hover:text-white transition-colors duration-200"
                 >
-                  Calculate Your Fund →
-                </Link>
+                  Try the SIP Calculator →
+                </a>
               </div>
             </div>
             <div className="flex-shrink-0 opacity-15">
