@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import { motion } from 'framer-motion';
 import { BookOpen, ArrowLeft, MessageCircle } from 'lucide-react';
 import Navbar from '@/components/Navbar';
@@ -23,6 +24,7 @@ const RevealSection = ({ children, className = '', delay = 0 }: { children: Reac
 
 type ContentItem = {
   id: string; type: string; slug: string; title_en: string | null; title_or: string | null;
+  preview_en: string | null; preview_or: string | null;
   body_en: string | null; body_or: string | null; category: string | null;
   status: string | null; published_at: string | null; created_at: string | null;
 };
@@ -157,7 +159,9 @@ const LearnList = () => {
                     </span>
                     <h3 className="font-heading font-semibold text-lg text-foreground mb-1">{getTitle(item)}</h3>
                     {item.category && <span className="text-xs text-muted-foreground font-body mb-2">{item.category}</span>}
-                    <p className="text-sm font-body text-muted-foreground line-clamp-3 flex-1">{getBody(item).slice(0, 120)}...</p>
+                    <p className="text-sm font-body text-muted-foreground line-clamp-2 flex-1">
+                      {(currentLang === 'or' ? item.preview_or : item.preview_en) || getBody(item).slice(0, 120)}
+                    </p>
                     <div className="flex gap-2 mt-3">
                       {item.title_en && <span className="text-xs border border-border rounded px-2 py-0.5 text-muted-foreground">EN</span>}
                       {item.title_or && <span className="text-xs border border-border rounded px-2 py-0.5 text-muted-foreground font-odia">ଓଡ଼ିଆ</span>}
@@ -261,10 +265,9 @@ const LearnDetail = () => {
           </div>
 
           <h1 className={`font-heading font-bold text-3xl text-foreground mb-6 ${viewLang === 'or' ? 'font-odia' : ''}`}>{title}</h1>
-          <div
-            className={`prose prose-lg max-w-none font-body text-foreground leading-relaxed ${viewLang === 'or' ? 'font-odia' : ''}`}
-            dangerouslySetInnerHTML={{ __html: body || '' }}
-          />
+          <div className={`prose prose-lg max-w-none font-body text-foreground leading-relaxed ${viewLang === 'or' ? 'font-odia' : ''}`}>
+            <ReactMarkdown>{body || ''}</ReactMarkdown>
+          </div>
 
           <div className="mt-10 bg-green rounded-xl p-6 text-center text-white">
             <MessageCircle className="mx-auto mb-2" size={28} />
