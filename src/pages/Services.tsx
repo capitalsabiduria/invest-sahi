@@ -83,11 +83,11 @@ const ServiceCard = ({ svc, lang }: { svc: ServiceItem; lang: string; }) => {
               <p className="text-sm font-body text-foreground">{t(svc.descKey, svc.descKey)}</p>
               <p className="text-xs text-muted-foreground font-body"><strong>{t('svc.whoLabel', 'Who it\'s for')}:</strong> {t(svc.whoKey, svc.whoKey)}</p>
               <p className="text-xs text-muted-foreground font-body"><strong>{t('svc.benefitLabel', 'Key benefit')}:</strong> {t(svc.benefitKey, svc.benefitKey)}</p>
-              <div className="flex flex-wrap gap-3 pt-2">
+              <div className="flex gap-2 pt-3">
                 <Link
                   to={`/${lang}/book`}
                   onClick={(e) => e.stopPropagation()}
-                  className="bg-saffron text-white text-sm font-heading font-semibold px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+                  className="flex-1 text-center bg-saffron text-white text-sm font-heading font-semibold px-3 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
                 >
                   {t('svc.bookCta', 'Schedule a Free Consultation')} →
                 </Link>
@@ -96,15 +96,15 @@ const ServiceCard = ({ svc, lang }: { svc: ServiceItem; lang: string; }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center gap-1.5 text-sm font-medium text-green hover:underline"
+                  className="flex-1 flex items-center justify-center gap-1.5 text-sm font-medium text-white bg-green px-3 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
                 >
-                  <MessageCircle size={16} /> {t('svc.whatsappCta', '💬 Chat Now on WhatsApp')} →
+                  <MessageCircle size={15} /> {t('svc.whatsappCta', '💬 Chat Now on WhatsApp')}
                 </a>
               </div>
               <Link
                 to={`/${lang}/learn/${svc.guideSlug}`}
                 onClick={(e) => e.stopPropagation()}
-                className="w-full text-sm text-blue hover:underline font-body mt-1"
+                className="inline-block mt-2 text-sm font-body hover:underline"
                 style={{ color: '#1A6B9A' }}
               >
                 {t('svc.guideCta', 'Read our guide')} →
