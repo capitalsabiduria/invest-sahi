@@ -75,20 +75,39 @@ const AdminContent = () => {
 
   const handleSave = async (publish?: boolean) => {
     if (!editing) return;
+
     const item = { ...editing };
     if (publish) {
       item.status = 'published';
       item.published_at = new Date().toISOString();
     }
+
+    // Strip fields that must not be sent to Supabase on insert/update
     const { id, created_at, ...rest } = item as any;
+
+    let error: any = null;
+
     if (id) {
-      await supabase.from('content_items').update(rest).eq('id', id);
+      const result = await supabase
+        .from('content_items')
+        .update(rest)
+        .eq('id', id);
+      error = result.error;
     } else {
-      await supabase.from('content_items').insert(rest);
+      const result = await supabase
+        .from('content_items')
+        .insert(rest);
+      error = result.error;
     }
+
+    if (error) {
+      console.error('[AdminContent] Save failed:', error);
+      alert(`Save failed: ${error.message}`);
+      return;
+    }
+
     setEditing(null);
     fetchItems();
-    toast.success(publish ? 'Published!' : 'Saved as draft');
   };
 
   const togglePublish = async (item: ContentItem) => {
