@@ -82,8 +82,9 @@ const AdminContent = () => {
       item.published_at = new Date().toISOString();
     }
 
-    // Strip fields that must not be sent to Supabase on insert/update
     const { id, created_at, ...rest } = item as any;
+
+    console.log('[AdminContent] Saving item:', { id, rest });
 
     let error: any = null;
 
@@ -93,22 +94,24 @@ const AdminContent = () => {
         .update(rest)
         .eq('id', id);
       error = result.error;
+      console.log('[AdminContent] Update result:', result);
     } else {
       const result = await supabase
         .from('content_items')
         .insert(rest);
       error = result.error;
+      console.log('[AdminContent] Insert result:', result);
     }
 
     if (error) {
       console.error('[AdminContent] Save failed:', error);
-      toast.error(`Save failed: ${error.message}`);
+      alert(`Save failed: ${error.message}\n\nCode: ${error.code}\nDetails: ${error.details}`);
       return;
     }
 
-    toast.success(publish ? 'Published!' : 'Draft saved');
     setEditing(null);
     fetchItems();
+    alert(publish ? 'Published successfully!' : 'Saved as draft!');
   };
 
   const togglePublish = async (item: ContentItem) => {
