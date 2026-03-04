@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Sparkles, Pencil, Trash2, Copy, ChevronLeft, ChevronRight, X, ChevronDown } from 'lucide-react';
+import { Sparkles, Pencil, Trash2, Copy, ChevronLeft, ChevronRight, X, ChevronDown, ExternalLink, Check, Eye } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { toast } from 'sonner';
@@ -12,6 +12,12 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 /* ── Types ─────────────────────────────────────────────────── */
 
@@ -93,15 +99,41 @@ const emptyForm = (): PageForm => ({
 });
 
 const PAGE_TYPES: PageType[] = ['district', 'institution', 'service', 'community'];
-const PER_PAGE = 20;
+
+const VERSION_DEFS = [
+  { lang: 'en', style: 'standard', label: 'EN' },
+  { lang: 'or', style: 'mixed', label: 'OR' },
+  { lang: 'or', style: 'pure_odia', label: 'OR+' },
+] as const;
 
 /* ── Sub-components ────────────────────────────────────────── */
 
-const StatMini = ({ label, value, color }: { label: string; value: number | string; color?: string }) => (
-  <div className="bg-white rounded-xl p-4 shadow-sm">
-    <p className="text-2xl font-bold font-heading" style={color ? { color } : undefined}>{value}</p>
+type StatFilter = 'all' | 'live-en' | 'live-or' | 'pending';
+
+const StatCard = ({
+  label,
+  value,
+  color,
+  active,
+  onClick,
+}: {
+  label: string;
+  value: number | string;
+  color?: string;
+  active: boolean;
+  onClick: () => void;
+}) => (
+  <button
+    onClick={onClick}
+    className={`bg-white rounded-xl p-4 shadow-sm text-left transition-all ${
+      active ? 'border-2 border-[#E8820C] shadow-md' : 'border-2 border-transparent hover:shadow-md'
+    }`}
+  >
+    <p className="text-2xl font-bold font-heading" style={color ? { color } : undefined}>
+      {value}
+    </p>
     <p className="text-xs text-stone/50 mt-0.5">{label}</p>
-  </div>
+  </button>
 );
 
 /* ── Page form modal ────────────────────────────────────────── */
@@ -330,6 +362,63 @@ const DeleteModal = ({
   );
 };
 
+/* ── View All URLs modal ────────────────────────────────────── */
+
+const ViewAllModal = ({
+  page,
+  onClose,
+}: {
+  page: SeoPage | null;
+  onClose: () => void;
+}) => {
+  if (!page) return null;
+
+  const urls = [
+    { label: 'EN', url: `https://investsahi.in/en/${page.slug}`, version: page.versions.find(v => v.language === 'en' && v.audience_style === 'standard') },
+    { label: 'OR', url: `https://investsahi.in/or/${page.slug}`, version: page.versions.find(v => v.language === 'or' && v.audience_style === 'mixed') },
+    { label: 'OR+', url: `https://investsahi.in/or/${page.slug}-odia`, version: page.versions.find(v => v.language === 'or' && v.audience_style === 'pure_odia') },
+  ];
+
+  return (
+    <Dialog open={!!page} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="font-heading">All URLs for /{page.slug}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-3">
+          {urls.map(({ label, url, version }) => (
+            <div key={label} className="flex items-center gap-3 p-3 rounded-lg bg-stone/5">
+              <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${
+                version?.status === 'live'
+                  ? 'bg-green-100 text-green-700 border-green-200'
+                  : version?.status === 'pending_review'
+                    ? 'bg-amber-100 text-amber-700 border-amber-200'
+                    : 'bg-gray-100 text-gray-500 border-gray-200'
+              }`}>
+                {label}
+              </span>
+              <span className="font-mono text-xs text-stone/60 flex-1 truncate">{url}</span>
+              <span className="text-xs text-stone/40 capitalize">{version?.status ?? 'draft'}</span>
+              <button
+                onClick={() => { navigator.clipboard.writeText(url); toast.success('Copied!'); }}
+                className="p-1 rounded hover:bg-stone/10 text-stone/50"
+                title="Copy URL"
+              >
+                <Copy size={12} />
+              </button>
+              {version?.status === 'live' && (
+                <a href={url} target="_blank" rel="noopener noreferrer" className="p-1 rounded hover:bg-stone/10 text-stone/50">
+                  <ExternalLink size={12} />
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 /* ── Generate dropdown ──────────────────────────────────────── */
 
 const GENERATE_OPTIONS = [
@@ -343,14 +432,17 @@ const GenerateDropdown = ({
   page,
   generatingId,
   onGenerate,
+  justGenerated,
 }: {
   page: SeoPage;
   generatingId: string | null;
   onGenerate: (page: SeoPage, lang: string, style: string) => void;
+  justGenerated: string | null;
 }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const isPageGenerating = generatingId !== null && generatingId.startsWith(page.id + '-');
+  const showCheck = justGenerated !== null && justGenerated.startsWith(page.id + '-');
 
   useEffect(() => {
     if (!open) return;
@@ -368,34 +460,93 @@ const GenerateDropdown = ({
         disabled={generatingId !== null}
         title="Generate AI content"
         className="flex items-center gap-0.5 p-1.5 rounded hover:bg-purple-50 disabled:opacity-40 transition-colors"
-        style={{ color: isPageGenerating ? '#6B21A8' : '#9333EA' }}
+        style={{ color: showCheck ? '#16a34a' : isPageGenerating ? '#6B21A8' : '#9333EA' }}
       >
-        {isPageGenerating
-          ? <span className="inline-block w-3 h-3 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />
-          : <Sparkles size={14} />}
+        {showCheck
+          ? <Check size={14} />
+          : isPageGenerating
+            ? <span className="inline-block w-3 h-3 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />
+            : <Sparkles size={14} />}
         <ChevronDown size={10} />
       </button>
       {open && (
         <div className="absolute right-0 top-full z-50 mt-1 bg-white rounded-xl shadow-lg border border-stone/10 py-1 min-w-[190px]">
-          {GENERATE_OPTIONS.map(opt => (
-            <button
-              key={opt.label}
-              onClick={() => { setOpen(false); onGenerate(page, opt.lang, opt.style); }}
-              disabled={generatingId !== null}
-              className="w-full text-left px-4 py-2 text-sm hover:bg-stone/5 disabled:opacity-40 transition-colors"
-            >
-              {opt.label}
-            </button>
-          ))}
+          {GENERATE_OPTIONS.map(opt => {
+            const key = `${page.id}-${opt.lang}-${opt.style}`;
+            const isGenerating = generatingId === key;
+            return (
+              <button
+                key={opt.label}
+                onClick={() => { setOpen(false); onGenerate(page, opt.lang, opt.style); }}
+                disabled={generatingId !== null}
+                className="w-full text-left px-4 py-2 text-sm hover:bg-stone/5 disabled:opacity-40 transition-colors flex items-center gap-2"
+              >
+                {isGenerating && <span className="inline-block w-3 h-3 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />}
+                {opt.label}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>
   );
 };
 
+/* ── Content status helpers ─────────────────────────────────── */
+
+function getContentStatus(page: SeoPage) {
+  let count = 0;
+  for (const def of VERSION_DEFS) {
+    const v = page.versions.find(ver => ver.language === def.lang && ver.audience_style === def.style);
+    if (v?.content) count++;
+  }
+  return count;
+}
+
+function getContentTooltip(page: SeoPage) {
+  return VERSION_DEFS.map(def => {
+    const v = page.versions.find(ver => ver.language === def.lang && ver.audience_style === def.style);
+    return `${def.label} ${v?.content ? '✓' : '✗'}`;
+  }).join('  ');
+}
+
+/* ── Filter pill with count ─────────────────────────────────── */
+
+const FilterPill = ({
+  label,
+  count,
+  active,
+  onClick,
+}: {
+  label: string;
+  count?: number;
+  active: boolean;
+  onClick: () => void;
+}) => (
+  <button
+    onClick={onClick}
+    className={`text-xs px-3 py-1.5 rounded-full border transition-all capitalize inline-flex items-center gap-1.5 ${
+      active
+        ? 'bg-[#2C1810] text-white border-transparent'
+        : 'border-stone/20 text-stone/60 hover:border-stone/40'
+    }`}
+  >
+    {label}
+    {count !== undefined && (
+      <span className={`text-[10px] px-1.5 py-0 rounded-full ${
+        active ? 'bg-white/20 text-white' : 'bg-stone/10 text-stone/40'
+      }`}>
+        {count}
+      </span>
+    )}
+  </button>
+);
+
 /* ── Main SeoManager ────────────────────────────────────────── */
 
 type LangFilter = 'all' | 'en' | 'or-mixed' | 'or-pure_odia';
+type ContentFilter = 'all' | 'has-content' | 'missing-content' | 'live' | 'pending';
+const PAGE_SIZES = [20, 50, 100] as const;
 
 const SeoManager = () => {
   const { toast: uiToast } = useToast();
@@ -406,16 +557,23 @@ const SeoManager = () => {
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   /* filters */
+  const [statFilter, setStatFilter] = useState<StatFilter>('all');
   const [typeFilter, setTypeFilter] = useState<'all' | PageType>('all');
   const [langFilter, setLangFilter] = useState<LangFilter>('all');
+  const [contentFilter, setContentFilter] = useState<ContentFilter>('all');
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState<number>(20);
 
   /* modals */
   const [showAdd, setShowAdd] = useState(false);
   const [editPage, setEditPage] = useState<SeoPage | null>(null);
   const [deletePage, setDeletePage] = useState<SeoPage | null>(null);
+  const [viewAllPage, setViewAllPage] = useState<SeoPage | null>(null);
   const [generatingId, setGeneratingId] = useState<string | null>(null);
+  const [justGenerated, setJustGenerated] = useState<string | null>(null);
+
+  const hasAnyFilter = statFilter !== 'all' || typeFilter !== 'all' || langFilter !== 'all' || contentFilter !== 'all' || search !== '';
 
   /* ── fetch ── */
   const fetchPages = useCallback(async () => {
@@ -459,7 +617,19 @@ const SeoManager = () => {
 
   /* ── filtered + paginated ── */
   const filtered = pages.filter((p) => {
+    // Stat filter
+    if (statFilter === 'live-en') {
+      if (!p.versions.some(v => v.language === 'en' && v.status === 'live')) return false;
+    } else if (statFilter === 'live-or') {
+      if (!p.versions.some(v => v.language === 'or' && v.status === 'live')) return false;
+    } else if (statFilter === 'pending') {
+      if (!p.versions.some(v => v.status === 'pending_review')) return false;
+    }
+
+    // Type filter
     if (typeFilter !== 'all' && p.type !== typeFilter) return false;
+
+    // Language filter
     if (langFilter !== 'all') {
       const [lang, style] = langFilter === 'en'
         ? ['en', 'standard']
@@ -468,23 +638,49 @@ const SeoManager = () => {
           : ['or', 'pure_odia'];
       if (!p.versions.some(v => v.language === lang && v.audience_style === style)) return false;
     }
+
+    // Content filter
+    if (contentFilter !== 'all') {
+      const count = getContentStatus(p);
+      if (contentFilter === 'has-content' && count === 0) return false;
+      if (contentFilter === 'missing-content' && count === 3) return false;
+      if (contentFilter === 'live' && !p.versions.some(v => v.status === 'live')) return false;
+      if (contentFilter === 'pending' && !p.versions.some(v => v.status === 'pending_review')) return false;
+    }
+
+    // Search
     if (search) {
       const q = search.toLowerCase();
-      if (!p.slug.includes(q) && !p.title.toLowerCase().includes(q)) return false;
+      if (!p.slug.includes(q) && !(p.title || '').toLowerCase().includes(q)) return false;
     }
     return true;
   });
+
   const totalFiltered = filtered.length;
-  const pageCount = Math.ceil(totalFiltered / PER_PAGE);
-  const paginated = filtered.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
+  const pageCount = Math.ceil(totalFiltered / perPage);
+  const paginated = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
+
+  /* Count helpers for filter pills */
+  const countByType = (type: PageType) => pages.filter(p => p.type === type).length;
+  const countByContent = (f: ContentFilter) => {
+    if (f === 'all') return pages.length;
+    return pages.filter(p => {
+      const c = getContentStatus(p);
+      if (f === 'has-content') return c > 0;
+      if (f === 'missing-content') return c < 3;
+      if (f === 'live') return p.versions.some(v => v.status === 'live');
+      if (f === 'pending') return p.versions.some(v => v.status === 'pending_review');
+      return true;
+    }).length;
+  };
 
   /* reset to page 1 on filter change */
-  useEffect(() => { setCurrentPage(1); }, [typeFilter, langFilter, search]);
+  useEffect(() => { setCurrentPage(1); }, [typeFilter, langFilter, contentFilter, search, statFilter, perPage]);
 
   /* ── copy slug ── */
   const copySlug = (slug: string) => {
     navigator.clipboard.writeText(`/en/${slug}`);
-    uiToast({ title: 'Copied!', description: `/en/${slug}` });
+    toast.success(`Copied /en/${slug}`);
   };
 
   /* ── add page ── */
@@ -503,7 +699,6 @@ const SeoManager = () => {
       return;
     }
 
-    // Create 3 version rows (draft, no content)
     const versionRows = [
       { page_id: (newPage as any).id, language: 'en', audience_style: 'standard', url_suffix: `/en/${form.slug}`, status: 'draft' },
       { page_id: (newPage as any).id, language: 'or', audience_style: 'mixed', url_suffix: `/or/${form.slug}`, status: 'draft' },
@@ -602,6 +797,8 @@ const SeoManager = () => {
 
       const label = language === 'en' ? 'English' : audience_style === 'mixed' ? 'Odia (Urban)' : 'Odia (Formal)';
       toast.success(`${label} version generated`);
+      setJustGenerated(key);
+      setTimeout(() => setJustGenerated(null), 2000);
       await fetchPages();
     } catch (err: any) {
       toast.error(`Generation failed: ${err.message}`);
@@ -639,18 +836,96 @@ const SeoManager = () => {
       }
     : emptyForm();
 
-  /* ── version badges ── */
-  const VERSION_DEFS = [
-    { lang: 'en', style: 'standard', label: 'EN' },
-    { lang: 'or', style: 'mixed', label: 'OR' },
-    { lang: 'or', style: 'pure_odia', label: 'OR+' },
-  ] as const;
-
   const versionStatusColor = (status: string | undefined) => ({
     live: 'bg-green-100 text-green-700 border-green-200',
     pending_review: 'bg-amber-100 text-amber-700 border-amber-200',
     draft: 'bg-gray-100 text-gray-500 border-gray-200',
   }[status ?? 'draft'] ?? 'bg-gray-100 text-gray-500 border-gray-200');
+
+  const clearAllFilters = () => {
+    setStatFilter('all');
+    setTypeFilter('all');
+    setLangFilter('all');
+    setContentFilter('all');
+    setSearch('');
+  };
+
+  /* ── render helpers ── */
+  const startIdx = (currentPage - 1) * perPage + 1;
+  const endIdx = Math.min(currentPage * perPage, totalFiltered);
+
+  const ContentDot = ({ page }: { page: SeoPage }) => {
+    const count = getContentStatus(page);
+    const color = count === 3 ? 'bg-green-500' : count > 0 ? 'bg-amber-500' : 'bg-red-500';
+    const tip = getContentTooltip(page);
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className={`inline-block w-2.5 h-2.5 rounded-full ${color}`} />
+          </TooltipTrigger>
+          <TooltipContent className="text-xs font-mono">{tip}</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  };
+
+  const VersionBadges = ({ page }: { page: SeoPage }) => (
+    <div className="flex items-center gap-2">
+      {VERSION_DEFS.map(({ lang, style, label }) => {
+        const version = page.versions.find(v => v.language === lang && v.audience_style === style);
+        const hasContent = !!version?.content;
+        return (
+          <div key={label} className="flex flex-col items-center gap-0.5">
+            <button
+              onClick={() => handleVersionStatusToggle(page.id, version?.id, lang, style, version?.status ?? 'draft')}
+              className={`text-xs font-bold px-2 py-0.5 rounded-full transition-colors ${
+                hasContent
+                  ? `border ${versionStatusColor(version?.status)}`
+                  : 'border border-dashed border-gray-300 text-gray-400 bg-transparent'
+              }`}
+              title={`${label}: ${version?.status ?? 'draft'}${hasContent ? '' : ' (no content)'}`}
+            >
+              {label}
+            </button>
+            {version?.updated_at && (
+              <span className="text-[10px] text-stone/40 leading-none">{timeAgo(version.updated_at)}</span>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  const LiveLinks = ({ page }: { page: SeoPage }) => {
+    const links = [
+      { label: 'EN', url: `https://investsahi.in/en/${page.slug}`, version: page.versions.find(v => v.language === 'en' && v.audience_style === 'standard') },
+      { label: 'OR', url: `https://investsahi.in/or/${page.slug}`, version: page.versions.find(v => v.language === 'or' && v.audience_style === 'mixed') },
+      { label: 'OR+', url: `https://investsahi.in/or/${page.slug}-odia`, version: page.versions.find(v => v.language === 'or' && v.audience_style === 'pure_odia') },
+    ];
+    return (
+      <div className="flex items-center gap-1">
+        {links.map(({ label, url, version }) => (
+          version?.status === 'live' ? (
+            <a
+              key={label}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-green-50 text-green-600 hover:bg-green-100 transition-colors"
+              title={url}
+            >
+              {label}
+            </a>
+          ) : (
+            <span key={label} className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-stone/5 text-stone/20">
+              {label}
+            </span>
+          )
+        ))}
+      </div>
+    );
+  };
 
   /* ── render ── */
   return (
@@ -670,65 +945,93 @@ const SeoManager = () => {
         </button>
       </div>
 
-      {/* Stats */}
+      {/* Stats — clickable filters */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-        <StatMini label="Total Slugs" value={totalSlugs} />
-        <StatMini label="Live EN" value={liveEN} color="#1B6B3A" />
-        <StatMini label="Live Odia" value={liveOdia} color="#1A6B9A" />
-        <StatMini label="Pending Review" value={pendingReview} color="#D97706" />
+        <StatCard
+          label="Total Slugs"
+          value={totalSlugs}
+          active={statFilter === 'all'}
+          onClick={() => setStatFilter(s => s === 'all' ? 'all' : 'all')}
+        />
+        <StatCard
+          label="Live EN"
+          value={liveEN}
+          color="#1B6B3A"
+          active={statFilter === 'live-en'}
+          onClick={() => setStatFilter(s => s === 'live-en' ? 'all' : 'live-en')}
+        />
+        <StatCard
+          label="Live Odia"
+          value={liveOdia}
+          color="#1A6B9A"
+          active={statFilter === 'live-or'}
+          onClick={() => setStatFilter(s => s === 'live-or' ? 'all' : 'live-or')}
+        />
+        <StatCard
+          label="Pending Review"
+          value={pendingReview}
+          color="#D97706"
+          active={statFilter === 'pending'}
+          onClick={() => setStatFilter(s => s === 'pending' ? 'all' : 'pending')}
+        />
       </div>
 
-      {/* Filters */}
-      <div className="bg-white rounded-xl shadow-sm p-4 mb-4 flex flex-wrap gap-3 items-center">
-        {/* Type filter */}
-        <div className="flex gap-1.5 flex-wrap">
-          {(['all', ...PAGE_TYPES] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTypeFilter(t)}
-              className="text-xs px-3 py-1.5 rounded-full border capitalize transition-all"
-              style={
-                typeFilter === t
-                  ? { background: t === 'all' ? '#2C1810' : TYPE_COLORS[t as PageType], color: 'white', borderColor: 'transparent' }
-                  : { borderColor: '#D1D5DB', color: '#6B7280' }
-              }
-            >
-              {t}
-            </button>
+      {/* Unified filter bar */}
+      <div className="bg-white rounded-xl shadow-sm p-4 mb-4 space-y-3">
+        {/* Row 1 — Type */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-[10px] text-stone/40 uppercase tracking-wider font-medium w-12 shrink-0">Type</span>
+          <FilterPill label="All" count={totalSlugs} active={typeFilter === 'all'} onClick={() => setTypeFilter('all')} />
+          {PAGE_TYPES.map(t => (
+            <FilterPill key={t} label={t} count={countByType(t)} active={typeFilter === t} onClick={() => setTypeFilter(t)} />
           ))}
         </div>
 
-        {/* Language filter */}
-        <div className="flex gap-1.5 flex-wrap">
+        {/* Row 2 — Content status */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-[10px] text-stone/40 uppercase tracking-wider font-medium w-12 shrink-0">Status</span>
           {([
-            { value: 'all', label: 'All' },
-            { value: 'en', label: 'English' },
-            { value: 'or-mixed', label: 'Odia Urban' },
-            { value: 'or-pure_odia', label: 'Odia Formal' },
-          ] as const).map(({ value, label }) => (
-            <button
-              key={value}
-              onClick={() => setLangFilter(value)}
-              className="text-xs px-3 py-1.5 rounded-full border transition-all"
-              style={
-                langFilter === value
-                  ? { background: '#1A6B9A', color: 'white', borderColor: 'transparent' }
-                  : { borderColor: '#D1D5DB', color: '#6B7280' }
-              }
-            >
-              {label}
-            </button>
+            { value: 'all' as ContentFilter, label: 'All' },
+            { value: 'has-content' as ContentFilter, label: 'Has Content' },
+            { value: 'missing-content' as ContentFilter, label: 'Missing Content' },
+            { value: 'live' as ContentFilter, label: 'Live' },
+            { value: 'pending' as ContentFilter, label: 'Pending Review' },
+          ]).map(({ value, label }) => (
+            <FilterPill key={value} label={label} count={countByContent(value)} active={contentFilter === value} onClick={() => setContentFilter(value)} />
           ))}
         </div>
 
-        {/* Search */}
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search slug or title…"
-          className="ml-auto text-sm px-3 py-1.5 rounded-lg border border-stone/20 outline-none focus:border-saffron font-body"
-        />
+        {/* Row 3 — Language */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-[10px] text-stone/40 uppercase tracking-wider font-medium w-12 shrink-0">Lang</span>
+          {([
+            { value: 'all' as LangFilter, label: 'All' },
+            { value: 'en' as LangFilter, label: 'English' },
+            { value: 'or-mixed' as LangFilter, label: 'Odia Urban' },
+            { value: 'or-pure_odia' as LangFilter, label: 'Odia Formal' },
+          ]).map(({ value, label }) => (
+            <FilterPill key={value} label={label} active={langFilter === value} onClick={() => setLangFilter(value)} />
+          ))}
+        </div>
+
+        {/* Search + Clear */}
+        <div className="flex items-center gap-3 flex-wrap">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search slug or title…"
+            className="text-sm px-3 py-1.5 rounded-lg border border-stone/20 outline-none focus:border-[#E8820C] font-body flex-1 min-w-[180px]"
+          />
+          {hasAnyFilter && (
+            <button
+              onClick={clearAllFilters}
+              className="text-xs text-stone/50 hover:text-[#E8820C] underline transition-colors"
+            >
+              Clear all filters
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Fetch error banner */}
@@ -753,55 +1056,53 @@ const SeoManager = () => {
         {loading ? (
           <div className="py-16 text-center text-stone/40 font-body text-sm">Loading…</div>
         ) : paginated.length === 0 ? (
-          <div className="py-16 text-center text-stone/40 font-body text-sm">No pages found</div>
+          <div className="py-16 text-center font-body">
+            <p className="text-stone/40 text-sm">No pages match your filters.</p>
+            {hasAnyFilter && (
+              <button onClick={clearAllFilters} className="mt-2 text-sm text-[#E8820C] hover:underline">
+                Clear filters
+              </button>
+            )}
+          </div>
         ) : (
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-stone/10 text-xs text-stone/50 uppercase tracking-wide">
-                <th className="text-left px-4 py-3 font-medium">Type</th>
-                <th className="text-left px-4 py-3 font-medium">Slug</th>
-                <th className="text-left px-4 py-3 font-medium">Title</th>
+                <th className="text-left px-4 py-3 font-medium w-20">Type</th>
+                <th className="text-left px-4 py-3 font-medium max-w-[280px]">Page</th>
+                <th className="text-center px-4 py-3 font-medium w-16">Content</th>
                 <th className="text-left px-4 py-3 font-medium">Versions</th>
-                <th className="text-left px-4 py-3 font-medium">Actions</th>
+                <th className="text-center px-4 py-3 font-medium w-20">Live</th>
+                <th className="text-left px-4 py-3 font-medium w-32">Actions</th>
               </tr>
             </thead>
             <tbody>
               {paginated.map((page) => (
-                <tr key={page.id} className="border-b border-stone/5 hover:bg-stone/[0.02] transition-colors">
+                <tr key={page.id} className="border-b border-stone/5 hover:bg-[#F5EDD8]/50 transition-colors">
                   <td className="px-4 py-3">
                     <TypeBadge type={page.type} />
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 max-w-[280px]">
                     <button
                       onClick={() => copySlug(page.slug)}
-                      className="font-mono text-xs text-stone/60 hover:text-saffron transition-colors flex items-center gap-1"
+                      className="font-mono text-xs text-stone/50 hover:text-[#E8820C] transition-colors flex items-center gap-1 truncate max-w-full"
                       title="Click to copy"
                     >
                       /en/{page.slug}
-                      <Copy size={10} className="opacity-40" />
+                      <Copy size={10} className="opacity-40 shrink-0" />
                     </button>
+                    <p className="font-body text-sm text-stone truncate mt-0.5" title={page.title}>
+                      {page.title}
+                    </p>
                   </td>
-                  <td className="px-4 py-3 max-w-[200px]">
-                    <span className="font-body text-stone truncate block" title={page.title}>
-                      {page.title.length > 55 ? page.title.slice(0, 55) + '…' : page.title}
-                    </span>
+                  <td className="px-4 py-3 text-center">
+                    <ContentDot page={page} />
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center gap-1.5">
-                      {VERSION_DEFS.map(({ lang, style, label }) => {
-                        const version = page.versions.find(v => v.language === lang && v.audience_style === style);
-                        return (
-                          <button
-                            key={label}
-                            onClick={() => handleVersionStatusToggle(page.id, version?.id, lang, style, version?.status ?? 'draft')}
-                            className={`text-xs font-bold px-2 py-1 rounded-full border transition-colors ${versionStatusColor(version?.status)}`}
-                            title={`${label}: ${version?.status ?? 'draft'}`}
-                          >
-                            {label}
-                          </button>
-                        );
-                      })}
-                    </div>
+                    <VersionBadges page={page} />
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    <LiveLinks page={page} />
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1">
@@ -809,7 +1110,15 @@ const SeoManager = () => {
                         page={page}
                         generatingId={generatingId}
                         onGenerate={handleGenerate}
+                        justGenerated={justGenerated}
                       />
+                      <button
+                        onClick={() => setViewAllPage(page)}
+                        className="p-1.5 rounded hover:bg-stone/10 text-stone/50 transition-colors"
+                        title="View all URLs"
+                      >
+                        <Eye size={14} />
+                      </button>
                       <button
                         onClick={() => setEditPage(page)}
                         className="p-1.5 rounded hover:bg-stone/10 text-stone/50 transition-colors"
@@ -838,38 +1147,60 @@ const SeoManager = () => {
         {loading ? (
           <p className="text-center py-10 text-stone/40 text-sm">Loading…</p>
         ) : paginated.length === 0 ? (
-          <p className="text-center py-10 text-stone/40 text-sm">No pages found</p>
+          <div className="text-center py-10">
+            <p className="text-stone/40 text-sm">No pages match your filters.</p>
+            {hasAnyFilter && (
+              <button onClick={clearAllFilters} className="mt-2 text-sm text-[#E8820C] hover:underline">
+                Clear filters
+              </button>
+            )}
+          </div>
         ) : (
           paginated.map((page) => (
             <div key={page.id} className="bg-white rounded-xl shadow-sm p-4 space-y-2">
-              <div className="flex items-center justify-between">
-                <TypeBadge type={page.type} />
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <TypeBadge type={page.type} />
+                  <ContentDot page={page} />
+                </div>
                 <div className="flex items-center gap-1">
-                  {VERSION_DEFS.map(({ lang, style, label }) => {
-                    const version = page.versions.find(v => v.language === lang && v.audience_style === style);
-                    return (
-                      <button
-                        key={label}
-                        onClick={() => handleVersionStatusToggle(page.id, version?.id, lang, style, version?.status ?? 'draft')}
-                        className={`text-xs font-bold px-2 py-0.5 rounded-full border transition-colors ${versionStatusColor(version?.status)}`}
-                        title={`${label}: ${version?.status ?? 'draft'}`}
-                      >
-                        {label}
-                      </button>
-                    );
-                  })}
+                  <GenerateDropdown page={page} generatingId={generatingId} onGenerate={handleGenerate} justGenerated={justGenerated} />
+                  <button onClick={() => setViewAllPage(page)} className="p-1.5 rounded hover:bg-stone/10 text-stone/50" title="View all URLs">
+                    <Eye size={14} />
+                  </button>
+                  <button onClick={() => setEditPage(page)} className="p-1.5 rounded hover:bg-stone/10 text-stone/60" title="Edit">
+                    <Pencil size={14} />
+                  </button>
+                  <button onClick={() => setDeletePage(page)} className="p-1.5 rounded hover:bg-red-50 text-red-400" title="Delete">
+                    <Trash2 size={14} />
+                  </button>
                 </div>
               </div>
-              <p className="font-mono text-xs text-stone/60 truncate">/en/{page.slug}</p>
-              <p className="font-body text-sm font-medium text-stone line-clamp-1">{page.title}</p>
-              <div className="flex items-center justify-end gap-1 pt-1">
-                <GenerateDropdown page={page} generatingId={generatingId} onGenerate={handleGenerate} />
-                <button onClick={() => setEditPage(page)} className="p-1.5 rounded hover:bg-stone/10 text-stone/60" title="Edit">
-                  <Pencil size={14} />
-                </button>
-                <button onClick={() => setDeletePage(page)} className="p-1.5 rounded hover:bg-red-50 text-red-400" title="Delete">
-                  <Trash2 size={14} />
-                </button>
+              <button
+                onClick={() => copySlug(page.slug)}
+                className="font-mono text-xs text-stone/50 hover:text-[#E8820C] transition-colors flex items-center gap-1 truncate max-w-full"
+              >
+                /en/{page.slug} <Copy size={10} className="opacity-40 shrink-0" />
+              </button>
+              <div className="flex items-center gap-1.5 pt-1">
+                {VERSION_DEFS.map(({ lang, style, label }) => {
+                  const version = page.versions.find(v => v.language === lang && v.audience_style === style);
+                  const hasContent = !!version?.content;
+                  return (
+                    <button
+                      key={label}
+                      onClick={() => handleVersionStatusToggle(page.id, version?.id, lang, style, version?.status ?? 'draft')}
+                      className={`text-xs font-bold px-2 py-0.5 rounded-full transition-colors ${
+                        hasContent
+                          ? `border ${versionStatusColor(version?.status)}`
+                          : 'border border-dashed border-gray-300 text-gray-400 bg-transparent'
+                      }`}
+                      title={`${label}: ${version?.status ?? 'draft'}`}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           ))
@@ -877,28 +1208,43 @@ const SeoManager = () => {
       </div>
 
       {/* Pagination */}
-      {pageCount > 1 && (
-        <div className="flex items-center justify-between mt-4 text-sm text-stone/50">
-          <span>{totalFiltered} pages</span>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className="p-1.5 rounded hover:bg-stone/10 disabled:opacity-30"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <span className="text-xs">{currentPage} / {pageCount}</span>
-            <button
-              onClick={() => setCurrentPage((p) => Math.min(pageCount, p + 1))}
-              disabled={currentPage === pageCount}
-              className="p-1.5 rounded hover:bg-stone/10 disabled:opacity-30"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
+      <div className="flex items-center justify-between mt-4 text-sm text-stone/50 flex-wrap gap-2">
+        <span className="text-xs">
+          {totalFiltered > 0
+            ? `Showing ${startIdx}–${endIdx} of ${totalFiltered} pages`
+            : `${totalFiltered} pages`}
+        </span>
+        <div className="flex items-center gap-3">
+          <select
+            value={perPage}
+            onChange={(e) => setPerPage(Number(e.target.value))}
+            className="text-xs border border-stone/20 rounded px-2 py-1 bg-white outline-none"
+          >
+            {PAGE_SIZES.map(s => (
+              <option key={s} value={s}>{s} / page</option>
+            ))}
+          </select>
+          {pageCount > 1 && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="p-1.5 rounded hover:bg-stone/10 disabled:opacity-30"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <span className="text-xs">{currentPage} / {pageCount}</span>
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(pageCount, p + 1))}
+                disabled={currentPage === pageCount}
+                className="p-1.5 rounded hover:bg-stone/10 disabled:opacity-30"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       {/* Modals */}
       <PageFormModal
@@ -918,6 +1264,10 @@ const SeoManager = () => {
         page={deletePage}
         onClose={() => setDeletePage(null)}
         onConfirm={handleDelete}
+      />
+      <ViewAllModal
+        page={viewAllPage}
+        onClose={() => setViewAllPage(null)}
       />
     </div>
   );
