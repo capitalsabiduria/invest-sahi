@@ -420,8 +420,9 @@
     "whoKey": "Who it's for",
     "benefitLabel": "Key benefit",
     "benefitKey": "Key benefit",
-    "bookCta": "Book a consultation",
-    "whatsappCta": "Ask us on WhatsApp",
+    "bookCta": "Schedule a Free Consultation",
+    "whatsappCta": "💬 Chat Now on WhatsApp",
+    "guideCta": "Read our guide",
     "family": {
       "title": "For Your Family"
     },

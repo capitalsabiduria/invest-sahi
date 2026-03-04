@@ -416,12 +416,13 @@
   },
 
   "svc": {
-    "whoLabel": "କାହା ପାଇଁ",
-    "whoKey": "କାହା ପାଇଁ",
-    "benefitLabel": "ମୁଖ୍ୟ ଲାଭ",
-    "benefitKey": "ମୁଖ୍ୟ ଲାଭ",
-    "bookCta": "ପରାମର୍ଶ ବୁକ କରନ୍ତୁ",
-    "whatsappCta": "WhatsApp ରେ ଜିଜ୍ଞାସା",
+    "whoLabel": "ଏହା କାହା ପାଇଁ",
+    "whoKey": "ଏହା କାହା ପାଇଁ",
+    "benefitLabel": "ମୁଖ୍ୟ ସୁବିଧା",
+    "benefitKey": "ମୁଖ୍ୟ ସୁବିଧା",
+    "bookCta": "ମାଗଣା ପରାମର୍ଶ ସ୍ଥିର କରନ୍ତୁ",
+    "whatsappCta": "💬 ଏବେ WhatsApp ରେ କଥା ହୁଅନ୍ତୁ",
+    "guideCta": "ଆମର ଗାଇଡ୍ ପଢ଼ନ୍ତୁ",
     "family": {
       "title": "ଆପଣଙ୍କ ପରିବାର ପାଇଁ"
     },

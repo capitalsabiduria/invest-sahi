@@ -19,34 +19,35 @@ const ICON_MAP: Record<string, React.ElementType> = {
 type ServiceItem = {
   nameKey: string; descKey: string; whoKey: string; minEntry: string;
   benefitKey: string; iconName: string; iconColor: string; iconBg: string;
+  guideSlug: string;
 };
 
 const FAMILY_SERVICES: ServiceItem[] = [
-  { nameKey: 'svc.fam.sip.name', descKey: 'svc.fam.sip.desc', whoKey: 'svc.fam.sip.who', minEntry: 'Start from ₹500/mo', benefitKey: 'svc.fam.sip.benefit', iconName: 'TrendingUp', iconColor: 'text-green', iconBg: 'bg-green-light' },
-  { nameKey: 'svc.fam.term.name', descKey: 'svc.fam.term.desc', whoKey: 'svc.fam.term.who', minEntry: 'Start from ₹600/mo', benefitKey: 'svc.fam.term.benefit', iconName: 'Shield', iconColor: 'text-green', iconBg: 'bg-green-light' },
-  { nameKey: 'svc.fam.health.name', descKey: 'svc.fam.health.desc', whoKey: 'svc.fam.health.who', minEntry: 'Start from ₹400/mo', benefitKey: 'svc.fam.health.benefit', iconName: 'Heart', iconColor: 'text-green', iconBg: 'bg-green-light' },
-  { nameKey: 'svc.fam.sukanya.name', descKey: 'svc.fam.sukanya.desc', whoKey: 'svc.fam.sukanya.who', minEntry: 'Free Advisory', benefitKey: 'svc.fam.sukanya.benefit', iconName: 'GraduationCap', iconColor: 'text-green', iconBg: 'bg-green-light' },
-  { nameKey: 'svc.fam.ppf.name', descKey: 'svc.fam.ppf.desc', whoKey: 'svc.fam.ppf.who', minEntry: 'Free Advisory', benefitKey: 'svc.fam.ppf.benefit', iconName: 'PiggyBank', iconColor: 'text-green', iconBg: 'bg-green-light' },
-  { nameKey: 'svc.fam.eduLoan.name', descKey: 'svc.fam.eduLoan.desc', whoKey: 'svc.fam.eduLoan.who', minEntry: 'Start from ₹1L', benefitKey: 'svc.fam.eduLoan.benefit', iconName: 'Landmark', iconColor: 'text-green', iconBg: 'bg-green-light' },
+  { nameKey: 'svc.fam.sip.name', descKey: 'svc.fam.sip.desc', whoKey: 'svc.fam.sip.who', minEntry: 'Start from ₹500/mo', benefitKey: 'svc.fam.sip.benefit', iconName: 'TrendingUp', iconColor: 'text-green', iconBg: 'bg-green-light', guideSlug: 'sip-mutual-funds' },
+  { nameKey: 'svc.fam.term.name', descKey: 'svc.fam.term.desc', whoKey: 'svc.fam.term.who', minEntry: 'Start from ₹600/mo', benefitKey: 'svc.fam.term.benefit', iconName: 'Shield', iconColor: 'text-green', iconBg: 'bg-green-light', guideSlug: 'term-life-insurance' },
+  { nameKey: 'svc.fam.health.name', descKey: 'svc.fam.health.desc', whoKey: 'svc.fam.health.who', minEntry: 'Start from ₹400/mo', benefitKey: 'svc.fam.health.benefit', iconName: 'Heart', iconColor: 'text-green', iconBg: 'bg-green-light', guideSlug: 'health-insurance' },
+  { nameKey: 'svc.fam.sukanya.name', descKey: 'svc.fam.sukanya.desc', whoKey: 'svc.fam.sukanya.who', minEntry: 'Free Advisory', benefitKey: 'svc.fam.sukanya.benefit', iconName: 'GraduationCap', iconColor: 'text-green', iconBg: 'bg-green-light', guideSlug: 'sukanya-samriddhi-yojana' },
+  { nameKey: 'svc.fam.ppf.name', descKey: 'svc.fam.ppf.desc', whoKey: 'svc.fam.ppf.who', minEntry: 'Free Advisory', benefitKey: 'svc.fam.ppf.benefit', iconName: 'PiggyBank', iconColor: 'text-green', iconBg: 'bg-green-light', guideSlug: 'public-provident-fund' },
+  { nameKey: 'svc.fam.eduLoan.name', descKey: 'svc.fam.eduLoan.desc', whoKey: 'svc.fam.eduLoan.who', minEntry: 'Start from ₹1L', benefitKey: 'svc.fam.eduLoan.benefit', iconName: 'Landmark', iconColor: 'text-green', iconBg: 'bg-green-light', guideSlug: 'education-loans' },
 ];
 
 const FUTURE_SERVICES: ServiceItem[] = [
-  { nameKey: 'svc.fut.nps.name', descKey: 'svc.fut.nps.desc', whoKey: 'svc.fut.nps.who', minEntry: 'Start from ₹500/mo', benefitKey: 'svc.fut.nps.benefit', iconName: 'Umbrella', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
-  { nameKey: 'svc.fut.atal.name', descKey: 'svc.fut.atal.desc', whoKey: 'svc.fut.atal.who', minEntry: 'Free Advisory', benefitKey: 'svc.fut.atal.benefit', iconName: 'Shield', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
-  { nameKey: 'svc.fut.fd.name', descKey: 'svc.fut.fd.desc', whoKey: 'svc.fut.fd.who', minEntry: 'Start from ₹1,000', benefitKey: 'svc.fut.fd.benefit', iconName: 'Landmark', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
-  { nameKey: 'svc.fut.sgb.name', descKey: 'svc.fut.sgb.desc', whoKey: 'svc.fut.sgb.who', minEntry: 'Free Advisory', benefitKey: 'svc.fut.sgb.benefit', iconName: 'Wallet', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
-  { nameKey: 'svc.fut.ulip.name', descKey: 'svc.fut.ulip.desc', whoKey: 'svc.fut.ulip.who', minEntry: 'Start from ₹2,500/mo', benefitKey: 'svc.fut.ulip.benefit', iconName: 'TrendingUp', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
+  { nameKey: 'svc.fut.nps.name', descKey: 'svc.fut.nps.desc', whoKey: 'svc.fut.nps.who', minEntry: 'Start from ₹500/mo', benefitKey: 'svc.fut.nps.benefit', iconName: 'Umbrella', iconColor: 'text-saffron', iconBg: 'bg-saffron-light', guideSlug: 'national-pension-system' },
+  { nameKey: 'svc.fut.atal.name', descKey: 'svc.fut.atal.desc', whoKey: 'svc.fut.atal.who', minEntry: 'Free Advisory', benefitKey: 'svc.fut.atal.benefit', iconName: 'Shield', iconColor: 'text-saffron', iconBg: 'bg-saffron-light', guideSlug: 'atal-pension-yojana' },
+  { nameKey: 'svc.fut.fd.name', descKey: 'svc.fut.fd.desc', whoKey: 'svc.fut.fd.who', minEntry: 'Start from ₹1,000', benefitKey: 'svc.fut.fd.benefit', iconName: 'Landmark', iconColor: 'text-saffron', iconBg: 'bg-saffron-light', guideSlug: 'fixed-deposits' },
+  { nameKey: 'svc.fut.sgb.name', descKey: 'svc.fut.sgb.desc', whoKey: 'svc.fut.sgb.who', minEntry: 'Free Advisory', benefitKey: 'svc.fut.sgb.benefit', iconName: 'Wallet', iconColor: 'text-saffron', iconBg: 'bg-saffron-light', guideSlug: 'sovereign-gold-bonds' },
+  { nameKey: 'svc.fut.ulip.name', descKey: 'svc.fut.ulip.desc', whoKey: 'svc.fut.ulip.who', minEntry: 'Start from ₹2,500/mo', benefitKey: 'svc.fut.ulip.benefit', iconName: 'TrendingUp', iconColor: 'text-saffron', iconBg: 'bg-saffron-light', guideSlug: 'investment-insurance' },
 ];
 
 const BUSINESS_SERVICES: ServiceItem[] = [
-  { nameKey: 'svc.biz.mudra.name', descKey: 'svc.biz.mudra.desc', whoKey: 'svc.biz.mudra.who', minEntry: 'Free Advisory', benefitKey: 'svc.biz.mudra.benefit', iconName: 'Briefcase', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
-  { nameKey: 'svc.biz.shop.name', descKey: 'svc.biz.shop.desc', whoKey: 'svc.biz.shop.who', minEntry: 'Start from ₹2,000/yr', benefitKey: 'svc.biz.shop.benefit', iconName: 'Home', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
-  { nameKey: 'svc.biz.accident.name', descKey: 'svc.biz.accident.desc', whoKey: 'svc.biz.accident.who', minEntry: 'Start from ₹300/yr', benefitKey: 'svc.biz.accident.benefit', iconName: 'Shield', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
-  { nameKey: 'svc.biz.home.name', descKey: 'svc.biz.home.desc', whoKey: 'svc.biz.home.who', minEntry: 'Start from ₹1,500/yr', benefitKey: 'svc.biz.home.benefit', iconName: 'Home', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
-  { nameKey: 'svc.biz.personal.name', descKey: 'svc.biz.personal.desc', whoKey: 'svc.biz.personal.who', minEntry: 'Start from ₹50,000', benefitKey: 'svc.biz.personal.benefit', iconName: 'Wallet', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
+  { nameKey: 'svc.biz.mudra.name', descKey: 'svc.biz.mudra.desc', whoKey: 'svc.biz.mudra.who', minEntry: 'Free Advisory', benefitKey: 'svc.biz.mudra.benefit', iconName: 'Briefcase', iconColor: 'text-blue', iconBg: 'bg-blue-light', guideSlug: 'mudra-loans' },
+  { nameKey: 'svc.biz.shop.name', descKey: 'svc.biz.shop.desc', whoKey: 'svc.biz.shop.who', minEntry: 'Start from ₹2,000/yr', benefitKey: 'svc.biz.shop.benefit', iconName: 'Home', iconColor: 'text-blue', iconBg: 'bg-blue-light', guideSlug: 'shop-insurance' },
+  { nameKey: 'svc.biz.accident.name', descKey: 'svc.biz.accident.desc', whoKey: 'svc.biz.accident.who', minEntry: 'Start from ₹300/yr', benefitKey: 'svc.biz.accident.benefit', iconName: 'Shield', iconColor: 'text-blue', iconBg: 'bg-blue-light', guideSlug: 'personal-accident-cover' },
+  { nameKey: 'svc.biz.home.name', descKey: 'svc.biz.home.desc', whoKey: 'svc.biz.home.who', minEntry: 'Start from ₹1,500/yr', benefitKey: 'svc.biz.home.benefit', iconName: 'Home', iconColor: 'text-blue', iconBg: 'bg-blue-light', guideSlug: 'home-insurance' },
+  { nameKey: 'svc.biz.personal.name', descKey: 'svc.biz.personal.desc', whoKey: 'svc.biz.personal.who', minEntry: 'Start from ₹50,000', benefitKey: 'svc.biz.personal.benefit', iconName: 'Wallet', iconColor: 'text-blue', iconBg: 'bg-blue-light', guideSlug: 'personal-loans' },
 ];
 
-const ServiceCard = ({ svc, lang }: { svc: ServiceItem; lang: string }) => {
+const ServiceCard = ({ svc, lang }: { svc: ServiceItem; lang: string; }) => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const Icon = ICON_MAP[svc.iconName] || TrendingUp;
@@ -88,7 +89,7 @@ const ServiceCard = ({ svc, lang }: { svc: ServiceItem; lang: string }) => {
                   onClick={(e) => e.stopPropagation()}
                   className="bg-saffron text-white text-sm font-heading font-semibold px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
                 >
-                  {t('svc.bookCta', 'Book a consultation')} →
+                  {t('svc.bookCta', 'Schedule a Free Consultation')} →
                 </Link>
                 <a
                   href={WHATSAPP_URL}
@@ -97,9 +98,17 @@ const ServiceCard = ({ svc, lang }: { svc: ServiceItem; lang: string }) => {
                   onClick={(e) => e.stopPropagation()}
                   className="flex items-center gap-1.5 text-sm font-medium text-green hover:underline"
                 >
-                  <MessageCircle size={16} /> {t('svc.whatsappCta', 'Ask us on WhatsApp')} →
+                  <MessageCircle size={16} /> {t('svc.whatsappCta', '💬 Chat Now on WhatsApp')} →
                 </a>
               </div>
+              <Link
+                to={`/${lang}/learn/${svc.guideSlug}`}
+                onClick={(e) => e.stopPropagation()}
+                className="w-full text-sm text-blue hover:underline font-body mt-1"
+                style={{ color: '#1A6B9A' }}
+              >
+                {t('svc.guideCta', 'Read our guide')} →
+              </Link>
             </div>
           </motion.div>
         )}
