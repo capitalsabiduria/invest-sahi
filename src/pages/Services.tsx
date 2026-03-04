@@ -22,29 +22,28 @@ type ServiceItem = {
 };
 
 const FAMILY_SERVICES: ServiceItem[] = [
-  { nameKey: 'svc.fam.sip.name', descKey: 'svc.fam.sip.desc', whoKey: 'svc.fam.sip.who', minEntry: '₹500/mo', benefitKey: 'svc.fam.sip.benefit', iconName: 'TrendingUp', iconColor: 'text-green', iconBg: 'bg-green-light' },
-  { nameKey: 'svc.fam.term.name', descKey: 'svc.fam.term.desc', whoKey: 'svc.fam.term.who', minEntry: '₹600/mo', benefitKey: 'svc.fam.term.benefit', iconName: 'Shield', iconColor: 'text-green', iconBg: 'bg-green-light' },
-  { nameKey: 'svc.fam.health.name', descKey: 'svc.fam.health.desc', whoKey: 'svc.fam.health.who', minEntry: '₹400/mo', benefitKey: 'svc.fam.health.benefit', iconName: 'Heart', iconColor: 'text-green', iconBg: 'bg-green-light' },
-  { nameKey: 'svc.fam.sukanya.name', descKey: 'svc.fam.sukanya.desc', whoKey: 'svc.fam.sukanya.who', minEntry: '₹250/mo', benefitKey: 'svc.fam.sukanya.benefit', iconName: 'GraduationCap', iconColor: 'text-green', iconBg: 'bg-green-light' },
-  { nameKey: 'svc.fam.ppf.name', descKey: 'svc.fam.ppf.desc', whoKey: 'svc.fam.ppf.who', minEntry: '₹500/yr', benefitKey: 'svc.fam.ppf.benefit', iconName: 'PiggyBank', iconColor: 'text-green', iconBg: 'bg-green-light' },
-  { nameKey: 'svc.fam.eduLoan.name', descKey: 'svc.fam.eduLoan.desc', whoKey: 'svc.fam.eduLoan.who', minEntry: '₹1L', benefitKey: 'svc.fam.eduLoan.benefit', iconName: 'Landmark', iconColor: 'text-green', iconBg: 'bg-green-light' },
+  { nameKey: 'svc.fam.sip.name', descKey: 'svc.fam.sip.desc', whoKey: 'svc.fam.sip.who', minEntry: 'Start from ₹500/mo', benefitKey: 'svc.fam.sip.benefit', iconName: 'TrendingUp', iconColor: 'text-green', iconBg: 'bg-green-light' },
+  { nameKey: 'svc.fam.term.name', descKey: 'svc.fam.term.desc', whoKey: 'svc.fam.term.who', minEntry: 'Start from ₹600/mo', benefitKey: 'svc.fam.term.benefit', iconName: 'Shield', iconColor: 'text-green', iconBg: 'bg-green-light' },
+  { nameKey: 'svc.fam.health.name', descKey: 'svc.fam.health.desc', whoKey: 'svc.fam.health.who', minEntry: 'Start from ₹400/mo', benefitKey: 'svc.fam.health.benefit', iconName: 'Heart', iconColor: 'text-green', iconBg: 'bg-green-light' },
+  { nameKey: 'svc.fam.sukanya.name', descKey: 'svc.fam.sukanya.desc', whoKey: 'svc.fam.sukanya.who', minEntry: 'Free Advisory', benefitKey: 'svc.fam.sukanya.benefit', iconName: 'GraduationCap', iconColor: 'text-green', iconBg: 'bg-green-light' },
+  { nameKey: 'svc.fam.ppf.name', descKey: 'svc.fam.ppf.desc', whoKey: 'svc.fam.ppf.who', minEntry: 'Free Advisory', benefitKey: 'svc.fam.ppf.benefit', iconName: 'PiggyBank', iconColor: 'text-green', iconBg: 'bg-green-light' },
+  { nameKey: 'svc.fam.eduLoan.name', descKey: 'svc.fam.eduLoan.desc', whoKey: 'svc.fam.eduLoan.who', minEntry: 'Start from ₹1L', benefitKey: 'svc.fam.eduLoan.benefit', iconName: 'Landmark', iconColor: 'text-green', iconBg: 'bg-green-light' },
 ];
 
 const FUTURE_SERVICES: ServiceItem[] = [
-  { nameKey: 'svc.fut.nps.name', descKey: 'svc.fut.nps.desc', whoKey: 'svc.fut.nps.who', minEntry: '₹500/mo', benefitKey: 'svc.fut.nps.benefit', iconName: 'Umbrella', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
-  { nameKey: 'svc.fut.atal.name', descKey: 'svc.fut.atal.desc', whoKey: 'svc.fut.atal.who', minEntry: '₹42/mo', benefitKey: 'svc.fut.atal.benefit', iconName: 'Shield', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
-  { nameKey: 'svc.fut.rd.name', descKey: 'svc.fut.rd.desc', whoKey: 'svc.fut.rd.who', minEntry: '₹100/mo', benefitKey: 'svc.fut.rd.benefit', iconName: 'PiggyBank', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
-  { nameKey: 'svc.fut.fd.name', descKey: 'svc.fut.fd.desc', whoKey: 'svc.fut.fd.who', minEntry: '₹1,000', benefitKey: 'svc.fut.fd.benefit', iconName: 'Landmark', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
-  { nameKey: 'svc.fut.sgb.name', descKey: 'svc.fut.sgb.desc', whoKey: 'svc.fut.sgb.who', minEntry: '1 gram', benefitKey: 'svc.fut.sgb.benefit', iconName: 'Wallet', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
-  { nameKey: 'svc.fut.ulip.name', descKey: 'svc.fut.ulip.desc', whoKey: 'svc.fut.ulip.who', minEntry: '₹2,500/mo', benefitKey: 'svc.fut.ulip.benefit', iconName: 'TrendingUp', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
+  { nameKey: 'svc.fut.nps.name', descKey: 'svc.fut.nps.desc', whoKey: 'svc.fut.nps.who', minEntry: 'Start from ₹500/mo', benefitKey: 'svc.fut.nps.benefit', iconName: 'Umbrella', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
+  { nameKey: 'svc.fut.atal.name', descKey: 'svc.fut.atal.desc', whoKey: 'svc.fut.atal.who', minEntry: 'Free Advisory', benefitKey: 'svc.fut.atal.benefit', iconName: 'Shield', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
+  { nameKey: 'svc.fut.fd.name', descKey: 'svc.fut.fd.desc', whoKey: 'svc.fut.fd.who', minEntry: 'Start from ₹1,000', benefitKey: 'svc.fut.fd.benefit', iconName: 'Landmark', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
+  { nameKey: 'svc.fut.sgb.name', descKey: 'svc.fut.sgb.desc', whoKey: 'svc.fut.sgb.who', minEntry: 'Free Advisory', benefitKey: 'svc.fut.sgb.benefit', iconName: 'Wallet', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
+  { nameKey: 'svc.fut.ulip.name', descKey: 'svc.fut.ulip.desc', whoKey: 'svc.fut.ulip.who', minEntry: 'Start from ₹2,500/mo', benefitKey: 'svc.fut.ulip.benefit', iconName: 'TrendingUp', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
 ];
 
 const BUSINESS_SERVICES: ServiceItem[] = [
-  { nameKey: 'svc.biz.mudra.name', descKey: 'svc.biz.mudra.desc', whoKey: 'svc.biz.mudra.who', minEntry: '₹50,000', benefitKey: 'svc.biz.mudra.benefit', iconName: 'Briefcase', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
-  { nameKey: 'svc.biz.shop.name', descKey: 'svc.biz.shop.desc', whoKey: 'svc.biz.shop.who', minEntry: '₹2,000/yr', benefitKey: 'svc.biz.shop.benefit', iconName: 'Home', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
-  { nameKey: 'svc.biz.accident.name', descKey: 'svc.biz.accident.desc', whoKey: 'svc.biz.accident.who', minEntry: '₹300/yr', benefitKey: 'svc.biz.accident.benefit', iconName: 'Shield', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
-  { nameKey: 'svc.biz.home.name', descKey: 'svc.biz.home.desc', whoKey: 'svc.biz.home.who', minEntry: '₹1,500/yr', benefitKey: 'svc.biz.home.benefit', iconName: 'Home', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
-  { nameKey: 'svc.biz.personal.name', descKey: 'svc.biz.personal.desc', whoKey: 'svc.biz.personal.who', minEntry: '₹50,000', benefitKey: 'svc.biz.personal.benefit', iconName: 'Wallet', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
+  { nameKey: 'svc.biz.mudra.name', descKey: 'svc.biz.mudra.desc', whoKey: 'svc.biz.mudra.who', minEntry: 'Free Advisory', benefitKey: 'svc.biz.mudra.benefit', iconName: 'Briefcase', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
+  { nameKey: 'svc.biz.shop.name', descKey: 'svc.biz.shop.desc', whoKey: 'svc.biz.shop.who', minEntry: 'Start from ₹2,000/yr', benefitKey: 'svc.biz.shop.benefit', iconName: 'Home', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
+  { nameKey: 'svc.biz.accident.name', descKey: 'svc.biz.accident.desc', whoKey: 'svc.biz.accident.who', minEntry: 'Start from ₹300/yr', benefitKey: 'svc.biz.accident.benefit', iconName: 'Shield', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
+  { nameKey: 'svc.biz.home.name', descKey: 'svc.biz.home.desc', whoKey: 'svc.biz.home.who', minEntry: 'Start from ₹1,500/yr', benefitKey: 'svc.biz.home.benefit', iconName: 'Home', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
+  { nameKey: 'svc.biz.personal.name', descKey: 'svc.biz.personal.desc', whoKey: 'svc.biz.personal.who', minEntry: 'Start from ₹50,000', benefitKey: 'svc.biz.personal.benefit', iconName: 'Wallet', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
 ];
 
 const ServiceCard = ({ svc, lang }: { svc: ServiceItem; lang: string }) => {
