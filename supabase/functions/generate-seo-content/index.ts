@@ -10,10 +10,11 @@ LANGUAGE RULE — ODIA-ENGLISH CODE-MIX (strictly follow this):
 - Write ALL emotional context, storytelling, explanations, and sentence connectors in native Odia script.
 - Tone must sound exactly like a 30-year-old educated professional in Bhubaneswar speaking casually to a friend about money.
 - MUST keep these words in English script always: SIP, Mutual Funds, NPS, ELSS, FD, EPF, PPF, Term Insurance, Health Insurance, Corpus, Return, Income Tax, 80C, Stock Market, Real Estate, Down Payment, Loan, Portfolio, SEBI, AMFI, IRDAI, Investment, Tax Planning.
+- When using English nouns inside Odia sentences, always Capitalize the first letter (e.g. write 'Investment', not 'investment').
 - NEVER translate financial product names into Odia. "ପାରସ୍ପରିକ ପାଣ୍ଠି" for Mutual Funds is WRONG. Keep "Mutual Funds" in English.
 - Emotional and action words MUST be in Odia: ଭବିଷ୍ୟତ (future), ସଞ୍ଚୟ (savings), ଅବସର (retirement), ପରିବାର (family), ଟଙ୍କା (money), ବିଶ୍ୱାସ (trust), ନିରାପଦ (safe), ସ୍ୱପ୍ନ (dream), ପିଲା (child), ଶିକ୍ଷା (education).
-- Correct example: "ମାସିକ ₹2,000 SIP ଆରମ୍ଭ କଲେ, ୧୫ ବର୍ଷ ପରେ ଆପଣଙ୍କ ପିଲାର ଶିକ୍ଷା ପାଇଁ ଏକ ଭଲ Corpus ତିଆରି ହେବ।"
-- Wrong example: "ମାସିକ ନିୟମିତ ନିବେଶ ଯୋଜନା ଆରମ୍ଭ କଲେ..." (SIP must stay as SIP)
+- CRITICAL META DESCRIPTION RULE: You MUST write the 'meta_description' field in Transliterated Odia (Odia words typed using the English alphabet). Example: "Bhubaneswar re best mutual fund agent khojuchanti ki? Aama expert mananka sahita katha huantu..."
+- CRITICAL FAQ RULE: Make at least one of the FAQ questions written in Transliterated Odia (English alphabet) to match how users type on mobile phones. Write the answer for that question in native Odia script.
 `;
   }
 
@@ -67,6 +68,7 @@ Brand voice rules (apply in whatever language you are writing):
 
 Return ONLY this JSON structure with no other text:
 {
+  "meta_description": "For English pages: plain English 150-160 chars with location/service and ₹500 mention. For Odia code-mix pages: write in Transliterated Odia (Odia words in English alphabet) 150-160 chars, matching how mobile users type searches. For formal Odia pages: write in native Odia script 150-160 chars.",
   "hero_headline": "compelling specific headline mentioning exact location/profession/institution (max 12 words)",
   "hero_subline": "1-2 warm sentences explaining what this page offers (max 30 words)",
   "story_paragraph": "3-4 sentence story about a fictional relatable Odia person. Real Odia name, specific rupee amounts, specific fear, specific outcome. (max 80 words)",
@@ -149,7 +151,7 @@ Every field must contain content that could only apply to this specific page. No
       throw new Error(`Failed to parse Gemini response as JSON: ${parseError.message}`);
     }
 
-    if (!parsed.hero_headline || !parsed.why_section || !parsed.services || !parsed.faqs) {
+    if (!parsed.hero_headline || !parsed.why_section || !parsed.services || !parsed.faqs || !parsed.meta_description) {
       throw new Error('Generated content missing required fields');
     }
 

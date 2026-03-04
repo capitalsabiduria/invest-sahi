@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BRAND } from "@/constants/brand";
 
 interface GuideContent {
+  meta_description?: string;
   hero_headline: string;
   hero_subline: string;
   story_paragraph?: string;
@@ -46,7 +47,7 @@ function SchemaMarkup({ page, content, baseSlug }: { page: SeoPage; content: Gui
     "@context": "https://schema.org",
     "@type": "FinancialService",
     "name": BRAND.name,
-    "description": page.meta_description,
+    "description": content.meta_description || page.meta_description,
     "url": `https://investsahi.in/en/${baseSlug}`,
     "telephone": BRAND.contact.phone,
     "email": BRAND.contact.email,
@@ -161,7 +162,10 @@ export default function GuidePage() {
       document.title = `${pageData.title} | InvestSahi`;
 
       const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) metaDesc.setAttribute('content', pageData.meta_description);
+      if (metaDesc) {
+        const generatedMeta = (versionData.content as GuideContent)?.meta_description;
+        metaDesc.setAttribute('content', generatedMeta || pageData.meta_description);
+      }
 
       // Inject hreflang tags
       const existingHreflang = document.querySelectorAll('link[hreflang]');
@@ -221,7 +225,7 @@ export default function GuidePage() {
         </a>
       </header>
 
-      <main className="pt-16 pb-20 md:pb-0">
+      <main className="pt-16 pb-20 md:pb-0" lang={language}>
 
         {/* Hero */}
         <section className="bg-[#F5EDD8] py-12 md:py-24 px-4 md:px-8 min-h-[60vh] flex items-center">
