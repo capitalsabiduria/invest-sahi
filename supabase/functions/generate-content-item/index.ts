@@ -33,13 +33,37 @@ function parseAndValidate(
   rawText: string,
   requiredFields: string[]
 ): Record<string, string> {
+  // Strip markdown code fences if present
+  const cleaned = rawText
+    .replace(/^```json\s*/i, '')
+    .replace(/^```\s*/i, '')
+    .replace(/```\s*$/i, '')
+    .trim();
+
   let parsed: Record<string, string>;
   try {
-    parsed = JSON.parse(rawText);
-  } catch (e: any) {
-    console.error('[generate-content-item] JSON parse failed. Raw text:', rawText);
-    throw new Error(`JSON parse failed: ${e.message}`);
+    parsed = JSON.parse(cleaned);
+  } catch (firstError: any) {
+    // Attempt recovery: replace unescaped literal newlines inside JSON string values
+    try {
+      const recovered = cleaned.replace(
+        /"((?:[^"\\]|\\.)*)"/gs,
+        (_match: string, inner: string) => {
+          const fixed = inner
+            .replace(/\r\n/g, '\\n')
+            .replace(/\r/g, '\\n')
+            .replace(/\n/g, '\\n');
+          return `"${fixed}"`;
+        }
+      );
+      parsed = JSON.parse(recovered);
+    } catch (secondError: any) {
+      console.error('[generate-content-item] JSON parse failed after recovery attempt.');
+      console.error('Cleaned text:', cleaned.slice(0, 500));
+      throw new Error(`JSON parse failed: ${firstError.message}`);
+    }
   }
+
   for (const field of requiredFields) {
     if (!parsed[field] || typeof parsed[field] !== 'string') {
       throw new Error(`Missing or invalid field: ${field}`);
@@ -83,7 +107,9 @@ Return exactly:
   "title_en": "...",
   "preview_en": "...",
   "body_en": "## Section\\n\\nParagraph...\\n\\n> callout"
-}`;
+}
+
+CRITICAL: Return ONLY a valid JSON object. Inside JSON string values, newlines must be written as \\n (escaped), never as literal line breaks. No markdown code fences. No text before or after the JSON object.`;
 
     const enRaw = await callGemini(enPrompt);
     const enResult = parseAndValidate(enRaw, ['title_en', 'preview_en', 'body_en']);
@@ -115,7 +141,9 @@ Return exactly:
   "title_or": "...",
   "preview_or": "...",
   "body_or": "## ଶୀର୍ଷକ\\n\\nଅନୁଚ୍ଛେଦ...\\n\\n> ଓଡ଼ିଆ callout"
-}`;
+}
+
+CRITICAL: Return ONLY a valid JSON object. Inside JSON string values, newlines must be written as \\n (escaped), never as literal line breaks. No markdown code fences. No text before or after the JSON object.`;
 
     const orRaw = await callGemini(orPrompt);
     const orResult = parseAndValidate(orRaw, ['title_or', 'preview_or', 'body_or']);
