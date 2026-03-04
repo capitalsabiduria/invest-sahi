@@ -51,13 +51,16 @@ const RetirementCalculator = ({ onBack }: RetirementCalculatorProps) => {
 
   const handleSubmit = async () => {
     if (!phone && !name) return;
-    await supabase.from('calculator_leads').insert({
-      child_age: currentAge,
-      target_institution: `Retirement at ${retireAge}`,
-      monthly_sip_needed: calc.sipNeeded,
-      user_monthly_budget: calc.sipNeeded,
-      phone,
-    }).catch(() => {});
+    try {
+      await supabase.from('calculator_leads').insert({
+        child_age: currentAge,
+        target_institution: `Retirement at ${retireAge}`,
+        monthly_sip_needed: calc.sipNeeded,
+        user_monthly_budget: calc.sipNeeded,
+        phone,
+      });
+    } catch {}
+
     setSubmitted(true);
     toast({ title: 'Retirement plan submitted!' });
   };

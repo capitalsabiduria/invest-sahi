@@ -176,12 +176,54 @@ export type Database = {
         }
         Relationships: []
       }
+      seo_pages: {
+        Row: {
+          content: Json | null
+          created_at: string
+          id: string
+          keywords: string[] | null
+          meta_description: string | null
+          slug: string
+          status: string
+          title: string | null
+          type: string
+          updated_at: string
+          view_count: number
+        }
+        Insert: {
+          content?: Json | null
+          created_at?: string
+          id?: string
+          keywords?: string[] | null
+          meta_description?: string | null
+          slug: string
+          status?: string
+          title?: string | null
+          type: string
+          updated_at?: string
+          view_count?: number
+        }
+        Update: {
+          content?: Json | null
+          created_at?: string
+          id?: string
+          keywords?: string[] | null
+          meta_description?: string | null
+          slug?: string
+          status?: string
+          title?: string | null
+          type?: string
+          updated_at?: string
+          view_count?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_seo_view: { Args: { page_slug: string }; Returns: undefined }
     }
     Enums: {
       [_ in never]: never

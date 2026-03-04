@@ -102,9 +102,10 @@ Make all content highly specific and locally relevant to this exact audience. Ev
 
     // Strip any accidental markdown fences
     const cleaned = rawText
-      .replace(/```json\n?/g, '')
-      .replace(/```\n?/g, '')
-      .trim();
+  .replace(/```json\n?/g, '')
+  .replace(/```\n?/g, '')
+  .replace(/,(\s*[}\]])/g, '$1')
+  .trim();
 
     let parsed;
     try {
