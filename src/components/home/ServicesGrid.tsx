@@ -16,12 +16,11 @@ export const SERVICES = [
   { nameKey: 'services.s4.name', amountKey: 'services.s4.amount', descKey: 'services.s4.desc', iconName: 'GraduationCap', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
   { nameKey: 'services.s5.name', amountKey: 'services.s5.amount', descKey: 'services.s5.desc', iconName: 'Heart', iconColor: 'text-green', iconBg: 'bg-green-light' },
   { nameKey: 'services.s6.name', amountKey: 'services.s6.amount', descKey: 'services.s6.desc', iconName: 'Umbrella', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
-  { nameKey: 'services.s7.name', amountKey: 'services.s7.amount', descKey: 'services.s7.desc', iconName: 'Briefcase', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
+  { nameKey: 'services.s7.name', amountKey: 'services.s7.amount', descKey: 'services.s7.desc', iconName: 'Star', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
   { nameKey: 'services.s8.name', amountKey: 'services.s8.amount', descKey: 'services.s8.desc', iconName: 'HomeIcon', iconColor: 'text-green', iconBg: 'bg-green-light' },
-  { nameKey: 'services.s9.name', amountKey: 'services.s9.amount', descKey: 'services.s9.desc', iconName: 'Car', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
   { nameKey: 'services.s10.name', amountKey: 'services.s10.amount', descKey: 'services.s10.desc', iconName: 'Wallet', iconColor: 'text-saffron', iconBg: 'bg-saffron-light' },
   { nameKey: 'services.s11.name', amountKey: 'services.s11.amount', descKey: 'services.s11.desc', iconName: 'Landmark', iconColor: 'text-green', iconBg: 'bg-green-light' },
-  { nameKey: 'services.s12.name', amountKey: 'services.s12.amount', descKey: 'services.s12.desc', iconName: 'Star', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
+  { nameKey: 'services.s12.name', amountKey: 'services.s12.amount', descKey: 'services.s12.desc', iconName: 'Briefcase', iconColor: 'text-blue', iconBg: 'bg-blue-light' },
 ];
 
 const ServicesGrid = () => {

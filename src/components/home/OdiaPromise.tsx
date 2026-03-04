@@ -38,9 +38,18 @@ const OdiaPromise = () => {
         <div className="flex justify-center mb-6">
           <CoinPlantIcon />
         </div>
-        <h2 className="font-odia text-3xl md:text-4xl text-foreground mb-3">{t('odia.headline', 'odia.headline')}</h2>
-        <p className="font-body italic text-muted-foreground mb-6">{t('odia.translation', 'odia.translation')}</p>
-        <p className="font-body text-[17px] text-foreground leading-relaxed mb-8">{t('odia.body', 'odia.body')}</p>
+        <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-2">
+          {t('odia.headline', 'Odisha\'s Homegrown Financial Platform')}
+        </h2>
+        <p className="font-odia text-xl text-muted-foreground mb-6">
+          {t('odia.translation', 'ଓଡ଼ିଶାର ନିଜସ୍ୱ ଆର୍ଥିକ ପ୍ଲାଟଫର୍ମ')}
+        </p>
+        <p className="font-body text-[17px] text-foreground leading-relaxed mb-4">
+          {t('odia.body', 'odia.body')}
+        </p>
+        <p className="font-odia text-[16px] text-muted-foreground leading-relaxed mb-8">
+          {t('odia.bodyOdia', 'odia.bodyOdia')}
+        </p>
         <div className="inline-flex rounded-full border border-saffron overflow-hidden">
           <button onClick={() => switchLang('en')} className={`px-5 py-2 text-sm font-body font-medium ${currentLang === 'en' ? 'bg-saffron text-white' : 'text-saffron'}`}>
             English

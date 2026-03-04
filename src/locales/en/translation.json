@@ -15,8 +15,8 @@
   "hero": {
     "state1": {
       "tag": "For Your Family",
-      "headline": "NIT Rourkela. IIT Bhubaneswar. AIIMS. SCB Medical. Whatever your child's dream — we'll show you the monthly SIP to get there.",
-      "subline": "₹2,000 a month starting today makes it possible. We'll show you exactly how.",
+      "headline": "Fund your child's dream college. We'll show you the exact math.",
+      "subline": "Whether it's NIT Rourkela, SCB Medical, or an IIT — we give you a transparent, month-by-month SIP roadmap to guarantee their education is fully funded. Start planning today with just ₹2,000/month.",
       "cta": "Calculate Your Child's Fund →",
       "secondary": "See how it works ↓"
     },
@@ -244,7 +244,7 @@
   "stories": {
     "header": "Odishara Artha Katha",
     "headerOdia": "ଓଡ଼ିଶାର ଅର୍ଥ କଥା",
-    "subtitle": "Stories of real Odishan families — and the financial decisions that changed everything.",
+    "subtitle": "Stories of real Odia families — and the financial decisions that changed everything.",
     "readAll": "Read all stories →",
     "readMore": "Read story →",
     "cat1": "Savings vs SIP",
@@ -281,9 +281,10 @@
   },
 
   "odia": {
-    "headline": "ଆମେ ଓଡ଼ିଆରେ କଥା ହୁଅନ୍ତୁ।",
-    "translation": "Let's talk in Odia.",
-    "body": "Every piece of content on this site is available in Odia. Not Google Translate — actually written in Odia, by people who speak it. Because the best financial advice is the advice you actually understand."
+    "headline": "Odisha's Homegrown Financial Platform",
+    "translation": "ଓଡ଼ିଶାର ନିଜସ୍ୱ ଆର୍ଥିକ ପ୍ଲାଟଫର୍ମ",
+    "body": "Financial advice shouldn't feel like it's imported from Wall Street. InvestSahi is built right here in Bhubaneswar. We understand the specific goals, careers, and financial needs of Odia families, which is why our entire platform is available in both English and Odia.",
+    "bodyOdia": "ଆର୍ଥିକ ପରାମର୍ଶ Wall Street ରୁ ଆମଦାନି ହୋଇଥିବା ଭଳି ଲାଗିବା ଉଚିତ ନୁହେଁ। InvestSahi ଭୁବନେଶ୍ୱରରେ ନିର୍ମିତ। ଆମେ Odia ପରିବାରର ନିର୍ଦ୍ଦିଷ୍ଟ ଲକ୍ଷ୍ୟ, କ୍ୟାରିୟର ଓ ଆର୍ଥିକ ଆବଶ୍ୟକତା ବୁଝୁ, ଏଥିପାଇଁ ଆମର ସମ୍ପୂର୍ଣ୍ଣ ପ୍ଲାଟଫର୍ମ ଇଂରାଜୀ ଓ ଓଡ଼ିଆ ଉଭୟରେ ଉପଲବ୍ଧ।"
   },
 
   "servicesGrid": {
@@ -294,52 +295,47 @@
   "services": {
     "s1": {
       "name": "SIP / Mutual Funds",
-      "amount": "₹500/month",
+      "amount": "Start from ₹500/month",
       "desc": "Your money, growing every day"
     },
     "s2": {
       "name": "Term Life Insurance",
-      "amount": "₹500/year",
+      "amount": "Start from ₹500/year",
       "desc": "₹50 lakh cover for your family"
     },
     "s3": {
       "name": "Health Insurance",
-      "amount": "₹3,000/year",
+      "amount": "Start from ₹3,000/year",
       "desc": "One hospital visit shouldn't ruin you"
     },
     "s4": {
       "name": "NPS",
-      "amount": "₹500/month",
+      "amount": "Start from ₹500/month",
       "desc": "Extra ₹50,000 tax deduction every year"
     },
     "s5": {
       "name": "PPF",
-      "amount": "₹500/year",
+      "amount": "Free Advisory",
       "desc": "Government guaranteed savings"
     },
     "s6": {
       "name": "Sukanya Samriddhi",
-      "amount": "₹250/year",
+      "amount": "Free Advisory",
       "desc": "For your daughter's future"
     },
     "s7": {
-      "name": "Recurring Deposits",
-      "amount": "₹500/month",
-      "desc": "Safe, steady, simple"
+      "name": "Gold / Digital Gold Investment",
+      "amount": "Free Advisory",
+      "desc": "Gold investment without physical storage hassles"
     },
     "s8": {
       "name": "Fixed Deposits",
       "amount": "Advisory",
       "desc": "Which FD, which bank, what tenure"
     },
-    "s9": {
-      "name": "Sovereign Gold Bonds",
-      "amount": "₹5,000",
-      "desc": "Smarter than physical gold"
-    },
     "s10": {
       "name": "MUDRA Business Loans",
-      "amount": "Advisory",
+      "amount": "Free Advisory",
       "desc": "Fuel for your business"
     },
     "s11": {
@@ -348,9 +344,9 @@
       "desc": "NIT, AIIMS, and beyond"
     },
     "s12": {
-      "name": "Atal Pension Yojana",
-      "amount": "₹42/month",
-      "desc": "A guaranteed pension for everyone"
+      "name": "Investment Insurance",
+      "amount": "Free Advisory",
+      "desc": "Insurance + market-linked investment in one plan"
     },
     "filter": {
       "all": "All Services",
@@ -364,52 +360,47 @@
     },
     "sip": {
       "name": "SIP / Mutual Funds",
-      "amount": "₹500/month",
+      "amount": "Start from ₹500/month",
       "desc": "Your money, growing every day"
     },
     "term": {
       "name": "Term Life Insurance",
-      "amount": "₹500/year",
+      "amount": "Start from ₹500/year",
       "desc": "₹50 lakh cover for your family"
     },
     "health": {
       "name": "Health Insurance",
-      "amount": "₹3,000/year",
+      "amount": "Start from ₹3,000/year",
       "desc": "One hospital visit shouldn't ruin you"
     },
     "nps": {
       "name": "NPS",
-      "amount": "₹500/month",
+      "amount": "Start from ₹500/month",
       "desc": "Extra ₹50,000 tax deduction every year"
     },
     "ppf": {
       "name": "PPF",
-      "amount": "₹500/year",
+      "amount": "Free Advisory",
       "desc": "Government guaranteed savings"
     },
     "sukanya": {
       "name": "Sukanya Samriddhi",
-      "amount": "₹250/year",
+      "amount": "Free Advisory",
       "desc": "For your daughter's future"
     },
-    "rd": {
-      "name": "Recurring Deposits",
-      "amount": "₹500/month",
-      "desc": "Safe, steady, simple"
+    "gold": {
+      "name": "Gold / Digital Gold Investment",
+      "amount": "Free Advisory",
+      "desc": "Gold investment without physical storage hassles"
     },
     "fd": {
       "name": "Fixed Deposits",
       "amount": "Advisory",
       "desc": "Which FD, which bank, what tenure"
     },
-    "sgb": {
-      "name": "Sovereign Gold Bonds",
-      "amount": "₹5,000",
-      "desc": "Smarter than physical gold"
-    },
     "mudra": {
       "name": "MUDRA Business Loans",
-      "amount": "Advisory",
+      "amount": "Free Advisory",
       "desc": "Fuel for your business"
     },
     "edu": {
@@ -417,10 +408,10 @@
       "amount": "Advisory",
       "desc": "NIT, AIIMS, and beyond"
     },
-    "apy": {
-      "name": "Atal Pension Yojana",
-      "amount": "₹42/month",
-      "desc": "A guaranteed pension for everyone"
+    "investInsurance": {
+      "name": "Investment Insurance",
+      "amount": "Free Advisory",
+      "desc": "Insurance + market-linked investment in one plan"
     }
   },
 
@@ -504,14 +495,14 @@
         "benefit": "Up to 9%+ with select NBFCs and senior citizen benefits"
       },
       "sgb": {
-        "name": "Sovereign Gold Bonds",
-        "desc": "Invest in gold without storage hassles. Government-issued bonds that track gold prices plus earn 2.5% annual interest.",
+        "name": "Gold / Digital Gold Investment",
+        "desc": "Invest in gold without storage hassles. Options include government bonds, digital gold, and sovereign instruments.",
         "who": "Anyone who buys gold — this is smarter than jewellery or coins",
-        "benefit": "Gold price appreciation + 2.5% annual interest, tax-free at maturity"
+        "benefit": "Gold price appreciation with no storage risk"
       },
       "ulip": {
-        "name": "ULIP",
-        "desc": "Unit Linked Insurance Plans combine life cover with market-linked investments. Best suited for long-term wealth creation with insurance.",
+        "name": "Investment Insurance",
+        "desc": "Plans that combine life cover with market-linked investments. Best suited for long-term wealth creation with insurance protection.",
         "who": "Investors wanting insurance + investment in a single product",
         "benefit": "Tax-free maturity under 10(10D) with market-linked returns"
       }
@@ -566,11 +557,11 @@
       "note": "A real office, real people, your language"
     },
     "t3": {
-      "title": "Advice in Odia",
-      "line1": "Every service, every guide, in Odia and English",
-      "line2": "Written by native Odia speakers, not machine translated",
-      "line3": "Financial jargon explained in plain language",
-      "note": "Because understanding matters more than impressing"
+      "title": "We Speak Your Language",
+      "line1": "Conversations that feel like talking to a friend",
+      "line2": "Happy to discuss your plans in Odia or English",
+      "line3": "We listen to your family's unique goals first",
+      "note": "Honest advice that feels close to home."
     },
     "reg": {
       "title": "Regulated & Registered",
@@ -585,9 +576,9 @@
       "note": "A real office, real people, your language"
     },
     "odia": {
-      "title": "Advice in Odia",
-      "line1": "Every service, every guide, in Odia and English",
-      "note": "Because understanding matters more than impressing"
+      "title": "We Speak Your Language",
+      "line1": "Conversations that feel like talking to a friend",
+      "note": "Honest advice that feels close to home."
     }
   },
 

@@ -117,7 +117,7 @@ SIP ବନ୍ଦ କରି ହୁଏ? ହଁ। ଯେ କୌଣସି ସମୟ
     preview_en: 'Insurance is a promise. You pay a small amount every year. In return, if something bad happens, a large amount is paid to you or your family.',
     preview_or: 'ବୀମା ଏକ ପ୍ରତିଶ୍ରୁତି। ଆପଣ ପ୍ରତି ବର୍ଷ ଅଳ୍ପ ଟଙ୍କା ଦିଅନ୍ତି। ବଦଳ ରେ, ଖରାପ ଘଟଣା ହଲେ, ବଡ ଟଙ୍କା ମିଳେ।',
     body_en: `Insurance is a promise. You pay a small amount every year — called a premium. In return, if something bad happens — illness, accident, death — a large amount is paid to you or your family.
-Think of it like the old Odishan village tradition: when a cyclone damaged someone's house, the whole village came together to help rebuild. Everyone contributed a little. No one could afford to rebuild alone, but together they could.
+Think of it like the old Odia village tradition: when a cyclone damaged someone's house, the whole village came together to help rebuild. Everyone contributed a little. No one could afford to rebuild alone, but together they could.
 Insurance works the same way. Thousands of people pay small premiums. The money pools together. When one person faces a disaster, the pool pays for it.
 Types relevant to you:
 Term Life Insurance — if you die, your family gets ₹50 lakh or more. Premium as low as ₹650 per month for a 28-year-old.
