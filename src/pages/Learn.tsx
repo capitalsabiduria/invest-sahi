@@ -365,7 +365,7 @@ const LearnDetail = () => {
             "url": "https://investsahi.in"
           },
           "datePublished": item?.published_at,
-          "inLanguage": currentLang === 'or' ? 'or' : 'en-IN'
+          "inLanguage": currentLang === 'or' ? 'or-IN' : 'en-IN'
         }}
       />
       <Navbar />
