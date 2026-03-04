@@ -147,6 +147,8 @@ export default function GuidePage() {
     chatWhatsapp: audience_style === 'pure_odia' ? 'WhatsApp ରେ କଥା ହୁଅନ୍ତୁ' : 'Chat with us on WhatsApp',
   };
 
+  const BOOKING_FORM_URL = `/${language}/book`;
+
   useEffect(() => {
     if (!slug) return;
 
@@ -239,11 +241,11 @@ export default function GuidePage() {
           <span style={{ color: '#2C1810' }}>Sahi</span>
           <span style={{ color: '#1B6B3A', fontSize: '0.6em' }}>.in</span>
         </Link>
-        <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
+        <Link to={BOOKING_FORM_URL}
           className="bg-[#E8820C] text-white font-body text-sm px-4 py-2 rounded-lg hover:bg-[#C45C00] transition-colors">
           <span className="sm:hidden">Book a Call →</span>
           <span className="hidden sm:inline">Book a Free Call →</span>
-        </a>
+        </Link>
       </header>
 
       <main className="pt-16 pb-20 md:pb-0" lang={language}>
@@ -453,10 +455,10 @@ export default function GuidePage() {
             <h2 className="font-heading font-bold text-3xl text-white mb-3">{content.cta_headline}</h2>
             <p className="font-body text-white opacity-90 mb-8">{content.cta_subline}</p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
+              <Link to={BOOKING_FORM_URL}
                 className="bg-white text-[#E8820C] font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#F5EDD8] transition-colors">
                 {t.bookCall}
-              </a>
+              </Link>
               <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
                 className="border-2 border-white text-white font-body px-6 py-3 rounded-lg hover:bg-white hover:text-[#E8820C] transition-colors">
                 {t.whatsapp}
