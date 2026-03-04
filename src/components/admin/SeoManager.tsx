@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Sparkles, Pencil, Trash2, Copy, ChevronLeft, ChevronRight, X, TrendingUp } from 'lucide-react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { Sparkles, Pencil, Trash2, Copy, ChevronLeft, ChevronRight, X, ChevronDown } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -15,20 +16,26 @@ import { Textarea } from '@/components/ui/textarea';
 /* ── Types ─────────────────────────────────────────────────── */
 
 type PageType = 'district' | 'institution' | 'service' | 'community';
-type PageStatus = 'live' | 'draft';
+
+interface PageVersion {
+  id: string;
+  language: string;
+  audience_style: string;
+  url_suffix: string;
+  status: string;
+  content: any;
+  view_count: number;
+  updated_at: string;
+}
 
 interface SeoPage {
   id: string;
   slug: string;
   title: string;
   meta_description: string;
-  content: Record<string, unknown> | null;
-  status: PageStatus;
   type: PageType;
-  view_count: number | null;
-  keywords: string[] | null;
-  created_at: string;
-  updated_at: string;
+  keywords: string[];
+  versions: PageVersion[];
 }
 
 interface PageForm {
@@ -74,26 +81,6 @@ const TypeBadge = ({ type }: { type: PageType }) => (
   </span>
 );
 
-const StatusPill = ({
-  status,
-  onClick,
-}: {
-  status: PageStatus;
-  onClick?: () => void;
-}) => (
-  <button
-    onClick={onClick}
-    className={`text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${
-      status === 'live'
-        ? 'bg-green text-white hover:opacity-80'
-        : 'bg-stone/20 text-stone/70 hover:bg-stone/30'
-    }`}
-    title={`Click to toggle to ${status === 'live' ? 'draft' : 'live'}`}
-  >
-    {status === 'live' ? 'Live' : 'Draft'}
-  </button>
-);
-
 /* ── Form helpers ──────────────────────────────────────────── */
 
 const emptyForm = (): PageForm => ({
@@ -135,7 +122,7 @@ const PageFormModal = ({
   const [form, setForm] = useState<PageForm>(initial);
   const [saving, setSaving] = useState(false);
   const [slugError, setSlugError] = useState('');
-  const { toast } = useToast();
+  const { toast: uiToast } = useToast();
 
   useEffect(() => { if (open) setForm(initial); }, [open, initial]);
 
@@ -153,8 +140,8 @@ const PageFormModal = ({
     set('keywords', form.keywords.filter((k) => k !== kw));
 
   const handleSave = async () => {
-    if (!form.title.trim()) { toast({ title: 'Title required', variant: 'destructive' }); return; }
-    if (!form.slug.trim()) { toast({ title: 'Slug required', variant: 'destructive' }); return; }
+    if (!form.title.trim()) { uiToast({ title: 'Title required', variant: 'destructive' }); return; }
+    if (!form.slug.trim()) { uiToast({ title: 'Slug required', variant: 'destructive' }); return; }
     if (!isValidSlug(form.slug)) {
       setSlugError('Slug must be lowercase letters, numbers, and hyphens only');
       return;
@@ -168,7 +155,7 @@ const PageFormModal = ({
     }
   };
 
-  const liveUrl = `investsahi.in/guide/${form.slug}`;
+  const liveUrl = `investsahi.in/en/${form.slug}`;
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
@@ -323,7 +310,7 @@ const DeleteModal = ({
         </DialogHeader>
         <p className="font-body text-sm text-stone/70">
           Are you sure you want to delete{' '}
-          <code className="font-mono text-xs bg-stone/10 px-1 rounded">/guide/{page?.slug}</code>?{' '}
+          <code className="font-mono text-xs bg-stone/10 px-1 rounded">/en/{page?.slug}</code>?{' '}
           This cannot be undone.
         </p>
         <DialogFooter className="gap-2 mt-2">
@@ -343,122 +330,75 @@ const DeleteModal = ({
   );
 };
 
-/* ── Generate modal ─────────────────────────────────────────── */
+/* ── Generate dropdown ──────────────────────────────────────── */
 
-const GenerateModal = ({
+const GENERATE_OPTIONS = [
+  { label: '🇬🇧 Generate English', lang: 'en', style: 'standard' },
+  { label: '🔤 Generate Odia (Urban)', lang: 'or', style: 'mixed' },
+  { label: '📜 Generate Odia (Formal)', lang: 'or', style: 'pure_odia' },
+  { label: '⚡ Generate All 3', lang: 'all', style: '' },
+] as const;
+
+const GenerateDropdown = ({
   page,
-  onClose,
-  onConfirm,
-  generating,
-}: {
-  page: SeoPage | null;
-  onClose: () => void;
-  onConfirm: () => Promise<void>;
-  generating: boolean;
-}) => (
-  <Dialog open={!!page} onOpenChange={(v) => { if (!v && !generating) onClose(); }}>
-    <DialogContent className="max-w-sm">
-      <DialogHeader>
-        <DialogTitle className="font-heading" style={{ color: '#6B21A8' }}>Generate AI Content</DialogTitle>
-      </DialogHeader>
-      <div className="space-y-2 text-sm font-body text-stone/70">
-        <p>Generate content for</p>
-        <code className="block font-mono text-xs bg-stone/10 px-2 py-1 rounded">/guide/{page?.slug}</code>
-        <p className="text-xs text-stone/50 capitalize">{page?.type} page · {page?.title}</p>
-        {page?.content && (
-          <p className="text-xs text-amber-600 font-medium">
-            ⚠️ This will replace existing content.
-          </p>
-        )}
-      </div>
-      <DialogFooter className="gap-2 mt-2">
-        <button
-          onClick={onClose}
-          disabled={generating}
-          className="px-4 py-2 rounded-lg text-sm text-stone/60 hover:bg-stone/10 disabled:opacity-40"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={onConfirm}
-          disabled={generating}
-          className="flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold text-white disabled:opacity-60"
-          style={{ background: '#6B21A8' }}
-        >
-          {generating ? (
-            <>
-              <span className="inline-block w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              Generating…
-            </>
-          ) : (
-            <>
-              <Sparkles size={14} />
-              Generate
-            </>
-          )}
-        </button>
-      </DialogFooter>
-    </DialogContent>
-  </Dialog>
-);
-
-/* ── Mobile card view ───────────────────────────────────────── */
-
-const PageCard = ({
-  page,
-  onToggleStatus,
-  onEdit,
-  onDelete,
+  generatingId,
   onGenerate,
-  isGenerating,
-  anyGenerating,
 }: {
   page: SeoPage;
-  onToggleStatus: (p: SeoPage) => void;
-  onEdit: (p: SeoPage) => void;
-  onDelete: (p: SeoPage) => void;
-  onGenerate: (p: SeoPage) => void;
-  isGenerating: boolean;
-  anyGenerating: boolean;
-}) => (
-  <div className="bg-white rounded-xl shadow-sm p-4 space-y-2">
-    <div className="flex items-center justify-between">
-      <TypeBadge type={page.type} />
-      <StatusPill status={page.status} onClick={() => onToggleStatus(page)} />
+  generatingId: string | null;
+  onGenerate: (page: SeoPage, lang: string, style: string) => void;
+}) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const isPageGenerating = generatingId !== null && generatingId.startsWith(page.id + '-');
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        disabled={generatingId !== null}
+        title="Generate AI content"
+        className="flex items-center gap-0.5 p-1.5 rounded hover:bg-purple-50 disabled:opacity-40 transition-colors"
+        style={{ color: isPageGenerating ? '#6B21A8' : '#9333EA' }}
+      >
+        {isPageGenerating
+          ? <span className="inline-block w-3 h-3 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />
+          : <Sparkles size={14} />}
+        <ChevronDown size={10} />
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full z-50 mt-1 bg-white rounded-xl shadow-lg border border-stone/10 py-1 min-w-[190px]">
+          {GENERATE_OPTIONS.map(opt => (
+            <button
+              key={opt.label}
+              onClick={() => { setOpen(false); onGenerate(page, opt.lang, opt.style); }}
+              disabled={generatingId !== null}
+              className="w-full text-left px-4 py-2 text-sm hover:bg-stone/5 disabled:opacity-40 transition-colors"
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
-    <p className="font-mono text-xs text-stone/60 truncate">/guide/{page.slug}</p>
-    <p className="font-body text-sm font-medium text-stone line-clamp-1">{page.title}</p>
-    <div className="flex items-center justify-between pt-1">
-      <span className={`text-xs ${page.content ? 'text-green' : 'text-stone/40'}`}>
-        {page.content ? 'Generated' : 'Empty'}
-      </span>
-      <div className="flex gap-1">
-        <button
-          onClick={() => onGenerate(page)}
-          disabled={anyGenerating}
-          title="Generate content"
-          className="p-1.5 rounded hover:bg-purple-50 disabled:opacity-40 transition-colors"
-          style={{ color: isGenerating ? '#6B21A8' : '#9333EA' }}
-        >
-          {isGenerating
-            ? <span className="inline-block w-3 h-3 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />
-            : <Sparkles size={14} />}
-        </button>
-        <button onClick={() => onEdit(page)} className="p-1.5 rounded hover:bg-stone/10 text-stone/60" title="Edit">
-          <Pencil size={14} />
-        </button>
-        <button onClick={() => onDelete(page)} className="p-1.5 rounded hover:bg-red-50 text-red-400" title="Delete">
-          <Trash2 size={14} />
-        </button>
-      </div>
-    </div>
-  </div>
-);
+  );
+};
 
 /* ── Main SeoManager ────────────────────────────────────────── */
 
+type LangFilter = 'all' | 'en' | 'or-mixed' | 'or-pure_odia';
+
 const SeoManager = () => {
-  const { toast } = useToast();
+  const { toast: uiToast } = useToast();
 
   /* data */
   const [pages, setPages] = useState<SeoPage[]>([]);
@@ -467,7 +407,7 @@ const SeoManager = () => {
 
   /* filters */
   const [typeFilter, setTypeFilter] = useState<'all' | PageType>('all');
-  const [statusFilter, setStatusFilter] = useState<'all' | PageStatus>('all');
+  const [langFilter, setLangFilter] = useState<LangFilter>('all');
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -475,7 +415,6 @@ const SeoManager = () => {
   const [showAdd, setShowAdd] = useState(false);
   const [editPage, setEditPage] = useState<SeoPage | null>(null);
   const [deletePage, setDeletePage] = useState<SeoPage | null>(null);
-  const [generatePage, setGeneratePage] = useState<SeoPage | null>(null);
   const [generatingId, setGeneratingId] = useState<string | null>(null);
 
   /* ── fetch ── */
@@ -484,16 +423,25 @@ const SeoManager = () => {
     setFetchError(null);
     const { data, error } = await supabase
       .from('seo_pages' as any)
-      .select('*')
-      .order('updated_at', { ascending: false });
-    console.log('[SeoManager] fetchPages data:', data);
-    console.log('[SeoManager] fetchPages error:', error);
+      .select(`
+        id, slug, title, meta_description, type, keywords,
+        page_versions (
+          id, language, audience_style, url_suffix,
+          status, content, view_count, updated_at
+        )
+      `)
+      .order('created_at', { ascending: false });
+
     if (error) {
       console.error('[SeoManager] fetch failed:', error);
       setFetchError(`${error.message} (code: ${error.code})`);
       setPages([]);
     } else {
-      setPages((data as unknown as SeoPage[]) ?? []);
+      const mapped = ((data as any[]) || []).map(p => ({
+        ...p,
+        versions: p.page_versions || [],
+      }));
+      setPages(mapped as SeoPage[]);
     }
     setLoading(false);
   }, []);
@@ -501,15 +449,25 @@ const SeoManager = () => {
   useEffect(() => { fetchPages(); }, [fetchPages]);
 
   /* ── derived stats ── */
-  const totalPages = pages.length;
-  const liveCount = pages.filter((p) => p.status === 'live').length;
-  const totalViews = pages.reduce((sum, p) => sum + (p.view_count ?? 0), 0);
-  const withContent = pages.filter((p) => p.content !== null).length;
+  const totalSlugs = pages.length;
+  const liveEN = pages.reduce((sum, p) =>
+    sum + p.versions.filter(v => v.language === 'en' && v.status === 'live').length, 0);
+  const liveOdia = pages.reduce((sum, p) =>
+    sum + p.versions.filter(v => v.language === 'or' && v.status === 'live').length, 0);
+  const pendingReview = pages.reduce((sum, p) =>
+    sum + p.versions.filter(v => v.status === 'pending_review').length, 0);
 
   /* ── filtered + paginated ── */
   const filtered = pages.filter((p) => {
     if (typeFilter !== 'all' && p.type !== typeFilter) return false;
-    if (statusFilter !== 'all' && p.status !== statusFilter) return false;
+    if (langFilter !== 'all') {
+      const [lang, style] = langFilter === 'en'
+        ? ['en', 'standard']
+        : langFilter === 'or-mixed'
+          ? ['or', 'mixed']
+          : ['or', 'pure_odia'];
+      if (!p.versions.some(v => v.language === lang && v.audience_style === style)) return false;
+    }
     if (search) {
       const q = search.toLowerCase();
       if (!p.slug.includes(q) && !p.title.toLowerCase().includes(q)) return false;
@@ -521,41 +479,39 @@ const SeoManager = () => {
   const paginated = filtered.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
 
   /* reset to page 1 on filter change */
-  useEffect(() => { setCurrentPage(1); }, [typeFilter, statusFilter, search]);
-
-  /* ── toggle status (optimistic) ── */
-  const toggleStatus = async (page: SeoPage) => {
-    const next: PageStatus = page.status === 'live' ? 'draft' : 'live';
-    setPages((prev) => prev.map((p) => p.id === page.id ? { ...p, status: next } : p));
-    const { error } = await supabase
-      .from('seo_pages' as any).update({ status: next }).eq('id', page.id);
-    if (error) {
-      setPages((prev) => prev.map((p) => p.id === page.id ? { ...p, status: page.status } : p));
-      toast({ title: 'Status update failed', description: error.message, variant: 'destructive' });
-    }
-  };
+  useEffect(() => { setCurrentPage(1); }, [typeFilter, langFilter, search]);
 
   /* ── copy slug ── */
   const copySlug = (slug: string) => {
-    navigator.clipboard.writeText(`/guide/${slug}`);
-    toast({ title: 'Copied!', description: `/guide/${slug}` });
+    navigator.clipboard.writeText(`/en/${slug}`);
+    uiToast({ title: 'Copied!', description: `/en/${slug}` });
   };
 
   /* ── add page ── */
   const handleAdd = async (form: PageForm) => {
-    const { error } = await supabase.from('seo_pages' as any).insert({
+    const { data: newPage, error } = await supabase.from('seo_pages' as any).insert({
       slug: form.slug,
       title: form.title,
       meta_description: form.meta_description,
       type: form.type,
       keywords: form.keywords,
       status: 'draft',
-    });
-    if (error) {
-      toast({ title: 'Save failed', description: error.message, variant: 'destructive' });
+    }).select('id').single();
+
+    if (error || !newPage) {
+      uiToast({ title: 'Save failed', description: error?.message, variant: 'destructive' });
       return;
     }
-    toast({ title: `Page created`, description: `/guide/${form.slug}` });
+
+    // Create 3 version rows (draft, no content)
+    const versionRows = [
+      { page_id: (newPage as any).id, language: 'en', audience_style: 'standard', url_suffix: `/en/${form.slug}`, status: 'draft' },
+      { page_id: (newPage as any).id, language: 'or', audience_style: 'mixed', url_suffix: `/or/${form.slug}`, status: 'draft' },
+      { page_id: (newPage as any).id, language: 'or', audience_style: 'pure_odia', url_suffix: `/or/${form.slug}-odia`, status: 'draft' },
+    ];
+    await supabase.from('page_versions' as any).insert(versionRows);
+
+    uiToast({ title: 'Page created', description: `/en/${form.slug}` });
     setShowAdd(false);
     fetchPages();
   };
@@ -570,10 +526,10 @@ const SeoManager = () => {
       keywords: form.keywords,
     }).eq('id', editPage.id);
     if (error) {
-      toast({ title: 'Update failed', description: error.message, variant: 'destructive' });
+      uiToast({ title: 'Update failed', description: error.message, variant: 'destructive' });
       return;
     }
-    toast({ title: 'Page updated' });
+    uiToast({ title: 'Page updated' });
     setEditPage(null);
     fetchPages();
   };
@@ -583,57 +539,93 @@ const SeoManager = () => {
     if (!deletePage) return;
     const { error } = await supabase.from('seo_pages' as any).delete().eq('id', deletePage.id);
     if (error) {
-      toast({ title: 'Delete failed', description: error.message, variant: 'destructive' });
+      uiToast({ title: 'Delete failed', description: error.message, variant: 'destructive' });
       return;
     }
-    toast({ title: 'Page deleted', description: `/guide/${deletePage.slug}` });
+    uiToast({ title: 'Page deleted', description: `/en/${deletePage.slug}` });
     setDeletePage(null);
     setPages((prev) => prev.filter((p) => p.id !== deletePage.id));
   };
 
-  /* ── generate content ── */
-  const handleGenerate = async () => {
-    if (!generatePage) return;
-    const page = generatePage;
-    setGeneratingId(page.id);
+  /* ── version status toggle ── */
+  async function handleVersionStatusToggle(
+    pageId: string,
+    versionId: string | undefined,
+    language: string,
+    audience_style: string,
+    currentStatus: string,
+  ) {
+    const cycle: Record<string, string> = { draft: 'pending_review', pending_review: 'live', live: 'draft' };
+    const nextStatus = cycle[currentStatus];
 
+    if (nextStatus === 'live' && language === 'or') {
+      toast('Ensure this Odia page has been reviewed by a native speaker before going live.', { icon: '⚠️' });
+    }
+
+    if (!versionId) return;
+
+    await supabase
+      .from('page_versions' as any)
+      .update({ status: nextStatus })
+      .eq('id', versionId);
+
+    await fetchPages();
+    toast.success(`${language.toUpperCase()} version → ${nextStatus}`);
+  }
+
+  /* ── generate content ── */
+  async function generateSingleVersion(page: SeoPage, language: string, audience_style: string) {
+    const key = `${page.id}-${language}-${audience_style}`;
+    setGeneratingId(key);
     try {
-      const { data, error: fnError } = await supabase.functions.invoke('generate-seo-content', {
+      const { data, error } = await supabase.functions.invoke('generate-seo-content', {
         body: {
           type: page.type,
           slug: page.slug,
           title: page.title,
           meta_description: page.meta_description,
           keywords: page.keywords,
+          language,
+          audience_style,
         },
       });
 
-      if (fnError) throw new Error(fnError.message);
-      if (data?.error) throw new Error(data.error);
+      if (error || !data?.content) throw new Error(error?.message || 'Generation failed');
 
-      const parsed = data?.content;
-      if (!parsed) throw new Error('Edge Function returned empty content');
+      const version = page.versions.find(v => v.language === language && v.audience_style === audience_style);
+      if (!version) throw new Error('Version row not found');
 
-      const { error: dbError } = await supabase
-        .from('seo_pages' as any)
-        .update({ content: parsed })
-        .eq('id', page.id);
+      await supabase
+        .from('page_versions' as any)
+        .update({ content: data.content, updated_at: new Date().toISOString() })
+        .eq('id', version.id);
 
-      if (dbError) throw new Error(dbError.message);
-
-      setPages((prev) =>
-        prev.map((p) => p.id === page.id ? { ...p, content: parsed } : p)
-      );
-      toast({ title: `Content generated for /guide/${page.slug}` });
-      setGeneratePage(null);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Unknown error';
-      console.error('[SeoManager] generation error:', err);
-      toast({ title: 'Generation failed', description: msg, variant: 'destructive' });
+      const label = language === 'en' ? 'English' : audience_style === 'mixed' ? 'Odia (Urban)' : 'Odia (Formal)';
+      toast.success(`${label} version generated`);
+      await fetchPages();
+    } catch (err: any) {
+      toast.error(`Generation failed: ${err.message}`);
     } finally {
       setGeneratingId(null);
     }
-  };
+  }
+
+  async function handleGenerate(page: SeoPage, language: string, audience_style: string) {
+    if (language === 'all') {
+      const versions = [
+        { lang: 'en', style: 'standard' },
+        { lang: 'or', style: 'mixed' },
+        { lang: 'or', style: 'pure_odia' },
+      ];
+      for (const v of versions) {
+        await generateSingleVersion(page, v.lang, v.style);
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
+      toast.success('All 3 versions generated');
+    } else {
+      await generateSingleVersion(page, language, audience_style);
+    }
+  }
 
   /* ── form initial for edit ── */
   const editFormInit = editPage
@@ -646,6 +638,19 @@ const SeoManager = () => {
         keywordInput: '',
       }
     : emptyForm();
+
+  /* ── version badges ── */
+  const VERSION_DEFS = [
+    { lang: 'en', style: 'standard', label: 'EN' },
+    { lang: 'or', style: 'mixed', label: 'OR' },
+    { lang: 'or', style: 'pure_odia', label: 'OR+' },
+  ] as const;
+
+  const versionStatusColor = (status: string | undefined) => ({
+    live: 'bg-green-100 text-green-700 border-green-200',
+    pending_review: 'bg-amber-100 text-amber-700 border-amber-200',
+    draft: 'bg-gray-100 text-gray-500 border-gray-200',
+  }[status ?? 'draft'] ?? 'bg-gray-100 text-gray-500 border-gray-200');
 
   /* ── render ── */
   return (
@@ -667,10 +672,10 @@ const SeoManager = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-        <StatMini label="Total pages" value={totalPages} />
-        <StatMini label="Live pages" value={liveCount} color="#1B6B3A" />
-        <StatMini label="Total views" value={totalViews.toLocaleString('en-IN')} color="#1A6B9A" />
-        <StatMini label="With content" value={withContent} />
+        <StatMini label="Total Slugs" value={totalSlugs} />
+        <StatMini label="Live EN" value={liveEN} color="#1B6B3A" />
+        <StatMini label="Live Odia" value={liveOdia} color="#1A6B9A" />
+        <StatMini label="Pending Review" value={pendingReview} color="#D97706" />
       </div>
 
       {/* Filters */}
@@ -693,20 +698,25 @@ const SeoManager = () => {
           ))}
         </div>
 
-        {/* Status filter */}
-        <div className="flex gap-1.5">
-          {(['all', 'live', 'draft'] as const).map((s) => (
+        {/* Language filter */}
+        <div className="flex gap-1.5 flex-wrap">
+          {([
+            { value: 'all', label: 'All' },
+            { value: 'en', label: 'English' },
+            { value: 'or-mixed', label: 'Odia Urban' },
+            { value: 'or-pure_odia', label: 'Odia Formal' },
+          ] as const).map(({ value, label }) => (
             <button
-              key={s}
-              onClick={() => setStatusFilter(s)}
-              className="text-xs px-3 py-1.5 rounded-full border capitalize transition-all"
+              key={value}
+              onClick={() => setLangFilter(value)}
+              className="text-xs px-3 py-1.5 rounded-full border transition-all"
               style={
-                statusFilter === s
-                  ? { background: s === 'live' ? '#1B6B3A' : s === 'draft' ? '#6B7280' : '#2C1810', color: 'white', borderColor: 'transparent' }
+                langFilter === value
+                  ? { background: '#1A6B9A', color: 'white', borderColor: 'transparent' }
                   : { borderColor: '#D1D5DB', color: '#6B7280' }
               }
             >
-              {s}
+              {label}
             </button>
           ))}
         </div>
@@ -751,89 +761,73 @@ const SeoManager = () => {
                 <th className="text-left px-4 py-3 font-medium">Type</th>
                 <th className="text-left px-4 py-3 font-medium">Slug</th>
                 <th className="text-left px-4 py-3 font-medium">Title</th>
-                <th className="text-left px-4 py-3 font-medium">Status</th>
-                <th className="text-left px-4 py-3 font-medium">Content</th>
-                <th className="text-right px-4 py-3 font-medium">Views</th>
-                <th className="text-left px-4 py-3 font-medium">Updated</th>
+                <th className="text-left px-4 py-3 font-medium">Versions</th>
                 <th className="text-left px-4 py-3 font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {paginated.map((page) => {
-                const isGenerating = generatingId === page.id;
-                const anyGenerating = generatingId !== null;
-                return (
-                  <tr key={page.id} className="border-b border-stone/5 hover:bg-stone/[0.02] transition-colors">
-                    <td className="px-4 py-3">
-                      <TypeBadge type={page.type} />
-                    </td>
-                    <td className="px-4 py-3">
+              {paginated.map((page) => (
+                <tr key={page.id} className="border-b border-stone/5 hover:bg-stone/[0.02] transition-colors">
+                  <td className="px-4 py-3">
+                    <TypeBadge type={page.type} />
+                  </td>
+                  <td className="px-4 py-3">
+                    <button
+                      onClick={() => copySlug(page.slug)}
+                      className="font-mono text-xs text-stone/60 hover:text-saffron transition-colors flex items-center gap-1"
+                      title="Click to copy"
+                    >
+                      /en/{page.slug}
+                      <Copy size={10} className="opacity-40" />
+                    </button>
+                  </td>
+                  <td className="px-4 py-3 max-w-[200px]">
+                    <span className="font-body text-stone truncate block" title={page.title}>
+                      {page.title.length > 55 ? page.title.slice(0, 55) + '…' : page.title}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-1.5">
+                      {VERSION_DEFS.map(({ lang, style, label }) => {
+                        const version = page.versions.find(v => v.language === lang && v.audience_style === style);
+                        return (
+                          <button
+                            key={label}
+                            onClick={() => handleVersionStatusToggle(page.id, version?.id, lang, style, version?.status ?? 'draft')}
+                            className={`text-xs font-bold px-2 py-1 rounded-full border transition-colors ${versionStatusColor(version?.status)}`}
+                            title={`${label}: ${version?.status ?? 'draft'}`}
+                          >
+                            {label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-1">
+                      <GenerateDropdown
+                        page={page}
+                        generatingId={generatingId}
+                        onGenerate={handleGenerate}
+                      />
                       <button
-                        onClick={() => copySlug(page.slug)}
-                        className="font-mono text-xs text-stone/60 hover:text-saffron transition-colors flex items-center gap-1"
-                        title="Click to copy"
+                        onClick={() => setEditPage(page)}
+                        className="p-1.5 rounded hover:bg-stone/10 text-stone/50 transition-colors"
+                        title="Edit"
                       >
-                        /guide/{page.slug}
-                        <Copy size={10} className="opacity-40" />
+                        <Pencil size={14} />
                       </button>
-                    </td>
-                    <td className="px-4 py-3 max-w-[200px]">
-                      <span
-                        className="font-body text-stone truncate block"
-                        title={page.title}
+                      <button
+                        onClick={() => setDeletePage(page)}
+                        className="p-1.5 rounded hover:bg-red-50 text-red-400 transition-colors"
+                        title="Delete"
                       >
-                        {page.title.length > 55 ? page.title.slice(0, 55) + '…' : page.title}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <StatusPill status={page.status} onClick={() => toggleStatus(page)} />
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={`text-xs font-medium ${page.content ? 'text-green' : 'text-stone/40'}`}>
-                        {page.content ? 'Generated' : 'Empty'}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <span className="text-sm text-stone flex items-center justify-end gap-1">
-                        <TrendingUp size={11} className="text-green" />
-                        {(page.view_count ?? 0).toLocaleString('en-IN')}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-stone/40 text-xs whitespace-nowrap">
-                      {timeAgo(page.updated_at)}
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={() => setGeneratePage(page)}
-                          disabled={anyGenerating}
-                          title="Generate AI content"
-                          className="p-1.5 rounded hover:bg-purple-50 disabled:opacity-40 transition-colors"
-                          style={{ color: isGenerating ? '#6B21A8' : '#9333EA' }}
-                        >
-                          {isGenerating
-                            ? <span className="inline-block w-3 h-3 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />
-                            : <Sparkles size={14} />}
-                        </button>
-                        <button
-                          onClick={() => setEditPage(page)}
-                          className="p-1.5 rounded hover:bg-stone/10 text-stone/50 transition-colors"
-                          title="Edit"
-                        >
-                          <Pencil size={14} />
-                        </button>
-                        <button
-                          onClick={() => setDeletePage(page)}
-                          className="p-1.5 rounded hover:bg-red-50 text-red-400 transition-colors"
-                          title="Delete"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         )}
@@ -847,16 +841,37 @@ const SeoManager = () => {
           <p className="text-center py-10 text-stone/40 text-sm">No pages found</p>
         ) : (
           paginated.map((page) => (
-            <PageCard
-              key={page.id}
-              page={page}
-              onToggleStatus={toggleStatus}
-              onEdit={setEditPage}
-              onDelete={setDeletePage}
-              onGenerate={setGeneratePage}
-              isGenerating={generatingId === page.id}
-              anyGenerating={generatingId !== null}
-            />
+            <div key={page.id} className="bg-white rounded-xl shadow-sm p-4 space-y-2">
+              <div className="flex items-center justify-between">
+                <TypeBadge type={page.type} />
+                <div className="flex items-center gap-1">
+                  {VERSION_DEFS.map(({ lang, style, label }) => {
+                    const version = page.versions.find(v => v.language === lang && v.audience_style === style);
+                    return (
+                      <button
+                        key={label}
+                        onClick={() => handleVersionStatusToggle(page.id, version?.id, lang, style, version?.status ?? 'draft')}
+                        className={`text-xs font-bold px-2 py-0.5 rounded-full border transition-colors ${versionStatusColor(version?.status)}`}
+                        title={`${label}: ${version?.status ?? 'draft'}`}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              <p className="font-mono text-xs text-stone/60 truncate">/en/{page.slug}</p>
+              <p className="font-body text-sm font-medium text-stone line-clamp-1">{page.title}</p>
+              <div className="flex items-center justify-end gap-1 pt-1">
+                <GenerateDropdown page={page} generatingId={generatingId} onGenerate={handleGenerate} />
+                <button onClick={() => setEditPage(page)} className="p-1.5 rounded hover:bg-stone/10 text-stone/60" title="Edit">
+                  <Pencil size={14} />
+                </button>
+                <button onClick={() => setDeletePage(page)} className="p-1.5 rounded hover:bg-red-50 text-red-400" title="Delete">
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            </div>
           ))
         )}
       </div>
@@ -903,12 +918,6 @@ const SeoManager = () => {
         page={deletePage}
         onClose={() => setDeletePage(null)}
         onConfirm={handleDelete}
-      />
-      <GenerateModal
-        page={generatePage}
-        onClose={() => setGeneratePage(null)}
-        onConfirm={handleGenerate}
-        generating={generatingId === generatePage?.id}
       />
     </div>
   );

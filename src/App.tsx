@@ -50,7 +50,8 @@ const App = () => (
             <Route path="/:lang/learn/:slug" element={<LangRoute><Learn /></LangRoute>} />
             <Route path="/:lang/book" element={<LangRoute><Book /></LangRoute>} />
             <Route path="/admin" element={<AdminAuthGate><Admin /></AdminAuthGate>} />
-            <Route path="/guide/:slug" element={<PageWrap><GuidePage /></PageWrap>} />
+            <Route path="/en/:slug" element={<PageWrap><GuidePage /></PageWrap>} />
+            <Route path="/or/:slug" element={<PageWrap><GuidePage /></PageWrap>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
