@@ -265,7 +265,19 @@ const LearnDetail = () => {
 
           <h1 className={`font-heading font-bold text-3xl text-foreground mb-6 ${viewLang === 'or' ? 'font-odia' : ''}`}>{title}</h1>
           <div
-            className={`prose prose-lg max-w-none font-body text-foreground leading-relaxed ${viewLang === 'or' ? 'font-odia' : ''}`}
+            className={`prose prose-lg max-w-none
+              prose-headings:font-heading prose-headings:text-stone
+              prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl
+              prose-p:text-stone/80 prose-p:leading-relaxed
+              prose-strong:text-stone prose-strong:font-semibold
+              prose-blockquote:border-l-4 prose-blockquote:border-saffron
+              prose-blockquote:bg-saffron/5 prose-blockquote:rounded-r-lg
+              prose-blockquote:px-4 prose-blockquote:py-2 prose-blockquote:not-italic
+              prose-blockquote:text-stone/70
+              prose-ul:text-stone/80 prose-ol:text-stone/80
+              prose-li:marker:text-saffron
+              prose-a:text-blue prose-a:no-underline hover:prose-a:underline
+              ${viewLang === 'or' ? 'font-odia' : ''}`}
             dangerouslySetInnerHTML={{ __html: body || '' }}
           />
 
