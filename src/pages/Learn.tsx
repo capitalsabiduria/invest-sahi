@@ -10,6 +10,7 @@ import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import SEO from '@/components/SEO';
 
 
 const RevealSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
@@ -344,6 +345,29 @@ const LearnDetail = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title={currentLang === 'or' ? (item?.title_or || item?.title_en || '') : (item?.title_en || '')}
+        description={currentLang === 'or' ? (item?.preview_or || item?.preview_en || '') : (item?.preview_en || '')}
+        url={`/${currentLang}/learn/${slug}`}
+        lang={currentLang as 'en' | 'or'}
+        slug={slug}
+        type="article"
+        publishedAt={item?.published_at ?? undefined}
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": currentLang === 'or' ? (item?.title_or || item?.title_en) : item?.title_en,
+          "description": item?.preview_en,
+          "url": `https://investsahi.in/${currentLang}/learn/${slug}`,
+          "publisher": {
+            "@type": "Organization",
+            "name": "InvestSahi",
+            "url": "https://investsahi.in"
+          },
+          "datePublished": item?.published_at,
+          "inLanguage": currentLang === 'or' ? 'or' : 'en-IN'
+        }}
+      />
       <Navbar />
       <div className="max-w-5xl mx-auto px-4 md:px-8 py-12 grid grid-cols-1 lg:grid-cols-3 gap-10">
         <article className="lg:col-span-2">
