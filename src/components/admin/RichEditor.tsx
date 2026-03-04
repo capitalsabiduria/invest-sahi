@@ -5,7 +5,7 @@ import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import Color from '@tiptap/extension-color';
-import TextStyle from '@tiptap/extension-text-style';
+import { TextStyle } from '@tiptap/extension-text-style';
 import Highlight from '@tiptap/extension-highlight';
 import Placeholder from '@tiptap/extension-placeholder';
 import Strike from '@tiptap/extension-strike';
@@ -17,7 +17,7 @@ import BulletList from '@tiptap/extension-bullet-list';
 import { Label } from '@/components/ui/label';
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough, Link as LinkIcon,
-  LinkOff, List, ListOrdered, AlignLeft, AlignCenter, AlignRight,
+  Unlink, List, ListOrdered, AlignLeft, AlignCenter, AlignRight,
   Undo, Redo, Image as ImageIcon, Code, Quote, Minus,
 } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
@@ -199,7 +199,7 @@ const RichEditor = ({ value, onChange, placeholder, isOdia, label }: RichEditorP
               <LinkIcon size={13} />
             </ToolbarButton>
             <ToolbarButton onClick={() => editor.chain().focus().unsetLink().run()} title="Remove Link">
-              <LinkOff size={13} />
+              <Unlink size={13} />
             </ToolbarButton>
           </div>
 
