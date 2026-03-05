@@ -83,6 +83,10 @@ const Calculator = () => {
     ? Math.round(calculateRequiredSIP(gap, yearsToGoal * 12))
     : 0;
 
+  const waText = encodeURIComponent(
+    `Hi, I want to plan for my child's ${selectedInst === 'other' ? customInst || 'education' : inst.name} fund. My child is ${childAge} years old. I can invest ${formatCurrency(budget)}/month${stepUp ? ' with 10% annual step-up' : ''}. Monthly SIP needed: ${formatCurrency(onTrack ? budget : budget + extraNeeded)}. Please send my education plan.`
+  );
+
   const handleSubmit = async () => {
     if (!email && !phone) return;
     await supabase.from('calculator_leads').insert({
@@ -92,6 +96,7 @@ const Calculator = () => {
       target_institution: selectedInst === 'other' ? customInst || 'Other' : inst.name,
       monthly_sip_needed: onTrack ? budget : budget + extraNeeded,
       user_monthly_budget: budget,
+      whatsapp_message: decodeURIComponent(waText),
       email, phone,
     } as any);
     setSubmitted(true);
@@ -323,7 +328,7 @@ const Calculator = () => {
                     </p>
                   )}
                   <a
-                    href={`${WHATSAPP_URL}?text=Hi, I'd like to discuss my child's education plan`}
+                    href={`${WHATSAPP_URL}?text=${waText}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-heading font-semibold"

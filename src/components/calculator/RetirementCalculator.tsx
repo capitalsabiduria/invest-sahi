@@ -66,6 +66,7 @@ const RetirementCalculator = ({ onBack }: RetirementCalculatorProps) => {
         existing_savings: existingSavings,
         monthly_sip_needed: calc.sipNeeded,
         user_monthly_budget: calc.sipNeeded,
+        whatsapp_message: decodeURIComponent(waText),
         email,
         phone,
       } as any);

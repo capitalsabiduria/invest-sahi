@@ -72,6 +72,7 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
         step_up: stepUp,
         monthly_sip_needed: monthly,
         user_monthly_budget: monthly,
+        whatsapp_message: decodeURIComponent(waText),
         email,
         phone,
       } as any);
