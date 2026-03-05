@@ -68,10 +68,16 @@ const Book = () => {
       preferred_contact: contact,
       preferred_language: prefLang,
       message: message || null,
+      source: `website-${currentLang}`,
     });
     setSubmitting(false);
     if (error) {
-      toast({ title: t('book.error', 'Something went wrong'), variant: 'destructive' });
+      console.error('Booking insert error:', error.message, error.details, error.hint);
+      toast({
+        title: 'Something went wrong',
+        description: error.message,
+        variant: 'destructive',
+      });
       return;
     }
     setSubmitted(true);
