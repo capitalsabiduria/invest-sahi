@@ -7,6 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency, calculateSIPCorpus } from '@/utils/sipCalculator';
+import { useRelevantGuide } from '@/hooks/useRelevantGuide';
 import { WHATSAPP_URL } from '@/config/constants';
 
 interface RetirementCalculatorProps {
@@ -19,7 +20,10 @@ const RetirementCalculator = ({ onBack }: RetirementCalculatorProps) => {
   const [retireAge, setRetireAge] = useState(50);
   const [monthlyExpenses, setMonthlyExpenses] = useState(40000);
   const [existingSavings, setExistingSavings] = useState(200000);
+  const relevantGuide = useRelevantGuide('retirement');
+
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
@@ -50,15 +54,21 @@ const RetirementCalculator = ({ onBack }: RetirementCalculatorProps) => {
   };
 
   const handleSubmit = async () => {
-    if (!phone && !name) return;
+    if (!phone && !email) return;
     try {
       await supabase.from('calculator_leads').insert({
-        child_age: currentAge,
+        calculator_type: 'retirement',
+        lead_name: name,
         target_institution: `Retirement at ${retireAge}`,
+        current_age: currentAge,
+        retire_age: retireAge,
+        monthly_expenses: monthlyExpenses,
+        existing_savings: existingSavings,
         monthly_sip_needed: calc.sipNeeded,
         user_monthly_budget: calc.sipNeeded,
+        email,
         phone,
-      });
+      } as any);
     } catch {}
 
     setSubmitted(true);
@@ -173,6 +183,7 @@ const RetirementCalculator = ({ onBack }: RetirementCalculatorProps) => {
             {!submitted ? (
               <div className="space-y-3">
                 <Input placeholder="Your name (e.g. Rahul)" value={name} onChange={e => setName(e.target.value)} />
+                <Input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} />
                 <Input type="tel" placeholder="WhatsApp (e.g. 98XXXXXXXX)" value={phone} onChange={e => setPhone(e.target.value)} />
                 <p className="text-xs text-muted-foreground font-body">
                   We'll send you: exact SIP plan, NPS optimisation for your age, investment split across equity/debt, and a month-by-month roadmap to retirement.
@@ -192,12 +203,17 @@ const RetirementCalculator = ({ onBack }: RetirementCalculatorProps) => {
                 <Check className="mx-auto text-green mb-2" size={40} />
                 <p className="font-heading font-semibold text-lg text-foreground">Your retirement plan is on its way!</p>
                 <p className="text-sm text-muted-foreground font-body mb-2">We'll call you within 24 hours to walk through it together.</p>
-                <p className="text-sm font-body mb-5">
-                  In the meantime —{' '}
-                  <a href="/en/learn" className="text-saffron underline underline-offset-2 hover:opacity-80 transition-opacity">
-                    read how NPS can cut your SIP by ₹3,000/month →
-                  </a>
-                </p>
+                {relevantGuide && (
+                  <p className="text-sm font-body mb-5">
+                    In the meantime &mdash;{' '}
+                    <a
+                      href={`/en/learn/${relevantGuide.slug}`}
+                      className="text-saffron underline underline-offset-2 hover:opacity-80 transition-opacity font-semibold"
+                    >
+                      {relevantGuide.title_en} &rarr;
+                    </a>
+                  </p>
+                )}
                 <a href={`${WHATSAPP_URL}?text=${waText}`} target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-heading font-semibold"
                   style={{ backgroundColor: '#25D366' }}>
