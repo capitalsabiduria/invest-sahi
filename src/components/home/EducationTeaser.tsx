@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -12,42 +12,18 @@ import RevealSection from '@/components/RevealSection';
 import { INSTITUTIONS, INSTITUTION_COSTS } from '@/data/institutions';
 import { calculateProjectedCost, calculateRequiredSIP, calculateSIPCorpus, formatCurrency } from '@/utils/sipCalculator';
 
-const ParentDiplomaIllustration = () => (
-  <svg viewBox="0 0 280 150" fill="none" aria-hidden="true" className="w-full max-w-[280px] my-6">
-    {/* Parent figure */}
-    <circle cx="78" cy="44" r="17" fill="#1B6B3A" />
-    <path d="M60 130 L60 74 Q60 61 78 61 Q96 61 96 74 L96 130 Z" fill="#1B6B3A" />
-    {/* Arm reaching to diploma */}
-    <path d="M93 90 Q116 80 132 85" stroke="#1B6B3A" strokeWidth="6" strokeLinecap="round" />
-    {/* Diploma scroll */}
-    <rect x="130" y="72" width="52" height="36" rx="5" fill="#E8820C" />
-    <rect x="130" y="72" width="52" height="11" rx="5" fill="#E8820C" fillOpacity="0.55" />
-    {/* Scroll lines */}
-    <line x1="140" y1="92" x2="172" y2="92" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.7" />
-    <line x1="140" y1="100" x2="166" y2="100" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.7" />
-    {/* Seal */}
-    <circle cx="156" cy="67" r="8" fill="#E8820C" />
-    <circle cx="156" cy="67" r="5" fill="white" fillOpacity="0.45" />
-    {/* Pot */}
-    <path d="M222 130 L218 112 L238 112 L234 130 Z" fill="#1B6B3A" fillOpacity="0.65" />
-    <ellipse cx="228" cy="112" rx="11" ry="3.5" fill="#1B6B3A" fillOpacity="0.75" />
-    {/* Stem */}
-    <path d="M228 112 L228 82" stroke="#1B6B3A" strokeWidth="3.5" strokeLinecap="round" />
-    {/* Left leaf */}
-    <path d="M228 96 Q211 88 209 72 Q224 80 228 93" fill="#1B6B3A" />
-    {/* Right leaf */}
-    <path d="M228 87 Q245 79 248 63 Q232 72 228 84" fill="#1B6B3A" fillOpacity="0.78" />
-    {/* Bloom */}
-    <circle cx="228" cy="80" r="6" fill="#1B6B3A" fillOpacity="0.8" />
-    <circle cx="228" cy="74" r="5" fill="#E8820C" fillOpacity="0.75" />
-    {/* Ground */}
-    <path d="M45 130 L260 130" stroke="#1B6B3A" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.18" />
-  </svg>
-);
+const institutionPills = [
+  { name: 'NIT Rourkela', cost: '₹6L', years: '4 yrs' },
+  { name: 'AIIMS Bhubaneswar', cost: '₹4L', years: '5 yrs' },
+  { name: 'IIT Bhubaneswar', cost: '₹8L', years: '4 yrs' },
+  { name: 'Private Engineering', cost: '₹12L', years: '4 yrs' },
+];
 
 const EducationTeaser = ({ lang }: { lang: string }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const calcRef = useRef<HTMLDivElement>(null);
+
   const [childAge, setChildAge] = useState(7);
   const [institution, setInstitution] = useState('NIT Rourkela');
   const [budget, setBudget] = useState(2000);
@@ -70,6 +46,11 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
   const years = 18 - childAge;
   const extraNeeded = !onTrack && years > 0 ? Math.round(calculateRequiredSIP(calc.gap, years * 12)) : 0;
 
+  const handlePillClick = (name: string) => {
+    setInstitution(name);
+    calcRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
   const handleLeadSubmit = async () => {
     if (!email && !phone) return;
     await supabase.from('calculator_leads').insert({
@@ -83,52 +64,64 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
     toast({ title: t('calc.success', 'Thank you!'), description: t('calc.successDesc', "We'll reach out soon.") });
   };
 
-  const institutionCosts = [
-    { name: 'NIT Rourkela', cost: '₹6L', years: '4 yrs' },
-    { name: 'AIIMS Bhubaneswar', cost: '₹4L', years: '5 yrs' },
-    { name: 'IIT Bhubaneswar', cost: '₹8L', years: '4 yrs' },
-    { name: 'Private Engineering', cost: '₹12L', years: '4 yrs' },
-  ];
-
   return (
-    <section className="bg-green-light py-20">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-11 gap-10 items-start">
-        {/* Left */}
-        <RevealSection className="md:col-span-6">
-          <span className="inline-block bg-green text-white text-xs font-medium px-3 py-1 rounded-full mb-4">
-            {t('edu.tag', 'edu.tag')}
-          </span>
-          <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-3">{t('edu.headline', 'edu.headline')}</h2>
-          <p className="font-body text-muted-foreground mb-2">{t('edu.body', 'edu.body')}</p>
-          <ParentDiplomaIllustration />
-          <div className="space-y-3 mb-6">
-            {institutionCosts.map((ic) => (
-              <div key={ic.name} className="flex items-center justify-between bg-card rounded-lg px-4 py-3">
-                <span className="font-body text-sm text-foreground">{ic.name}</span>
-                <div className="flex gap-4">
-                  <span className="font-heading font-semibold text-sm text-saffron">{ic.cost}</span>
-                  <span className="text-xs text-muted-foreground">{ic.years}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <Link to={`/${lang}/calculator`} className="bg-green text-white font-heading font-semibold px-6 py-3 rounded-lg inline-block hover:opacity-90 transition-opacity">
-            {t('edu.cta', 'edu.cta')} →
-          </Link>
-        </RevealSection>
+    <section className="py-20" style={{ background: '#E8F5EE' }}>
+      <RevealSection>
+        <div className="max-w-2xl mx-auto px-4" style={{ maxWidth: '680px' }}>
 
-        {/* Right - Mini Calculator */}
-        <RevealSection className="md:col-span-5" delay={0.2}>
-          <div className="bg-card rounded-xl shadow-lg p-6">
-            <h3 className="font-heading font-semibold text-lg text-foreground mb-5">{t('calc.quickEstimate', 'Quick Estimate')}</h3>
+          {/* Heading */}
+          <div className="text-center mb-6">
+            <span className="inline-block bg-[#1B6B3A] text-white text-xs font-medium px-3 py-1 rounded-full mb-4">
+              {t('edu.tag', 'Most Popular Tool')}
+            </span>
+            <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-3 whitespace-pre-line">
+              {t('edu.headline', "Your child's dream college.\nHow much do you need?")}
+            </h2>
+            <p className="font-body text-muted-foreground">
+              {t('edu.body', "NIT Rourkela. AIIMS Bhubaneswar. VSSUT Burla. We've calculated what each costs when your child is 18 — and exactly what monthly SIP gets you there.")}
+            </p>
+          </div>
+
+          {/* Institution pills */}
+          <div className="flex flex-wrap justify-center gap-2 mb-8">
+            {institutionPills.map((pill) => {
+              const selected = institution === pill.name;
+              return (
+                <button
+                  key={pill.name}
+                  onClick={() => handlePillClick(pill.name)}
+                  className={`rounded-full px-4 py-2 text-sm border transition-colors ${
+                    selected
+                      ? 'bg-[#1B6B3A] text-white border-[#1B6B3A]'
+                      : 'bg-white text-foreground border-[#1B6B3A]/20 hover:border-[#1B6B3A]/50'
+                  }`}
+                >
+                  <span className="font-medium">{pill.name}</span>
+                  <span className={`ml-2 ${selected ? 'text-white/80' : 'text-muted-foreground'}`}>
+                    {pill.cost} · {pill.years}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Calculator card */}
+          <div ref={calcRef} className="bg-white rounded-2xl shadow-md px-8 py-8 mb-6">
+            <h3 className="font-heading font-semibold text-lg text-foreground mb-5">
+              {t('calc.quickEstimate', 'Quick Estimate')}
+            </h3>
 
             <div className="mb-5">
-              <label className="text-sm font-body text-muted-foreground mb-2 block">{t('calc.childAge', "Child's Age")}: <span className="font-semibold text-foreground">{childAge} years</span></label>
+              <label className="text-sm font-body text-muted-foreground mb-2 block">
+                {t('calc.childAge', "Child's current age")}: <span className="font-semibold text-foreground">{childAge} years</span>
+              </label>
               <Slider value={[childAge]} onValueChange={([v]) => setChildAge(v)} min={1} max={15} step={1} />
             </div>
 
             <div className="mb-5">
-              <label className="text-sm font-body text-muted-foreground mb-2 block">{t('calc.institution', 'Institution')}</label>
+              <label className="text-sm font-body text-muted-foreground mb-2 block">
+                {t('calc.institution', 'Dream institution')}
+              </label>
               <Select value={institution} onValueChange={setInstitution}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -140,51 +133,73 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
             </div>
 
             <div className="mb-6">
-              <label className="text-sm font-body text-muted-foreground mb-2 block">{t('calc.budget', 'Monthly Budget')}: <span className="font-semibold text-foreground">{formatCurrency(budget)}/month</span></label>
+              <label className="text-sm font-body text-muted-foreground mb-2 block">
+                {t('calc.budget', 'Monthly Budget')}: <span className="font-semibold text-foreground">{formatCurrency(budget)}/month</span>
+              </label>
               <Slider value={[budget]} onValueChange={([v]) => setBudget(v)} min={500} max={10000} step={500} />
             </div>
 
-            <div className="bg-muted rounded-lg p-4 mb-4">
-              <p className="text-sm text-muted-foreground font-body mb-1">
-                {t('calc.investing', 'Investing {{amount}}/month for {{years}} years', {
-                  amount: formatCurrency(budget),
-                  years: years,
-                })}
-              </p>
-              <motion.p
-                className="font-heading font-bold text-2xl text-green"
-                key={calc.projected}
-                initial={{ opacity: 0.5, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                {t('calc.youllHave', "You'll have")}: {formatCurrency(calc.projected)}
-              </motion.p>
-              <p className="text-sm text-muted-foreground font-body mt-1">
-                {t('calc.target', '{{institution}} fees in {{year}}:', {
-                  institution: institution,
-                  year: new Date().getFullYear() + years,
-                })} ~{formatCurrency(calc.target)}
-              </p>
-              <div className="mt-2">
-                {onTrack ? (
-                  <span className="text-xs bg-green-light text-green px-2 py-0.5 rounded-full font-medium">✓ {t('calc.onTrack', 'On track')}</span>
-                ) : (
-                  <span className="text-xs bg-saffron-light text-amber px-2 py-0.5 rounded-full font-medium">
+            {/* Result panel */}
+            <motion.div
+              key={`${onTrack}-${calc.projected}`}
+              initial={{ opacity: 0.6 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="rounded-xl p-5 mb-4"
+              style={{ background: onTrack ? '#E8F5EE' : '#FFF3E0' }}
+            >
+              {onTrack ? (
+                <>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Check size={18} className="text-[#1B6B3A]" />
+                    <p className="font-heading font-bold text-[#1B6B3A]">
+                      {lang === 'or'
+                        ? `${institution} ପାଇଁ ଆପଣ ସଠିକ୍ ରାସ୍ତାରେ ✓`
+                        : `You're on track for ${institution} ✓`}
+                    </p>
+                  </div>
+                  <p className="text-sm font-body text-muted-foreground">
+                    {lang === 'or'
+                      ? `${formatCurrency(budget)}/ମାସରେ ଆପଣ ${formatCurrency(calc.projected)} ପାଇବେ — ଯଥେଷ୍ଟ ଅଧିକ।`
+                      : `At ${formatCurrency(budget)}/month you'll have ${formatCurrency(calc.projected)} — more than enough.`}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="font-heading font-bold text-2xl text-[#2C1810] mb-1">
+                    {t('calc.youllHave', "You'll have:")} {formatCurrency(calc.projected)}
+                  </p>
+                  <p className="text-sm font-body text-muted-foreground mb-2">
+                    {t('calc.target', '{{institution}} fees in {{year}}:', {
+                      institution,
+                      year: new Date().getFullYear() + years,
+                    })} ~{formatCurrency(calc.target)}
+                  </p>
+                  <span className="inline-block rounded-full px-3 py-1 text-xs font-medium bg-[#C45C00]/10 text-[#C45C00]">
                     {t('calc.moreNeeded', '₹{{amount}} more/month needed', {
                       amount: extraNeeded.toLocaleString('en-IN'),
                     })}
                   </span>
-                )}
-              </div>
-            </div>
+                </>
+              )}
+            </motion.div>
+
+            {/* CTA — book a call */}
+            <Link
+              to={`/${lang}/book`}
+              className="block w-full text-center bg-[#E8820C] text-white font-heading font-semibold rounded-xl py-3 hover:opacity-90 transition-opacity mb-4"
+            >
+              {onTrack
+                ? (lang === 'or' ? 'ନିଃଶୁଳ୍କ Call ବୁକ କରନ୍ତୁ — ଆସନ୍ତୁ ଅଫିସିଆଲ କରୁ' : "Book a free call — let's make it official")
+                : (lang === 'or' ? 'ନିଃଶୁଳ୍କ Call ବୁକ କରନ୍ତୁ — ଆମେ ଆପଣଙ୍କ ଯୋଜନା ତିଆରି କରିବୁ' : "Book a free call — we'll build your plan")}
+            </Link>
 
             {!showForm && !submitted && (
               <button
                 onClick={() => setShowForm(true)}
                 className="text-sm text-saffron font-medium hover:underline"
               >
-                {t('calc.getFullPlan', 'Get full plan →')}
+                {t('calc.getFullPlan', 'Get full education plan →')}
               </button>
             )}
 
@@ -205,8 +220,19 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
               </div>
             )}
           </div>
-        </RevealSection>
-      </div>
+
+          {/* Bottom CTA */}
+          <div className="text-center">
+            <Link
+              to={`/${lang}/calculators`}
+              className="inline-block bg-[#1B6B3A] text-white font-heading font-semibold rounded-xl px-8 py-4 hover:opacity-90 transition-opacity w-full md:w-auto"
+            >
+              {t('edu.cta', "Calculate Your Child's Fund →")}
+            </Link>
+          </div>
+
+        </div>
+      </RevealSection>
     </section>
   );
 };
