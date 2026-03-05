@@ -2,7 +2,6 @@
   "admin": {
     "panel": "Admin Panel"
   },
-
   "nav": {
     "offer": "What We Offer",
     "plan": "Build Your Free Wealth Plan",
@@ -11,7 +10,6 @@
     "book": "Book a Free Call",
     "tagline": "ଇନ୍ଭେଷ୍ଟ ସହି"
   },
-
   "hero": {
     "state1": {
       "tag": "For Your Family",
@@ -60,7 +58,6 @@
       "item4": "Physical office in Bhubaneswar — come visit us"
     }
   },
-
   "landing": {
     "tag": "Odisha's Homegrown Financial Services Platform",
     "headline1": "Most people wait until they're \"rich enough\" to start investing.",
@@ -81,14 +78,12 @@
       "footer": "Start with a SIP as low as ₹500. Step up yearly. Build ₹1 crore."
     }
   },
-
   "stats": {
     "label1": "to start — no minimum beyond this",
     "label2": "is all it takes to build real wealth",
     "label3": "potential from ₹500/month at 12%",
     "label4": "just the power of compounding"
   },
-
   "goals": {
     "header": "What can we help you with?",
     "subheader": "Most people don't start with a product in mind. They start with a goal.",
@@ -122,10 +117,22 @@
     "heading": "What is your primary focus right now?",
     "subheading": "We'll build a personalised plan around your goal.",
     "hint": "Not sure? Start with Building Wealth — you can always refine later.",
-    "home": { "title": "Buying a Home", "subtitle": "Plan your down payment and EMI budget" },
-    "education": { "title": "Child's Education", "subtitle": "Fund NIT, IIT, AIIMS — name the college" },
-    "retirement": { "title": "Early Retirement", "subtitle": "Build the corpus to retire on your terms" },
-    "wealth": { "title": "Building Wealth", "subtitle": "Grow your savings systematically" },
+    "home": {
+      "title": "Buying a Home",
+      "subtitle": "Plan your down payment and EMI budget"
+    },
+    "education": {
+      "title": "Child's Education",
+      "subtitle": "Fund NIT, IIT, AIIMS — name the college"
+    },
+    "retirement": {
+      "title": "Early Retirement",
+      "subtitle": "Build the corpus to retire on your terms"
+    },
+    "wealth": {
+      "title": "Building Wealth",
+      "subtitle": "Grow your savings systematically"
+    },
     "page": {
       "heading": "Build Your Wealth Plan",
       "subheading": "Tell us your goal — we'll show you exactly how to get there."
@@ -140,19 +147,23 @@
       "invested": "Total Invested",
       "gained": "Wealth Gained",
       "cta": "Get a Personalised Plan on WhatsApp →",
-      "home": { "heading": "Plan Your Home Purchase" },
-      "retirement": { "heading": "Plan Your Early Retirement" },
-      "wealth": { "heading": "Build Your Wealth Systematically" }
+      "home": {
+        "heading": "Plan Your Home Purchase"
+      },
+      "retirement": {
+        "heading": "Plan Your Early Retirement"
+      },
+      "wealth": {
+        "heading": "Build Your Wealth Systematically"
+      }
     }
   },
-
   "edu": {
     "tag": "Most Popular Tool",
     "headline": "Your child's dream college.\nHow much do you need?",
     "body": "NIT Rourkela. AIIMS Bhubaneswar. VSSUT Burla. We've calculated what each costs when your child is 18 — and exactly what monthly SIP gets you there.",
     "cta": "Calculate Your Child's Fund →"
   },
-
   "calc": {
     "quickEstimate": "Quick Estimate",
     "childAge": "Child's current age",
@@ -240,7 +251,6 @@
       "note": "Costs updated for 2025-26. Future costs projected at 8% annual inflation."
     }
   },
-
   "stories": {
     "header": "Odishara Artha Katha",
     "headerOdia": "ଓଡ଼ିଶାର ଅର୍ଥ କଥା",
@@ -279,19 +289,16 @@
     },
     "readStory": "Read story →"
   },
-
   "odia": {
     "headline": "Odisha's Homegrown Financial Platform",
     "translation": "ଓଡ଼ିଶାର ନିଜସ୍ୱ ଆର୍ଥିକ ପ୍ଲାଟଫର୍ମ",
     "body": "Financial advice shouldn't feel like it's imported from Wall Street. InvestSahi is built right here in Bhubaneswar. We understand the specific goals, careers, and financial needs of Odia families, which is why our entire platform is available in both English and Odia.",
     "bodyOdia": "ଆର୍ଥିକ ପରାମର୍ଶ Wall Street ରୁ ଆମଦାନି ହୋଇଥିବା ଭଳି ଲାଗିବା ଉଚିତ ନୁହେଁ। InvestSahi ଭୁବନେଶ୍ୱରରେ ନିର୍ମିତ। ଆମେ Odia ପରିବାରର ନିର୍ଦ୍ଦିଷ୍ଟ ଲକ୍ଷ୍ୟ, କ୍ୟାରିୟର ଓ ଆର୍ଥିକ ଆବଶ୍ୟକତା ବୁଝୁ, ଏଥିପାଇଁ ଆମର ସମ୍ପୂର୍ଣ୍ଣ ପ୍ଲାଟଫର୍ମ ଇଂରାଜୀ ଓ ଓଡ଼ିଆ ଉଭୟରେ ଉପଲବ୍ଧ।"
   },
-
   "servicesGrid": {
     "title": "Everything you need, starting at ₹500",
     "subtitle": "From your first SIP to your family's full financial plan."
   },
-
   "services": {
     "s1": {
       "name": "SIP / Mutual Funds",
@@ -414,7 +421,6 @@
       "desc": "Insurance + market-linked investment in one plan"
     }
   },
-
   "svc": {
     "whoLabel": "Who it's for",
     "whoKey": "Who it's for",
@@ -541,7 +547,6 @@
       }
     }
   },
-
   "trust": {
     "t1": {
       "title": "Regulated & Registered",
@@ -582,7 +587,6 @@
       "note": "Honest advice that feels close to home."
     }
   },
-
   "newsletter": {
     "headline": "Money Katha — Free Odia Newsletter",
     "subline": "Monthly financial guidance in Odia and English. No jargon. No spam. Real advice for real Odia families.",
@@ -597,7 +601,6 @@
     "thankYou": "ଧନ୍ୟବାଦ!",
     "error": "Something went wrong. Please try again."
   },
-
   "footer": {
     "tagline": "Odisha's bilingual financial advisory platform",
     "whatsapp": "Chat with us",
@@ -644,7 +647,6 @@
     "copyright": "© 2026 InvestSahi | AMFI ARN: XXXXXX | IRDAI Reg: XXXXXX",
     "disclaimer": "Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully. InvestSahi is not a bank. Loans are subject to eligibility and credit assessment."
   },
-
   "book": {
     "error": "Something went wrong. Please try again.",
     "headline": "Let's talk about your financial future",
@@ -717,7 +719,6 @@
       "map": "Google Maps"
     }
   },
-
   "learn": {
     "hero": {
       "headline": "Money School",
@@ -753,10 +754,176 @@
     "related": "Related content",
     "noRelated": "No related content yet"
   },
-
   "notFound": {
     "odia": "ଏହି ପୃଷ୍ଠା ମିଳିଲା ନାହିଁ",
     "english": "This page doesn't exist",
     "back": "Back to Home"
+  },
+  "home": {
+    "back": "Change Goal",
+    "step1": {
+      "title": "Step 1: Where in Odisha?"
+    },
+    "step2": {
+      "title": "Step 2: What are you buying?"
+    },
+    "step3": {
+      "title": "Step 3: When do you want to buy?",
+      "label": "Target timeline",
+      "value": "{{years}} years from now"
+    },
+    "step4": {
+      "title": "Step 4: Estimated property budget",
+      "label": "Budget",
+      "downpayment": "Down payment needed (20%): {{amount}}"
+    },
+    "step5": {
+      "title": "Step 5: How much have you saved toward this already?",
+      "label": "Current savings"
+    },
+    "result": {
+      "plan": "Your {{type}} plan{{city}}",
+      "defaultType": "home",
+      "downpayment": "Down payment needed",
+      "sip": "Monthly SIP to reach it"
+    },
+    "step6": {
+      "title": "Step 6: Get Your Home Buying Roadmap",
+      "name": "Your name (e.g. Priya)",
+      "email": "Email address",
+      "phone": "WhatsApp (e.g. 98XXXXXXXX)",
+      "desc": "We'll send you: SIP plan to reach your down payment, home loan eligibility estimate, and the best time to buy based on your savings rate.",
+      "submit": "Send My {{amount}}/mo Home Plan →"
+    },
+    "whatsapp": {
+      "discuss": "Discuss on WhatsApp instead"
+    },
+    "success": {
+      "title": "Your home buying plan is ready!",
+      "sub": "We'll call you within 24 hours to walk through it together.",
+      "meanwhile": "In the meantime —",
+      "whatsapp": "Discuss on WhatsApp"
+    },
+    "sidebar": {
+      "pricesTitle": "Typical prices in Odisha (2025)",
+      "ruleTitle": "The 20% rule",
+      "ruleBody": "Banks typically require 20% down payment. On a ₹60L flat, that's ₹12L upfront. Starting a SIP today means you arrive at the bank with cash — not scrambling for a personal loan.",
+      "expertTitle": "Talk to a home loan expert",
+      "expertDesc": "We help with SIP planning + home loan eligibility",
+      "chatNow": "Chat Now →"
+    }
+  },
+  "retirement": {
+    "back": "Change Goal",
+    "step1": {
+      "title": "Step 1: How old are you today?",
+      "label": "Current age",
+      "value": "{{age}} years"
+    },
+    "step2": {
+      "title": "Step 2: When do you want to retire?",
+      "label": "Retire at age",
+      "yearsFrom": "{{years}} years from now",
+      "hint": "Retiring at {{age}} means {{extra}} extra years of financial freedom compared to retiring at 65."
+    },
+    "step3": {
+      "title": "Step 3: What are your current monthly expenses?",
+      "label": "Monthly expenses",
+      "hint": "By the time you retire at {{age}}, ₹{{expenses}} today will feel like {{future}} — because prices double roughly every 12 years at 6% inflation."
+    },
+    "step4": {
+      "title": "Step 4: What have you saved so far? (EPF, FDs, savings)",
+      "label": "Current savings"
+    },
+    "result": {
+      "header": "Your retirement at {{age}} — {{years}} years to build this",
+      "waitingCost": "Cost of waiting 3 more years",
+      "waitingExtra": "+{{amount}}/month extra",
+      "waitingNote": "Starting today vs. starting at age {{age}} — same goal, very different monthly commitment.",
+      "corpus": "Corpus you need",
+      "sip": "Monthly SIP needed"
+    },
+    "step5": {
+      "title": "Step 5: Get Your Retirement Roadmap",
+      "name": "Your name (e.g. Rahul)",
+      "email": "Email address",
+      "phone": "WhatsApp (e.g. 98XXXXXXXX)",
+      "desc": "We'll send you: exact SIP plan, NPS optimisation for your age, investment split across equity/debt, and a month-by-month roadmap to retirement.",
+      "submit": "Send My {{amount}}/mo Retirement Plan →"
+    },
+    "whatsapp": {
+      "discuss": "Discuss on WhatsApp instead"
+    },
+    "success": {
+      "title": "Your retirement plan is on its way!",
+      "sub": "We'll call you within 24 hours to walk through it together.",
+      "meanwhile": "In the meantime —",
+      "whatsapp": "Discuss on WhatsApp"
+    },
+    "sidebar": {
+      "rule": "The 4% Withdrawal Rule",
+      "ruleDesc": "If your corpus earns 12% and inflation runs at 6%, you can safely withdraw 4–6% per year forever. This is why we target 25× your annual expenses.",
+      "npsTitle": "NPS: Your retirement head start",
+      "npsDesc": "If you're a government employee or salaried professional, NPS gives an extra ₹50,000 tax deduction under 80CCD(1B) — on top of the standard 80C limit. Most people miss this.",
+      "chatTitle": "Talk to a retirement planner",
+      "chatDesc": "In English or Odia. No jargon.",
+      "chatNow": "Chat Now →"
+    }
+  },
+  "wealth": {
+    "back": "Change Goal",
+    "step1": {
+      "title": "Step 1: How much can you invest monthly?",
+      "label": "Monthly SIP",
+      "value": "{{amount}}/mo",
+      "hint": "{{amount}} is less than {{comparison}}. Money that would otherwise vanish.",
+      "comp1": "a plate of Dalma at a restaurant",
+      "comp2": "a monthly mobile recharge",
+      "comp3": "a movie outing for two",
+      "comp4": "one month of petrol",
+      "comp5": "a short family trip"
+    },
+    "step2": {
+      "title": "Step 2: For how many years?",
+      "label": "Investment period",
+      "value": "{{years}} years"
+    },
+    "step3": {
+      "title": "Step 3: Will you increase your SIP each year?",
+      "stepup": "Increase by 10% each year",
+      "stepupDesc": "As your salary grows, your SIP grows too"
+    },
+    "result": {
+      "summary": "{{amount}}/mo for {{years}} years{{stepup}} at 12% avg return",
+      "stepup": " with 10% annual step-up",
+      "invested": "Total invested",
+      "gained": "Wealth gained",
+      "disclaimer": "Assumed 12% annual return. Not guaranteed. Past performance is not indicative of future results."
+    },
+    "step4": {
+      "title": "Step 4: Get Your Personalised Wealth Plan",
+      "name": "Your name (e.g. Rahul)",
+      "email": "Email address",
+      "phone": "WhatsApp (e.g. 98XXXXXXXX)",
+      "desc": "We'll send you: the right mutual funds to invest in, a month-by-month SIP plan, tax-saving strategies under 80C, and a review every 6 months.",
+      "submit": "Send My {{amount}}/mo Wealth Plan →"
+    },
+    "whatsapp": {
+      "discuss": "Discuss on WhatsApp instead"
+    },
+    "success": {
+      "title": "Your wealth plan is on its way!",
+      "sub": "We'll call you within 24 hours.",
+      "meanwhile": "In the meantime —",
+      "whatsapp": "Discuss on WhatsApp"
+    },
+    "sidebar": {
+      "earlyTitle": "The power of starting early",
+      "earlyDesc": "₹2,000/month invested at different ages (12% return, retire at 60):",
+      "compareTitle": "₹500 comparison",
+      "chatTitle": "Not sure where to start?",
+      "chatDesc": "Talk to us in English or Odia. No jargon, no pressure.",
+      "chatNow": "Chat Now →"
+    }
   }
 }
