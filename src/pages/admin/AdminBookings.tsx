@@ -34,6 +34,44 @@ const AdminBookings = () => {
     fetchBookings();
   };
 
+  const exportCSV = async () => {
+    let query = supabase.from('bookings').select('*');
+    if (statusFilter !== 'all') query = query.eq('status', statusFilter);
+    if (search) query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%`);
+    query = query.order('created_at', { ascending: false });
+
+    const { data } = await query;
+    if (!data || data.length === 0) return;
+    const headers = [
+      'Name', 'Email', 'Phone', 'Service Interest',
+      'Income Range', 'Preferred Contact', 'Language',
+      'Source', 'Status', 'Message', 'Date'
+    ];
+    const rows = data.map(b => [
+      b.name,
+      b.email,
+      b.phone,
+      (b.service_interest || []).join(' | '),
+      b.monthly_income_range || '',
+      b.preferred_contact || '',
+      b.preferred_language || '',
+      b.source || '',
+      b.status || '',
+      (b.message || '').replace(/\n/g, ' '),
+      new Date(b.created_at).toLocaleString('en-IN'),
+    ]);
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `investsahi-bookings-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const totalPages = Math.ceil(total / PAGE_SIZE);
   const statusColors: Record<string, string> = {
     pending: 'bg-amber/10 text-amber',
@@ -54,6 +92,13 @@ const AdminBookings = () => {
           </SelectContent>
         </Select>
         <Input placeholder="Search name or email..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(0); }} className="max-w-xs bg-white" />
+        <Button variant="outline" onClick={exportCSV} className="ml-auto flex items-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 1v9M5 7l3 3 3-3M2 11v2a1 1 0 001 1h10a1 1 0 001-1v-2"
+              stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Export CSV
+        </Button>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
