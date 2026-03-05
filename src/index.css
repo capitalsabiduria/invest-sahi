@@ -60,6 +60,11 @@
   }
 }
 
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 @layer utilities {
   /* Odia script requires more vertical space for matras */
   .font-body:lang(or),
