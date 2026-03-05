@@ -82,7 +82,7 @@ export default function RichEditor({ value, onChange, placeholder, isOdia, label
     const incoming = value || '';
     // Avoid resetting cursor if content is the same
     if (current !== incoming && incoming !== '<p></p>' && incoming !== '') {
-      editor.commands.setContent(incoming, false);
+      editor.commands.setContent(incoming);
     }
   }, [value]); // intentionally only value, not editor
 

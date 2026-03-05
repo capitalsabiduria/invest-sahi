@@ -433,16 +433,21 @@ const GenerateDropdown = ({
   generatingId,
   onGenerate,
   justGenerated,
+  bulkRunning,
 }: {
   page: SeoPage;
   generatingId: string | null;
   onGenerate: (page: SeoPage, lang: string, style: string) => void;
   justGenerated: string | null;
+  bulkRunning?: boolean;
 }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [dropUp, setDropUp] = useState(false);
   const isPageGenerating = generatingId !== null && generatingId.startsWith(page.id + '-');
   const showCheck = justGenerated !== null && justGenerated.startsWith(page.id + '-');
+  const isDisabled = generatingId !== null || !!bulkRunning;
 
   useEffect(() => {
     if (!open) return;
@@ -453,11 +458,21 @@ const GenerateDropdown = ({
     return () => document.removeEventListener('mousedown', handler);
   }, [open]);
 
+  const handleToggle = () => {
+    if (!open && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      setDropUp(spaceBelow < 160);
+    }
+    setOpen(o => !o);
+  };
+
   return (
     <div className="relative" ref={ref}>
       <button
-        onClick={() => setOpen(o => !o)}
-        disabled={generatingId !== null}
+        ref={buttonRef}
+        onClick={handleToggle}
+        disabled={isDisabled}
         title="Generate AI content"
         className="flex items-center gap-0.5 p-1.5 rounded hover:bg-purple-50 disabled:opacity-40 transition-colors"
         style={{ color: showCheck ? '#16a34a' : isPageGenerating ? '#6B21A8' : '#9333EA' }}
@@ -470,7 +485,9 @@ const GenerateDropdown = ({
         <ChevronDown size={10} />
       </button>
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-1 bg-white rounded-xl shadow-lg border border-stone/10 py-1 min-w-[190px]">
+        <div className={`absolute right-0 z-50 mt-1 bg-white rounded-xl shadow-lg border border-stone/10 py-1 min-w-[190px] ${
+          dropUp ? 'bottom-full top-auto mb-1 mt-0' : 'top-full'
+        }`}>
           {GENERATE_OPTIONS.map(opt => {
             const key = `${page.id}-${opt.lang}-${opt.style}`;
             const isGenerating = generatingId === key;
@@ -478,7 +495,7 @@ const GenerateDropdown = ({
               <button
                 key={opt.label}
                 onClick={() => { setOpen(false); onGenerate(page, opt.lang, opt.style); }}
-                disabled={generatingId !== null}
+                disabled={isDisabled}
                 className="w-full text-left px-4 py-2 text-sm hover:bg-stone/5 disabled:opacity-40 transition-colors flex items-center gap-2"
               >
                 {isGenerating && <span className="inline-block w-3 h-3 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />}
@@ -573,7 +590,24 @@ const SeoManager = () => {
   const [generatingId, setGeneratingId] = useState<string | null>(null);
   const [justGenerated, setJustGenerated] = useState<string | null>(null);
 
+  /* row selection */
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  /* bulk generation */
+  const [bulkProgress, setBulkProgress] = useState<{
+    total: number;
+    done: number;
+    failed: number;
+    running: boolean;
+  } | null>(null);
+  const [bulkDoneVisible, setBulkDoneVisible] = useState(false);
+
   const hasAnyFilter = statFilter !== 'all' || typeFilter !== 'all' || langFilter !== 'all' || contentFilter !== 'all' || search !== '';
+
+  /* clear selection when filters change */
+  useEffect(() => {
+    setSelectedIds(new Set());
+  }, [statFilter, typeFilter, langFilter, contentFilter, search]);
 
   /* ── fetch ── */
   const fetchPages = useCallback(async () => {
@@ -617,7 +651,6 @@ const SeoManager = () => {
 
   /* ── filtered + paginated ── */
   const filtered = pages.filter((p) => {
-    // Stat filter
     if (statFilter === 'live-en') {
       if (!p.versions.some(v => v.language === 'en' && v.status === 'live')) return false;
     } else if (statFilter === 'live-or') {
@@ -626,10 +659,8 @@ const SeoManager = () => {
       if (!p.versions.some(v => v.status === 'pending_review')) return false;
     }
 
-    // Type filter
     if (typeFilter !== 'all' && p.type !== typeFilter) return false;
 
-    // Language filter
     if (langFilter !== 'all') {
       const [lang, style] = langFilter === 'en'
         ? ['en', 'standard']
@@ -639,7 +670,6 @@ const SeoManager = () => {
       if (!p.versions.some(v => v.language === lang && v.audience_style === style)) return false;
     }
 
-    // Content filter
     if (contentFilter !== 'all') {
       const count = getContentStatus(p);
       if (contentFilter === 'has-content' && count === 0) return false;
@@ -648,7 +678,6 @@ const SeoManager = () => {
       if (contentFilter === 'pending' && !p.versions.some(v => v.status === 'pending_review')) return false;
     }
 
-    // Search
     if (search) {
       const q = search.toLowerCase();
       if (!p.slug.includes(q) && !(p.title || '').toLowerCase().includes(q)) return false;
@@ -659,6 +688,35 @@ const SeoManager = () => {
   const totalFiltered = filtered.length;
   const pageCount = Math.ceil(totalFiltered / perPage);
   const paginated = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
+
+  /* selection helpers */
+  const allPaginatedSelected = paginated.length > 0 && paginated.every(p => selectedIds.has(p.id));
+  const somePaginatedSelected = paginated.some(p => selectedIds.has(p.id));
+
+  const toggleSelectAll = () => {
+    if (allPaginatedSelected) {
+      setSelectedIds(prev => {
+        const next = new Set(prev);
+        paginated.forEach(p => next.delete(p.id));
+        return next;
+      });
+    } else {
+      setSelectedIds(prev => {
+        const next = new Set(prev);
+        paginated.forEach(p => next.add(p.id));
+        return next;
+      });
+    }
+  };
+
+  const toggleSelectOne = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   /* Count helpers for filter pills */
   const countByType = (type: PageType) => pages.filter(p => p.type === type).length;
@@ -824,6 +882,45 @@ const SeoManager = () => {
     }
   }
 
+  /* ── bulk generation ── */
+  async function handleBulkGenerate(mode: 'all' | 'en' | 'or') {
+    const pagesToGenerate = pages.filter(p => selectedIds.has(p.id));
+    const versionsToRun: { page: SeoPage; lang: string; style: string }[] = [];
+
+    for (const page of pagesToGenerate) {
+      if (mode === 'all' || mode === 'en') {
+        versionsToRun.push({ page, lang: 'en', style: 'standard' });
+      }
+      if (mode === 'all' || mode === 'or') {
+        versionsToRun.push({ page, lang: 'or', style: 'mixed' });
+        versionsToRun.push({ page, lang: 'or', style: 'pure_odia' });
+      }
+    }
+
+    setBulkProgress({ total: versionsToRun.length, done: 0, failed: 0, running: true });
+
+    for (const { page, lang, style } of versionsToRun) {
+      try {
+        await generateSingleVersion(page, lang, style);
+      } catch {
+        setBulkProgress(p => p ? { ...p, failed: p.failed + 1 } : p);
+      }
+      setBulkProgress(p => p ? { ...p, done: p.done + 1 } : p);
+      await new Promise(resolve => setTimeout(resolve, 6500));
+    }
+
+    setBulkProgress(p => p ? { ...p, running: false } : p);
+    setBulkDoneVisible(true);
+    toast.success(`Bulk generation complete — ${versionsToRun.length} versions processed`);
+    setSelectedIds(new Set());
+    fetchPages();
+
+    setTimeout(() => {
+      setBulkDoneVisible(false);
+      setBulkProgress(null);
+    }, 3000);
+  }
+
   /* ── form initial for edit ── */
   const editFormInit = editPage
     ? {
@@ -924,6 +1021,24 @@ const SeoManager = () => {
           )
         ))}
       </div>
+    );
+  };
+
+  /* ── Checkbox component ── */
+  const RowCheckbox = ({ checked, onChange, indeterminate }: { checked: boolean; onChange: () => void; indeterminate?: boolean }) => {
+    const cbRef = useRef<HTMLInputElement>(null);
+    useEffect(() => {
+      if (cbRef.current) cbRef.current.indeterminate = !!indeterminate;
+    }, [indeterminate]);
+    return (
+      <input
+        ref={cbRef}
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+        onClick={(e) => e.stopPropagation()}
+        className="w-4 h-4 rounded border-stone/30 text-saffron accent-[#E8820C] cursor-pointer"
+      />
     );
   };
 
@@ -1034,6 +1149,87 @@ const SeoManager = () => {
         </div>
       </div>
 
+      {/* Selection toolbar */}
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-out ${
+          selectedIds.size > 0 ? 'max-h-20 opacity-100 mb-3' : 'max-h-0 opacity-0 mb-0'
+        }`}
+      >
+        <div className="bg-[#2C1810] text-white rounded-xl px-5 py-3 flex items-center justify-between">
+          <div className="flex items-center">
+            <span className="text-sm font-medium">{selectedIds.size} pages selected</span>
+            <button
+              onClick={() => setSelectedIds(new Set())}
+              className="text-white/50 hover:text-white text-xs ml-4 transition-colors"
+            >
+              Clear selection
+            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handleBulkGenerate('all')}
+              disabled={!!bulkProgress?.running}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white disabled:opacity-40 transition-colors"
+              style={{ background: '#E8820C' }}
+            >
+              ⚡ Generate All 3 Versions
+            </button>
+            <button
+              onClick={() => handleBulkGenerate('en')}
+              disabled={!!bulkProgress?.running}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white border border-stone/30 hover:bg-white/10 disabled:opacity-40 transition-colors"
+            >
+              🇬🇧 Generate EN Only
+            </button>
+            <button
+              onClick={() => handleBulkGenerate('or')}
+              disabled={!!bulkProgress?.running}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white border border-stone/30 hover:bg-white/10 disabled:opacity-40 transition-colors"
+            >
+              🔤 Generate Odia Only
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Bulk progress bar */}
+      {bulkProgress !== null && bulkProgress.running && (
+        <div className="bg-white rounded-xl px-5 py-3 shadow-sm border border-stone/10 mb-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm">
+              Generating {bulkProgress.done} of {bulkProgress.total} versions…
+              {bulkProgress.failed > 0 && (
+                <span className="text-red-500 ml-2">{bulkProgress.failed} failed</span>
+              )}
+            </span>
+          </div>
+          <div className="w-full h-1.5 rounded-full bg-stone/10 overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all duration-500"
+              style={{
+                width: `${(bulkProgress.done / bulkProgress.total) * 100}%`,
+                background: '#E8820C',
+              }}
+            />
+          </div>
+          <p className="text-xs text-stone/40 mt-1.5">
+            This may take ~{Math.ceil(((bulkProgress.total - bulkProgress.done) * 6.5) / 60)} minutes remaining
+          </p>
+        </div>
+      )}
+
+      {/* Bulk completion summary */}
+      {bulkProgress !== null && !bulkProgress.running && bulkDoneVisible && (
+        <div className="bg-white rounded-xl px-5 py-3 shadow-sm border border-stone/10 mb-3">
+          <span className="text-sm">
+            ✓ Done — {bulkProgress.done} versions generated
+            {bulkProgress.failed > 0 && (
+              <span className="text-red-500 ml-1">, {bulkProgress.failed} failed</span>
+            )}
+          </span>
+        </div>
+      )}
+
       {/* Fetch error banner */}
       {fetchError && (
         <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-body text-red-700">
@@ -1068,6 +1264,13 @@ const SeoManager = () => {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-stone/10 text-xs text-stone/50 uppercase tracking-wide">
+                <th className="text-center px-3 py-3 font-medium w-10">
+                  <RowCheckbox
+                    checked={allPaginatedSelected}
+                    indeterminate={somePaginatedSelected && !allPaginatedSelected}
+                    onChange={toggleSelectAll}
+                  />
+                </th>
                 <th className="text-left px-4 py-3 font-medium w-20">Type</th>
                 <th className="text-left px-4 py-3 font-medium max-w-[280px]">Page</th>
                 <th className="text-center px-4 py-3 font-medium w-16">Content</th>
@@ -1078,7 +1281,13 @@ const SeoManager = () => {
             </thead>
             <tbody>
               {paginated.map((page) => (
-                <tr key={page.id} className="border-b border-stone/5 hover:bg-[#F5EDD8]/50 transition-colors">
+                <tr key={page.id} className={`border-b border-stone/5 hover:bg-[#F5EDD8]/50 transition-colors ${selectedIds.has(page.id) ? 'bg-saffron-light/30' : ''}`}>
+                  <td className="text-center px-3 py-3">
+                    <RowCheckbox
+                      checked={selectedIds.has(page.id)}
+                      onChange={() => toggleSelectOne(page.id)}
+                    />
+                  </td>
                   <td className="px-4 py-3">
                     <TypeBadge type={page.type} />
                   </td>
@@ -1111,6 +1320,7 @@ const SeoManager = () => {
                         generatingId={generatingId}
                         onGenerate={handleGenerate}
                         justGenerated={justGenerated}
+                        bulkRunning={bulkProgress?.running}
                       />
                       <button
                         onClick={() => setViewAllPage(page)}
@@ -1157,14 +1367,18 @@ const SeoManager = () => {
           </div>
         ) : (
           paginated.map((page) => (
-            <div key={page.id} className="bg-white rounded-xl shadow-sm p-4 space-y-2">
+            <div key={page.id} className={`bg-white rounded-xl shadow-sm p-4 space-y-2 ${selectedIds.has(page.id) ? 'ring-2 ring-[#E8820C]/30' : ''}`}>
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
+                  <RowCheckbox
+                    checked={selectedIds.has(page.id)}
+                    onChange={() => toggleSelectOne(page.id)}
+                  />
                   <TypeBadge type={page.type} />
                   <ContentDot page={page} />
                 </div>
                 <div className="flex items-center gap-1">
-                  <GenerateDropdown page={page} generatingId={generatingId} onGenerate={handleGenerate} justGenerated={justGenerated} />
+                  <GenerateDropdown page={page} generatingId={generatingId} onGenerate={handleGenerate} justGenerated={justGenerated} bulkRunning={bulkProgress?.running} />
                   <button onClick={() => setViewAllPage(page)} className="p-1.5 rounded hover:bg-stone/10 text-stone/50" title="View all URLs">
                     <Eye size={14} />
                   </button>

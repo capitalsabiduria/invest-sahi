@@ -123,7 +123,7 @@ export type Database = {
           preview_en?: string | null
           preview_or?: string | null
           published_at?: string | null
-          slug: string
+          slug?: string
           status?: string | null
           title_en?: string | null
           title_or?: string | null
