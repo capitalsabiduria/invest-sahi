@@ -54,7 +54,6 @@ const Navbar = () => {
     { key: 'nav.offer', fallback: 'What We Offer', href: `/${currentLang}/services` },
     { key: 'nav.plan', fallback: 'Build Your Free Wealth Plan', href: `/${currentLang}/calculator` },
     { key: 'nav.learn', fallback: 'Money School', href: `/${currentLang}/learn` },
-    { key: 'nav.newsletter', fallback: 'Newsletter', href: `/${currentLang}/newsletter` },
   ];
 
   const LanguagePill = () => (
