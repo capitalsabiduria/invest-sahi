@@ -17,6 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 import { INSTITUTIONS } from '@/data/institutions';
 import { calculateProjectedCost, calculateRequiredSIP, calculateSIPCorpus, formatCurrency } from '@/utils/sipCalculator';
 import { WHATSAPP_URL } from '@/config/constants';
+import { useRelevantGuide } from '@/hooks/useRelevantGuide';
 import GoalSelector, { type GoalType } from '@/components/calculator/GoalSelector';
 import BasicWealthCalculator from '@/components/calculator/BasicWealthCalculator';
 
@@ -28,6 +29,8 @@ const Calculator = () => {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = lang || 'en';
   const { toast } = useToast();
+
+  const relevantGuide = useRelevantGuide('education', currentLang);
 
   const [childName, setChildName] = useState('');
   const [childAge, setChildAge] = useState(7);
@@ -83,12 +86,14 @@ const Calculator = () => {
   const handleSubmit = async () => {
     if (!email && !phone) return;
     await supabase.from('calculator_leads').insert({
+      calculator_type: 'education',
+      lead_name: name,
       child_age: childAge,
       target_institution: selectedInst === 'other' ? customInst || 'Other' : inst.name,
       monthly_sip_needed: onTrack ? budget : budget + extraNeeded,
       user_monthly_budget: budget,
       email, phone,
-    });
+    } as any);
     setSubmitted(true);
     toast({ title: t('calc.successTitle', 'Plan submitted!') });
   };
@@ -306,6 +311,17 @@ const Calculator = () => {
                   <Check className="mx-auto text-green mb-2" size={40} />
                   <p className="font-heading font-semibold text-lg text-foreground">{t('calc.planReady', 'Your plan is ready!')}</p>
                   <p className="text-sm text-muted-foreground font-body mb-4">{t('calc.planSent', "We'll send it to you.")}</p>
+                  {relevantGuide && (
+                    <p className="text-sm font-body mb-5">
+                      In the meantime &mdash;{' '}
+                      <a
+                        href={`/${currentLang}/learn/${relevantGuide.slug}`}
+                        className="text-saffron underline underline-offset-2 hover:opacity-80 transition-opacity font-semibold"
+                      >
+                        {relevantGuide.title_en} &rarr;
+                      </a>
+                    </p>
+                  )}
                   <a
                     href={`${WHATSAPP_URL}?text=Hi, I'd like to discuss my child's education plan`}
                     target="_blank"

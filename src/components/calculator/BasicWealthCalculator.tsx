@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency, calculateSIPCorpus } from '@/utils/sipCalculator';
+import { useRelevantGuide } from '@/hooks/useRelevantGuide';
 import { WHATSAPP_URL } from '@/config/constants';
 import HomeCalculator from './HomeCalculator';
 import RetirementCalculator from './RetirementCalculator';
@@ -22,7 +23,10 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
   const [monthly, setMonthly] = useState(2500);
   const [years, setYears] = useState(15);
   const [stepUp, setStepUp] = useState(false);
+  const relevantGuide = useRelevantGuide('wealth');
+
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
@@ -58,15 +62,19 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
   };
 
   const handleSubmit = async () => {
-    if (!phone && !name) return;
+    if (!phone && !email) return;
     try {
       await supabase.from('calculator_leads').insert({
-        child_age: null,
+        calculator_type: 'wealth',
+        lead_name: name,
         target_institution: 'Wealth Building',
+        investment_years: years,
+        step_up: stepUp,
         monthly_sip_needed: monthly,
         user_monthly_budget: monthly,
+        email,
         phone,
-      });
+      } as any);
     } catch {}
 
     setSubmitted(true);
@@ -178,6 +186,7 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
             {!submitted ? (
               <div className="space-y-3">
                 <Input placeholder="Your name (e.g. Rahul)" value={name} onChange={e => setName(e.target.value)} />
+                <Input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} />
                 <Input type="tel" placeholder="WhatsApp (e.g. 98XXXXXXXX)" value={phone} onChange={e => setPhone(e.target.value)} />
                 <p className="text-xs text-muted-foreground font-body">
                   We'll send you: the right mutual funds to invest in, a month-by-month SIP plan,
@@ -198,9 +207,17 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
                 <Check className="mx-auto text-green mb-2" size={40} />
                 <p className="font-heading font-semibold text-lg text-foreground">Your wealth plan is on its way!</p>
                 <p className="text-sm text-muted-foreground font-body mb-2">We'll call you within 24 hours.</p>
-                <p className="text-sm font-body mb-5">
-                  In the meantime — <a href="/en/learn" className="text-saffron underline underline-offset-2 hover:opacity-80 transition-opacity">read how to pick your first mutual fund →</a>
-                </p>
+                {relevantGuide && (
+                  <p className="text-sm font-body mb-5">
+                    In the meantime &mdash;{' '}
+                    <a
+                      href={`/en/learn/${relevantGuide.slug}`}
+                      className="text-saffron underline underline-offset-2 hover:opacity-80 transition-opacity font-semibold"
+                    >
+                      {relevantGuide.title_en} &rarr;
+                    </a>
+                  </p>
+                )}
                 <a href={`${WHATSAPP_URL}?text=${waText}`} target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-heading font-semibold"
                   style={{ backgroundColor: '#25D366' }}>

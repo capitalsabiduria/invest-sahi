@@ -7,6 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency, calculateSIPCorpus } from '@/utils/sipCalculator';
+import { useRelevantGuide } from '@/hooks/useRelevantGuide';
 import { WHATSAPP_URL } from '@/config/constants';
 
 const CITIES = ['Bhubaneswar', 'Cuttack', 'Rourkela', 'Sambalpur', 'Berhampur', 'Other'];
@@ -26,6 +27,9 @@ interface HomeCalculatorProps {
 
 const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
   const { toast } = useToast();
+  const relevantGuide = useRelevantGuide('home');
+
+  const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
   const [propertyType, setPropertyType] = useState('');
   const [years, setYears] = useState(5);
@@ -56,16 +60,23 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
   };
 
   const handleSubmit = async () => {
-    if (!phone && !name) return;
+    if (!phone && !email) return;
     const propertyLabel = PROPERTY_TYPES.find(p => p.id === propertyType)?.label || propertyType;
     try {
       await supabase.from('calculator_leads').insert({
-        child_age: null,
+        calculator_type: 'home',
+        lead_name: name,
         target_institution: `Home: ${propertyLabel} in ${city || 'Odisha'}`,
+        property_type: propertyType,
+        property_city: city,
+        property_budget: propertyBudget,
+        existing_savings: existingSavings,
+        timeline_years: years,
         monthly_sip_needed: calc.sipNeeded,
         user_monthly_budget: calc.sipNeeded,
+        email,
         phone,
-      });
+      } as any);
     } catch {}
 
     setSubmitted(true);
@@ -185,6 +196,7 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
             {!submitted ? (
               <div className="space-y-3">
                 <Input placeholder="Your name (e.g. Priya)" value={name} onChange={e => setName(e.target.value)} />
+                <Input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} />
                 <Input type="tel" placeholder="WhatsApp (e.g. 98XXXXXXXX)" value={phone} onChange={e => setPhone(e.target.value)} />
                 <p className="text-xs text-muted-foreground font-body">
                   We'll send you: SIP plan to reach your down payment, home loan eligibility estimate, and the best time to buy based on your savings rate.
@@ -204,12 +216,17 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
                 <Check className="mx-auto text-green mb-2" size={40} />
                 <p className="font-heading font-semibold text-lg text-foreground">Your home buying plan is ready!</p>
                 <p className="text-sm text-muted-foreground font-body mb-2">We'll call you within 24 hours to walk through it together.</p>
-                <p className="text-sm font-body mb-5">
-                  In the meantime —{' '}
-                  <a href="/en/learn" className="text-saffron underline underline-offset-2 hover:opacity-80 transition-opacity">
-                    read why SIP beats personal loan for down payments →
-                  </a>
-                </p>
+                {relevantGuide && (
+                  <p className="text-sm font-body mb-5">
+                    In the meantime &mdash;{' '}
+                    <a
+                      href={`/en/learn/${relevantGuide.slug}`}
+                      className="text-saffron underline underline-offset-2 hover:opacity-80 transition-opacity font-semibold"
+                    >
+                      {relevantGuide.title_en} &rarr;
+                    </a>
+                  </p>
+                )}
                 <a href={`${WHATSAPP_URL}?text=${waText}`} target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-heading font-semibold"
                   style={{ backgroundColor: '#25D366' }}>
