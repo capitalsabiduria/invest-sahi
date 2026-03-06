@@ -102,7 +102,7 @@ const ServiceCard = ({ svc, lang, expandSlug }: { svc: ServiceItem; lang: string
                 <Link
                   to={`/${lang}/book`}
                   onClick={(e) => e.stopPropagation()}
-                  className="flex-1 text-center bg-saffron text-white text-xs font-semibold px-3 py-2 rounded-full hover:opacity-90 transition-opacity"
+                  className="flex-1 text-center bg-saffron text-white text-xs font-semibold px-3 py-3 rounded-full hover:opacity-90 transition-opacity"
                 >
                   {t('svc.bookCta', 'Schedule a Free Consultation')} →
                 </Link>
