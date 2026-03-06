@@ -94,7 +94,7 @@
       "goal2": "ଆପଣଙ୍କ ଅନୁପସ୍ଥିତିରେ ପରିବାରକୁ ସୁରକ୍ଷା",
       "goal3": "ଆପଣଙ୍କ ଝିଅ ପାଇଁ Sukanya Samriddhi",
       "goal4": "ପରିବାରର Emergency Fund ଗଢ଼ନ୍ତୁ",
-      "cta": "ପରିବାର ସେବା ଦେଖନ୍ତୁ →"
+      "cta": "ପରିବାର ସେବା ଦେଖନ୍ତୁ"
     },
     "card2": {
       "title": "ଆପଣଙ୍କ ବ୍ୟବସାୟ ପାଇଁ",
@@ -606,10 +606,10 @@
     "error": "କିଛି ଭୁଲ ହୋଇଛି। ଦୟାକରି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"
   },
   "footer": {
-    "tagline": "ଓଡ଼ିଶାର ଦ୍ୱିଭାଷିକ ଆର୍ଥିକ ପରାମର୍ଶ ମଞ୍ଚ",
+    "tagline": "ଓଡ଼ିଶାର ନିଜସ୍ୱ ଆର୍ଥିକ ସେବା Platform",
     "whatsapp": "ଆମ ସହ Chat କରନ୍ତୁ",
     "ourServices": "ଆମ ସେବା",
-    "learnInOdia": "ଓଡ଼ିଆରେ ଶିଖନ୍ତୁ",
+    "learnInOdia": "Learn in Odia",
     "aboutTitle": "ଆମ ବିଷୟରେ",
     "services": {
       "header": "ଆମ ସେବା",
@@ -625,14 +625,18 @@
       "header": "ଓଡ଼ିଆରେ ଶିଖନ୍ତୁ",
       "sip": "SIP କ'ଣ? (ଓଡ଼ିଆ)",
       "insurance": "ବୀମା କ'ଣ? (ଓଡ଼ିଆ)",
-      "stories": "ଅର୍ଥ କଥା",
-      "glossary": "ଆର୍ଥିକ ଶବ୍ଦ ଭଣ୍ଡାର",
-      "guides": "ଗାଇଡ ଓ ଉପାୟ",
+      "stories": "ଅର୍ଥ କଥା Stories",
+      "glossary": "ଆର୍ଥିକ Glossary",
+      "guides": "Guides ଏବଂ How-To",
       "education": "ଶିକ୍ଷା ଖର୍ଚ୍ଚ ଗାଇଡ",
       "districts": "ଜିଲ୍ଲା ଗାଇଡ",
       "calculators": "ଶିକ୍ଷା ଖର୍ଚ୍ଚ Calculator",
       "whatsapp": "WhatsApp ଆର୍ଥିକ ଟିପ୍ସ",
-      "videos": "ଭିଡ଼ିଓ ବ୍ୟାଖ୍ୟା"
+      "videos": "ଭିଡ଼ିଓ ବ୍ୟାଖ୍ୟା",
+      "eduCalc": "ଶିକ୍ଷା ଖର୍ଚ୍ଚ Calculator",
+      "homeCalc": "ଘର କିଣିବା Calculator",
+      "retirementCalc": "Retirement Calculator",
+      "wealthCalc": "Wealth Builder Calculator"
     },
     "about": {
       "header": "ଆମ ବିଷୟରେ",
@@ -649,7 +653,10 @@
     },
     "rights": "ସମସ୍ତ ଅଧିକାର ସଂରକ୍ଷିତ।",
     "copyright": "© 2026 InvestSahi | AMFI ARN: XXXXXX | IRDAI Reg: XXXXXX",
-    "disclaimer": "Mutual Fund ବିନିଯୋଗ ବଜାର ବିପଦ ଅଧୀନ। ସମସ୍ତ ଯୋଜନା ସଂପର୍କୀୟ ଦଲିଲ ଧ୍ୟାନ ଦେଇ ପଢ଼ନ୍ତୁ। InvestSahi ଏକ Bank ନୁହେଁ। ଋଣ ଯୋଗ୍ୟତା ଉପରେ ନିର୍ଭର।"
+    "disclaimer": "Mutual Fund ବିନିଯୋଗ ବଜାର ବିପଦ ଅଧୀନ। ସମସ୍ତ ଯୋଜନା ସଂପର୍କୀୟ ଦଲିଲ ଧ୍ୟାନ ଦେଇ ପଢ଼ନ୍ତୁ। InvestSahi ଏକ Bank ନୁହେଁ। ଋଣ ଯୋଗ୍ୟତା ଉପରେ ନିର୍ଭର।",
+    "learnInOdia.en": "Learn in Odia",
+    "learnInOdia.or": "ଶିଖନ୍ତୁ",
+    "sebi": "SEBI ପଞ୍ଜୀକୃତ Investment Advisor"
   },
   "book": {
     "error": "କିଛି ଭୁଲ ହୋଇଛି। ଦୟାକରି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।",

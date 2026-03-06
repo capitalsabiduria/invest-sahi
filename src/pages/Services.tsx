@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import SEO from '@/components/SEO';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -147,6 +147,17 @@ const Services = () => {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = lang || 'en';
   const [filter, setFilter] = useState<Filter>('all');
+  const location = useLocation();
+  useEffect(() => {
+    if (location.hash) {
+      const el = document.getElementById(location.hash.replace('#', ''));
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    }
+  }, [location.hash]);
 
   const filters: { key: Filter; label: string }[] = [
     { key: 'all', label: t('services.filter.all', 'All') },
