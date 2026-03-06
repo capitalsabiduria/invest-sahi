@@ -72,15 +72,13 @@ const Navbar = () => {
       >
         <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo */}
-          {!isHomePage && (
-            <Link to={`/${currentLang}`}>
-              <img
-                src="/investsahi-logo.png"
-                alt="InvestSahi"
-                className="h-14 w-auto"
-              />
-            </Link>
-          )}
+          <Link to={`/${currentLang}`}>
+            <img
+              src="/investsahi-logo.png"
+              alt="InvestSahi"
+              className="h-14 w-auto"
+            />
+          </Link>
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8">
