@@ -941,6 +941,12 @@
       "chatNow": "Chat Now →"
     }
   },
+  "mobilebar": {
+    "book": "Book a Free Call",
+    "whatsapp": "WhatsApp Us",
+    "waText": "Hi, I'd like to know more about InvestSahi",
+    "odia": "ଓଡ଼ିଆରେ ପଢ଼ନ୍ତୁ"
+  },
   "contact": {
     "title": "Get in Touch",
     "subtitle": "We're based in Bhubaneswar. Come visit, call, or WhatsApp us.",
