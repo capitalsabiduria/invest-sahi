@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams, Link, useLocation } from 'react-router-dom';
+import { useParams, Link, useLocation, useSearchParams } from 'react-router-dom';
 import SEO from '@/components/SEO';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -49,13 +49,26 @@ const BUSINESS_SERVICES: ServiceItem[] = [
   { nameKey: 'svc.biz.personal.name', descKey: 'svc.biz.personal.desc', whoKey: 'svc.biz.personal.who', minEntry: 'Start from ₹50,000', benefitKey: 'svc.biz.personal.benefit', iconName: 'Wallet', iconColor: 'text-blue', iconBg: 'bg-blue-light', guideSlug: 'personal-loans' },
 ];
 
-const ServiceCard = ({ svc, lang }: { svc: ServiceItem; lang: string; }) => {
+const ServiceCard = ({ svc, lang, expandSlug }: { svc: ServiceItem; lang: string; expandSlug?: string | null; }) => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const Icon = ICON_MAP[svc.iconName] || TrendingUp;
 
+  useEffect(() => {
+    if (expandSlug && expandSlug === svc.guideSlug) {
+      setExpanded(true);
+      setTimeout(() => {
+        const el = document.getElementById(`card-${svc.guideSlug}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 300);
+    }
+  }, [expandSlug, svc.guideSlug]);
+
   return (
     <div
+      id={`card-${svc.guideSlug}`}
       className={`bg-card rounded-xl border border-border p-5 cursor-pointer transition-all ${expanded ? 'shadow-md border-l-4 border-l-saffron' : 'hover:shadow-sm'}`}
       onClick={() => setExpanded(!expanded)}
     >
@@ -121,8 +134,8 @@ const ServiceCard = ({ svc, lang }: { svc: ServiceItem; lang: string; }) => {
 
 type Filter = 'all' | 'family' | 'future' | 'business';
 
-const ServiceCategory = ({ title, services, accent, IconComp, lang }: {
-  title: string; services: ServiceItem[]; accent: string; IconComp: React.ElementType; lang: string;
+const ServiceCategory = ({ title, services, accent, IconComp, lang, expandSlug }: {
+  title: string; services: ServiceItem[]; accent: string; IconComp: React.ElementType; lang: string; expandSlug?: string | null;
 }) => {
   const { t } = useTranslation();
   return (
@@ -134,7 +147,7 @@ const ServiceCategory = ({ title, services, accent, IconComp, lang }: {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {services.map((svc, i) => (
-            <ServiceCard key={i} svc={svc} lang={lang} />
+            <ServiceCard key={i} svc={svc} lang={lang} expandSlug={expandSlug} />
           ))}
         </div>
       </div>
@@ -148,6 +161,8 @@ const Services = () => {
   const currentLang = lang || 'en';
   const [filter, setFilter] = useState<Filter>('all');
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const expandSlug = searchParams.get('expand');
   useEffect(() => {
     if (location.hash) {
       const el = document.getElementById(location.hash.replace('#', ''));
@@ -202,16 +217,16 @@ const Services = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
         {(filter === 'all' || filter === 'family') && (
           <div id="family">
-            <ServiceCategory title="svc.family.title" services={FAMILY_SERVICES} accent="border-green" IconComp={Home} lang={currentLang} />
+            <ServiceCategory title="svc.family.title" services={FAMILY_SERVICES} accent="border-green" IconComp={Home} lang={currentLang} expandSlug={expandSlug} />
           </div>
         )}
         {(filter === 'all' || filter === 'future') && (
           <div id="retirement">
-            <ServiceCategory title="svc.future.title" services={FUTURE_SERVICES} accent="border-saffron" IconComp={Sun} lang={currentLang} />
+            <ServiceCategory title="svc.future.title" services={FUTURE_SERVICES} accent="border-saffron" IconComp={Sun} lang={currentLang} expandSlug={expandSlug} />
           </div>
         )}
         {(filter === 'all' || filter === 'business') && (
-          <ServiceCategory title="svc.business.title" services={BUSINESS_SERVICES} accent="border-blue" IconComp={Briefcase} lang={currentLang} />
+          <ServiceCategory title="svc.business.title" services={BUSINESS_SERVICES} accent="border-blue" IconComp={Briefcase} lang={currentLang} expandSlug={expandSlug} />
         )}
       </div>
 
