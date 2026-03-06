@@ -140,7 +140,7 @@ const Calculator = () => {
                 {t('goals.page.heading', 'Build Your Wealth Plan')}
               </h1>
               <p className="font-body text-white/80">
-                {t('goals.page.subheading', "Tell us your goal — we'll show you exactly how to get there.")}
+                {t('goals.page.subheading', "Tell us your goal — we'll send you the exact plan for free in 24 hours!.")}
               </p>
             </div>
           </section>
