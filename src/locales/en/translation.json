@@ -811,6 +811,10 @@
       "expertTitle": "Talk to a home loan expert",
       "expertDesc": "We help with SIP planning + home loan eligibility",
       "chatNow": "Chat Now →"
+    },
+    "educalc": {
+      "whatsappCta": "Prefer to chat? WhatsApp us →",
+      "whatsappText": "Hi, I'd like help planning my child's education fund"
     }
   },
   "retirement": {

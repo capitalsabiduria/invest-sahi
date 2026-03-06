@@ -2,7 +2,7 @@ import { useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check, MessageCircle } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import RevealSection from '@/components/RevealSection';
 import { INSTITUTIONS, INSTITUTION_COSTS } from '@/data/institutions';
 import { calculateProjectedCost, calculateRequiredSIP, calculateSIPCorpus, formatCurrency } from '@/utils/sipCalculator';
+import { WHATSAPP_URL } from '@/config/constants';
 
 const institutionPills = [
   { name: 'NIT Rourkela', cost: '₹6L', years: '4 yrs' },
@@ -193,15 +194,16 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
                 ? (lang === 'or' ? 'ନିଃଶୁଳ୍କ Call ବୁକ କରନ୍ତୁ — ଆସନ୍ତୁ ଅଫିସିଆଲ କରୁ' : "Book a free call — let's make it official")
                 : (lang === 'or' ? 'ନିଃଶୁଳ୍କ Call ବୁକ କରନ୍ତୁ — ଆମେ ଆପଣଙ୍କ ଯୋଜନା ତିଆରି କରିବୁ' : "Book a free call — we'll build your plan")}
             </Link>
-
-            {!showForm && !submitted && (
-              <button
-                onClick={() => setShowForm(true)}
-                className="text-sm text-saffron font-medium hover:underline"
-              >
-                {t('calc.getFullPlan', 'Get full education plan →')}
-              </button>
-            )}
+            <a
+              href={`${WHATSAPP_URL}?text=${encodeURIComponent(t('home.educalc.whatsappText', "Hi, I'd like help planning my child's education fund"))}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-1.5 text-sm font-heading font-semibold mt-2"
+              style={{ color: '#1B6B3A' }}
+            >
+              <MessageCircle size={14} />
+              {t('home.educalc.whatsappCta', 'Prefer to chat? WhatsApp us →')}
+            </a>
 
             {showForm && !submitted && (
               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-3 mt-2">
@@ -219,16 +221,6 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
                 <p className="text-sm font-body text-foreground">{t('calc.thankyou', 'Thank you! We will contact you soon.')}</p>
               </div>
             )}
-          </div>
-
-          {/* Bottom CTA */}
-          <div className="text-center">
-            <Link
-              to={`/${lang}/calculators`}
-              className="inline-block bg-[#1B6B3A] text-white font-heading font-semibold rounded-xl px-8 py-4 hover:opacity-90 transition-opacity w-full md:w-auto"
-            >
-              {t('edu.cta', "Calculate Your Child's Fund →")}
-            </Link>
           </div>
 
         </div>
