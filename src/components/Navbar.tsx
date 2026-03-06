@@ -11,6 +11,8 @@ const Navbar = () => {
   const { lang } = useParams<{ lang: string }>();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [showPulse, setShowPulse] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const currentLang = lang || 'en';
 
@@ -19,6 +21,31 @@ const Navbar = () => {
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    if (currentLang !== 'en') return;
+    if (sessionStorage.getItem('lang_pulse_shown') === 'true') return;
+    const pulseTimer = setTimeout(() => {
+      setShowPulse(true);
+      setShowTooltip(true);
+    }, 2000);
+    // Stop pulse and tooltip after 8 seconds
+    const stopTimer = setTimeout(() => {
+      setShowPulse(false);
+      setShowTooltip(false);
+      sessionStorage.setItem('lang_pulse_shown', 'true');
+    }, 10000);
+    return () => {
+      clearTimeout(pulseTimer);
+      clearTimeout(stopTimer);
+    };
+  }, [currentLang]);
+
+  const dismissPulse = () => {
+    setShowPulse(false);
+    setShowTooltip(false);
+    sessionStorage.setItem('lang_pulse_shown', 'true');
+  };
 
   const switchLang = (newLang: string) => {
     i18n.changeLanguage(newLang);
@@ -62,6 +89,16 @@ const Navbar = () => {
 
   return (
     <>
+      <style>{`
+        @keyframes pulseRing {
+          0% { transform: scale(1); opacity: 0.7; }
+          100% { transform: scale(1.8); opacity: 0; }
+        }
+        @keyframes fadeInDown {
+          from { opacity: 0; transform: translateY(-4px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
       <motion.nav
         className="sticky top-0 z-50 h-[72px] flex items-center px-4 md:px-8"
         style={{ backgroundColor: '#FAF6EF' }}
@@ -93,7 +130,56 @@ const Navbar = () => {
 
           {/* Right section */}
           <div className="hidden md:flex items-center gap-4">
-            <LanguagePill />
+            <div className="relative hidden lg:flex items-center">
+              {/* Pulse rings — only render when showPulse is true */}
+              {showPulse && (
+                <>
+                  <span
+                    className="absolute inset-0 rounded-full pointer-events-none"
+                    style={{
+                      border: '2px solid #E8820C',
+                      animation: 'pulseRing 1.8s ease-out infinite',
+                      opacity: 0,
+                    }}
+                  />
+                  <span
+                    className="absolute inset-0 rounded-full pointer-events-none"
+                    style={{
+                      border: '2px solid #E8820C',
+                      animation: 'pulseRing 1.8s ease-out 0.6s infinite',
+                      opacity: 0,
+                    }}
+                  />
+                </>
+              )}
+              {/* Existing language pill — styling unchanged */}
+              <LanguagePill />
+              {/* Tooltip — only render when showTooltip is true */}
+              {showTooltip && (
+                <div
+                  className="absolute top-full mt-2 right-0 z-50 bg-[#2C1810] text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-lg flex items-center gap-2"
+                  style={{ animation: 'fadeInDown 0.3s ease both' }}
+                >
+                  <span>Also available in ଓଡ଼ିଆ</span>
+                  <button
+                    onClick={dismissPulse}
+                    className="text-white/50 hover:text-white ml-1 text-sm leading-none"
+                    aria-label="Dismiss"
+                  >
+                    ✕
+                  </button>
+                  {/* Tooltip arrow pointing up */}
+                  <span
+                    className="absolute bottom-full right-4"
+                    style={{
+                      borderLeft: '5px solid transparent',
+                      borderRight: '5px solid transparent',
+                      borderBottom: '5px solid #2C1810',
+                    }}
+                  />
+                </div>
+              )}
+            </div>
             <Link
               to={`/${currentLang}/book`}
               className="bg-saffron text-white font-heading font-semibold text-sm px-5 py-2 rounded-lg hover:bg-saffron/90 transition-colors"
