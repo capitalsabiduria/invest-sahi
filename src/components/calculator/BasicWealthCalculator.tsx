@@ -1,4 +1,6 @@
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MessageCircle, Check, TrendingUp } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
@@ -19,11 +21,14 @@ interface BasicWealthCalculatorProps {
 }
 
 const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
+  const { t } = useTranslation();
+  const { lang } = useParams<{ lang: string }>();
+  const currentLang = lang || 'en';
   const { toast } = useToast();
   const [monthly, setMonthly] = useState(2500);
   const [years, setYears] = useState(15);
   const [stepUp, setStepUp] = useState(false);
-  const relevantGuide = useRelevantGuide('wealth');
+  const relevantGuide = useRelevantGuide('wealth', currentLang);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -72,6 +77,7 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
         step_up: stepUp,
         monthly_sip_needed: monthly,
         user_monthly_budget: monthly,
+        whatsapp_message: decodeURIComponent(waText),
         email,
         phone,
       } as any);
@@ -95,11 +101,11 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
           {/* Step 1: Monthly SIP */}
           <div className="bg-card rounded-xl p-6 shadow-sm">
             <h2 className="font-heading font-semibold text-xl text-foreground mb-4">
-              Step 1: How much can you invest monthly?
+              {t('wealth.step1.title', 'Step 1: How much can you invest monthly?')}
             </h2>
             <div className="flex justify-between mb-2">
-              <span className="text-sm font-body text-muted-foreground">Monthly SIP</span>
-              <span className="font-heading font-semibold text-foreground">{formatCurrency(monthly)}/mo</span>
+              <span className="text-sm font-body text-muted-foreground">{t('wealth.step1.label', 'Monthly SIP')}</span>
+              <span className="font-heading font-semibold text-foreground">{t('wealth.step1.value', '{{amount}}/mo', { amount: formatCurrency(monthly) })}</span>
             </div>
             <Slider value={[monthly]} onValueChange={([v]) => setMonthly(v)} min={500} max={100000} step={500} />
             <div className="flex justify-between text-xs text-muted-foreground mt-1">
@@ -107,13 +113,14 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
             </div>
             <div className="bg-muted rounded-lg px-4 py-3 mt-3">
               <p className="text-sm font-body text-muted-foreground">
-                {formatCurrency(monthly)} is less than{' '}
-                {monthly <= 500 ? 'a plate of Dalma at a restaurant' :
-                 monthly <= 1000 ? 'a monthly mobile recharge' :
-                 monthly <= 2500 ? 'a movie outing for two' :
-                 monthly <= 5000 ? 'one month of petrol' :
-                 'a short family trip'}.
-                {' '}Money that would otherwise vanish.
+                {t('wealth.step1.hint', '{{amount}} is less than {{comparison}}. Money that would otherwise vanish.', {
+                  amount: formatCurrency(monthly),
+                  comparison: monthly <= 500 ? t('wealth.step1.comp1', 'a plate of Dalma at a restaurant') :
+                              monthly <= 1000 ? t('wealth.step1.comp2', 'a monthly mobile recharge') :
+                              monthly <= 2500 ? t('wealth.step1.comp3', 'a movie outing for two') :
+                              monthly <= 5000 ? t('wealth.step1.comp4', 'one month of petrol') :
+                              t('wealth.step1.comp5', 'a short family trip')
+                })}
               </p>
             </div>
           </div>
@@ -121,11 +128,11 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
           {/* Step 2: Investment Period */}
           <div className="bg-card rounded-xl p-6 shadow-sm">
             <h2 className="font-heading font-semibold text-xl text-foreground mb-4">
-              Step 2: For how many years?
+              {t('wealth.step2.title', 'Step 2: For how many years?')}
             </h2>
             <div className="flex justify-between mb-2">
-              <span className="text-sm font-body text-muted-foreground">Investment period</span>
-              <span className="font-heading font-semibold text-foreground">{years} years</span>
+              <span className="text-sm font-body text-muted-foreground">{t('wealth.step2.label', 'Investment period')}</span>
+              <span className="font-heading font-semibold text-foreground">{t('wealth.step2.value', '{{years}} years', { years })}</span>
             </div>
             <Slider value={[years]} onValueChange={([v]) => setYears(v)} min={1} max={30} step={1} />
             <div className="flex justify-between text-xs text-muted-foreground mt-1">
@@ -136,13 +143,13 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
           {/* Step 3: Step-up toggle */}
           <div className="bg-card rounded-xl p-6 shadow-sm">
             <h2 className="font-heading font-semibold text-xl text-foreground mb-4">
-              Step 3: Will you increase your SIP each year?
+              {t('wealth.step3.title', 'Step 3: Will you increase your SIP each year?')}
             </h2>
             <div className="flex items-center justify-between bg-muted rounded-lg px-4 py-3">
               <div>
-                <p className="text-sm font-body text-foreground">Increase by 10% each year</p>
+                <p className="text-sm font-body text-foreground">{t('wealth.step3.stepup', 'Increase by 10% each year')}</p>
                 <p className="text-xs text-muted-foreground font-body mt-0.5">
-                  As your salary grows, your SIP grows too
+                  {t('wealth.step3.stepupDesc', 'As your salary grows, your SIP grows too')}
                 </p>
               </div>
               <Switch checked={stepUp} onCheckedChange={setStepUp} />
@@ -156,62 +163,61 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
             initial={{ opacity: 0.8 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}
           >
             <p className="text-sm text-white/70 font-body mb-2">
-              {formatCurrency(monthly)}/mo for {years} years{stepUp ? ' with 10% annual step-up' : ''} at 12% avg return
+              {t('wealth.result.summary', '{{amount}}/mo for {{years}} years{{stepup}} at 12% avg return', { amount: formatCurrency(monthly), years, stepup: stepUp ? t('wealth.result.stepup', ' with 10% annual step-up') : '' })}
             </p>
             <p className="font-heading font-bold text-5xl mb-6">
               {formatCorpus(calc.corpus)}
             </p>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-white/60 font-body">Total invested</p>
+                <p className="text-xs text-white/60 font-body">{t('wealth.result.invested', 'Total invested')}</p>
                 <p className="font-heading font-semibold text-xl">{formatCorpus(calc.totalInvested)}</p>
               </div>
               <div>
-                <p className="text-xs text-white/60 font-body">Wealth gained</p>
+                <p className="text-xs text-white/60 font-body">{t('wealth.result.gained', 'Wealth gained')}</p>
                 <p className="font-heading font-semibold text-xl text-saffron">
                   {formatCorpus(calc.gained)}
                 </p>
               </div>
             </div>
             <p className="text-xs text-white/50 font-body mt-4">
-              Assumed 12% annual return. Not guaranteed. Past performance is not indicative of future results.
+              {t('wealth.result.disclaimer', 'Assumed 12% annual return. Not guaranteed. Past performance is not indicative of future results.')}
             </p>
           </motion.div>
 
           {/* Step 4: Get Plan */}
           <div className="bg-card rounded-xl p-6 shadow-sm">
             <h2 className="font-heading font-semibold text-xl text-foreground mb-4">
-              Step 4: Get Your Personalised Wealth Plan
+              {t('wealth.step4.title', 'Step 4: Get Your Personalised Wealth Plan')}
             </h2>
             {!submitted ? (
               <div className="space-y-3">
-                <Input placeholder="Your name (e.g. Rahul)" value={name} onChange={e => setName(e.target.value)} />
-                <Input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} />
-                <Input type="tel" placeholder="WhatsApp (e.g. 98XXXXXXXX)" value={phone} onChange={e => setPhone(e.target.value)} />
+                <Input placeholder={t('wealth.step4.name', 'Your name (e.g. Rahul)')} value={name} onChange={e => setName(e.target.value)} />
+                <Input type="email" placeholder={t('wealth.step4.email', 'Email address')} value={email} onChange={e => setEmail(e.target.value)} />
+                <Input type="tel" placeholder={t('wealth.step4.phone', 'WhatsApp (e.g. 98XXXXXXXX)')} value={phone} onChange={e => setPhone(e.target.value)} />
                 <p className="text-xs text-muted-foreground font-body">
-                  We'll send you: the right mutual funds to invest in, a month-by-month SIP plan,
-                  tax-saving strategies under 80C, and a review every 6 months.
+                  {t('wealth.step4.desc', "We'll send you: the right mutual funds to invest in, a month-by-month SIP plan, tax-saving strategies under 80C, and a review every 6 months.")}
                 </p>
                 <button onClick={handleSubmit}
                   className="w-full bg-saffron text-white font-heading font-semibold py-3 rounded-lg hover:opacity-90 transition-opacity">
-                  Send My {formatCurrency(monthly)}/mo Wealth Plan →
+                  {t('wealth.step4.submit', 'Send My {{amount}}/mo Wealth Plan →', { amount: formatCurrency(monthly) })}
                 </button>
                 <a href={`${WHATSAPP_URL}?text=${waText}`} target="_blank" rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full py-3 rounded-lg font-heading font-semibold text-white hover:opacity-90 transition-opacity"
                   style={{ backgroundColor: '#25D366' }}>
-                  <MessageCircle size={18} /> Discuss on WhatsApp instead
+                  <MessageCircle size={18} /> {t('wealth.whatsapp.discuss', 'Discuss on WhatsApp instead')}
                 </a>
               </div>
             ) : (
               <div className="text-center py-6">
                 <Check className="mx-auto text-green mb-2" size={40} />
-                <p className="font-heading font-semibold text-lg text-foreground">Your wealth plan is on its way!</p>
-                <p className="text-sm text-muted-foreground font-body mb-2">We'll call you within 24 hours.</p>
+                <p className="font-heading font-semibold text-lg text-foreground">{t('wealth.success.title', 'Your wealth plan is on its way!')}</p>
+                <p className="text-sm text-muted-foreground font-body mb-2">{t('wealth.success.sub', "We'll call you within 24 hours.")}</p>
                 {relevantGuide && (
                   <p className="text-sm font-body mb-5">
-                    In the meantime &mdash;{' '}
+                    {t('wealth.success.meanwhile', 'In the meantime —')}{' '}
                     <a
-                      href={`/en/learn/${relevantGuide.slug}`}
+                      href={`/${currentLang}/learn/${relevantGuide.slug}`}
                       className="text-saffron underline underline-offset-2 hover:opacity-80 transition-opacity font-semibold"
                     >
                       {relevantGuide.title_en} &rarr;
@@ -233,9 +239,9 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
       <div className="lg:col-span-2 space-y-6 lg:sticky lg:top-20 lg:self-start">
         <div className="bg-card rounded-xl p-5 shadow-sm">
           <h3 className="font-heading font-semibold text-lg text-foreground mb-3">
-            The power of starting early
+            {t('wealth.sidebar.earlyTitle', 'The power of starting early')}
           </h3>
-          <p className="text-xs text-muted-foreground mb-3">₹2,000/month invested at different ages (12% return, retire at 60):</p>
+          <p className="text-xs text-muted-foreground mb-3">{t('wealth.sidebar.earlyDesc', '₹2,000/month invested at different ages (12% return, retire at 60):')}</p>
           <div className="space-y-2 text-sm">
             {[
               { age: 25, corpus: '₹3.5 Cr' },
@@ -252,7 +258,7 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
         </div>
         <div className="bg-saffron-light rounded-xl p-5">
           <h3 className="font-heading font-semibold text-lg text-foreground mb-2">
-            ₹500 comparison
+            {t('wealth.sidebar.compareTitle', '₹500 comparison')}
           </h3>
           <div className="space-y-2 text-sm font-body text-muted-foreground">
             <p>₹500/mo in SIP for 20 years = <strong className="text-foreground">₹49 lakh</strong></p>
@@ -264,8 +270,8 @@ const WealthCalculator = ({ onBack }: { onBack: () => void }) => {
         </div>
         <div className="bg-green rounded-xl p-5 text-white text-center">
           <TrendingUp className="mx-auto mb-2" size={28} />
-          <h3 className="font-heading font-semibold text-lg mb-2">Not sure where to start?</h3>
-          <p className="text-sm text-white/80 font-body mb-3">Talk to us in English or Odia. No jargon, no pressure.</p>
+          <h3 className="font-heading font-semibold text-lg mb-2">{t('wealth.sidebar.chatTitle', 'Not sure where to start?')}</h3>
+          <p className="text-sm text-white/80 font-body mb-3">{t('wealth.sidebar.chatDesc', 'Talk to us in English or Odia. No jargon, no pressure.')}</p>
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"
             className="inline-block bg-white text-green font-heading font-semibold px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity">
             Chat Now →

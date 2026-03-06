@@ -48,6 +48,10 @@ const AdminCalculatorLeads = () => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
   const [typeFilter, setTypeFilter] = useState<FilterType>('all');
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+
+  const toggleExpanded = (id: string) =>
+    setExpandedIds(prev => { const s = new Set(prev); s.has(id) ? s.delete(id) : s.add(id); return s; });
 
   const fetchLeads = useCallback(async () => {
     let query = supabase
@@ -102,6 +106,7 @@ const AdminCalculatorLeads = () => {
               <TableHead>Name</TableHead>
               <TableHead>Contact</TableHead>
               <TableHead>Goal</TableHead>
+              <TableHead>Message</TableHead>
               <TableHead>Monthly SIP</TableHead>
               <TableHead>Date</TableHead>
             </TableRow>
@@ -116,13 +121,29 @@ const AdminCalculatorLeads = () => {
                   {l.email && <span className="block text-xs text-stone/50">{l.email}</span>}
                 </TableCell>
                 <TableCell className="max-w-[200px] truncate">{l.target_institution || '—'}</TableCell>
+                <TableCell className="max-w-[220px]">
+                  {!(l as any).whatsapp_message ? '—' : (
+                    <span
+                      onClick={() => toggleExpanded(l.id)}
+                      className={expandedIds.has(l.id)
+                        ? 'text-xs font-body text-foreground cursor-pointer whitespace-pre-wrap'
+                        : 'text-xs font-body text-muted-foreground cursor-pointer hover:text-foreground'}
+                    >
+                      {expandedIds.has(l.id)
+                        ? (l as any).whatsapp_message
+                        : ((l as any).whatsapp_message.length > 60
+                          ? (l as any).whatsapp_message.slice(0, 60) + '...'
+                          : (l as any).whatsapp_message)}
+                    </span>
+                  )}
+                </TableCell>
                 <TableCell className="font-heading font-semibold">{formatSIP(l.monthly_sip_needed)}</TableCell>
                 <TableCell className="text-sm text-stone/60 whitespace-nowrap">{formatDate(l.created_at)}</TableCell>
               </TableRow>
             ))}
             {leads.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-stone/40 py-12">
+                <TableCell colSpan={7} className="text-center text-stone/40 py-12">
                   No leads yet. Calculator submissions will appear here.
                 </TableCell>
               </TableRow>
@@ -150,6 +171,20 @@ const AdminCalculatorLeads = () => {
               {l.email && <span className="block text-xs text-stone/50">{l.email}</span>}
             </p>
             <p className="text-sm text-muted-foreground truncate">{l.target_institution || '—'}</p>
+            {(l as any).whatsapp_message && (
+              <span
+                onClick={() => toggleExpanded(l.id)}
+                className={expandedIds.has(l.id)
+                  ? 'text-xs font-body text-foreground cursor-pointer whitespace-pre-wrap block'
+                  : 'text-xs font-body text-muted-foreground cursor-pointer hover:text-foreground block'}
+              >
+                {expandedIds.has(l.id)
+                  ? (l as any).whatsapp_message
+                  : ((l as any).whatsapp_message.length > 60
+                    ? (l as any).whatsapp_message.slice(0, 60) + '...'
+                    : (l as any).whatsapp_message)}
+              </span>
+            )}
             <p className="font-heading font-semibold text-green">{formatSIP(l.monthly_sip_needed)}/mo</p>
           </div>
         ))}

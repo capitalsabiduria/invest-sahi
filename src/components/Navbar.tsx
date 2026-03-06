@@ -4,27 +4,6 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
-const SunWheel = () => (
-  <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* 8 spokes alternating long/short */}
-    {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
-      const isLong = i % 2 === 0;
-      const len = isLong ? 15 : 10;
-      const rad = (angle * Math.PI) / 180;
-      const x2 = 18 + len * Math.cos(rad);
-      const y2 = 18 + len * Math.sin(rad);
-      return (
-        <line
-          key={angle}
-          x1="18" y1="18" x2={x2} y2={y2}
-          stroke="#E8820C" strokeWidth={isLong ? 2.5 : 2} strokeLinecap="round"
-        />
-      );
-    })}
-    <circle cx="18" cy="18" r="5" fill="#E8820C" />
-    <circle cx="18" cy="18" r="16" stroke="#E8820C" strokeWidth="2" fill="none" />
-  </svg>
-);
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
@@ -91,16 +70,12 @@ const Navbar = () => {
       >
         <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo */}
-          <Link to={`/${currentLang}`} className="flex items-center gap-2">
-            <SunWheel />
-            <div className="flex flex-col">
-              <div className="flex items-baseline">
-                <span className="font-heading text-[22px] text-saffron">Invest</span>
-                <span className="font-heading text-[22px] font-semibold text-stone">Sahi</span>
-                <span className="font-heading text-[16px] text-green ml-0.5">.in</span>
-              </div>
-              <span className="font-odia text-[13px] text-blue -mt-1">ଇନ୍ଭେଷ୍ଟ ସହି</span>
-            </div>
+          <Link to={`/${currentLang}`}>
+            <img
+              src="/investsahi-logo.png"
+              alt="InvestSahi"
+              className="h-10 w-auto"
+            />
           </Link>
 
           {/* Desktop nav */}

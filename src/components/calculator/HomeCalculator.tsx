@@ -1,4 +1,6 @@
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, MessageCircle, Check } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
@@ -26,8 +28,11 @@ interface HomeCalculatorProps {
 }
 
 const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
+  const { t } = useTranslation();
+  const { lang } = useParams<{ lang: string }>();
+  const currentLang = lang || 'en';
   const { toast } = useToast();
-  const relevantGuide = useRelevantGuide('home');
+  const relevantGuide = useRelevantGuide('home', currentLang);
 
   const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
@@ -74,6 +79,7 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
         timeline_years: years,
         monthly_sip_needed: calc.sipNeeded,
         user_monthly_budget: calc.sipNeeded,
+        whatsapp_message: decodeURIComponent(waText),
         email,
         phone,
       } as any);
@@ -91,12 +97,12 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
     <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 grid grid-cols-1 lg:grid-cols-5 gap-10">
       <div className="lg:col-span-3 space-y-6">
         <button onClick={onBack} className="flex items-center gap-2 text-sm font-body text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft size={16} /> Change Goal
+          <ArrowLeft size={16} /> {t('home.back', 'Change Goal')}
         </button>
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="space-y-6">
           {/* Step 1: City */}
           <div className="bg-card rounded-xl p-6 shadow-sm">
-            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">Step 1: Where in Odisha?</h2>
+            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">{t('home.step1.title', 'Step 1: Where in Odisha?')}</h2>
             <div className="grid grid-cols-3 gap-2">
               {CITIES.map(c => (
                 <button key={c} onClick={() => setCity(c)}
@@ -111,7 +117,7 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
 
           {/* Step 2: Property Type */}
           <div className="bg-card rounded-xl p-6 shadow-sm">
-            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">Step 2: What are you buying?</h2>
+            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">{t('home.step2.title', 'Step 2: What are you buying?')}</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {PROPERTY_TYPES.map(p => (
                 <button key={p.id} onClick={() => setPropertyType(p.id)}
@@ -127,10 +133,10 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
 
           {/* Step 3: Timeline */}
           <div className="bg-card rounded-xl p-6 shadow-sm">
-            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">Step 3: When do you want to buy?</h2>
+            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">{t('home.step3.title', 'Step 3: When do you want to buy?')}</h2>
             <div className="flex justify-between mb-2">
-              <span className="text-sm font-body text-muted-foreground">Target timeline</span>
-              <span className="font-heading font-semibold text-foreground">{years} years from now</span>
+              <span className="text-sm font-body text-muted-foreground">{t('home.step3.label', 'Target timeline')}</span>
+              <span className="font-heading font-semibold text-foreground">{t('home.step3.value', '{{years}} years from now', { years })}</span>
             </div>
             <Slider value={[years]} onValueChange={([v]) => setYears(v)} min={2} max={10} step={1} />
             <div className="flex justify-between text-xs text-muted-foreground mt-1"><span>2 years</span><span>10 years</span></div>
@@ -138,25 +144,25 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
 
           {/* Step 4: Property Budget */}
           <div className="bg-card rounded-xl p-6 shadow-sm">
-            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">Step 4: Estimated property budget</h2>
+            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">{t('home.step4.title', 'Step 4: Estimated property budget')}</h2>
             <div className="flex justify-between mb-2">
-              <span className="text-sm font-body text-muted-foreground">Budget</span>
+              <span className="text-sm font-body text-muted-foreground">{t('home.step4.label', 'Budget')}</span>
               <span className="font-heading font-semibold text-foreground">{formatAmount(propertyBudget)}</span>
             </div>
             <Slider value={[propertyBudget]} onValueChange={([v]) => setPropertyBudget(v)} min={2000000} max={100000000} step={2500000} />
             <div className="flex justify-between text-xs text-muted-foreground mt-1"><span>₹20L</span><span>₹10Cr</span></div>
             <div className="bg-muted rounded-lg px-4 py-3 mt-3">
               <p className="text-sm font-body text-muted-foreground">
-                Down payment needed (20%): <strong className="text-foreground">{formatAmount(calc.downPayment)}</strong>
+                {t('home.step4.downpayment', 'Down payment needed (20%): {{amount}}', { amount: formatAmount(calc.downPayment) })}
               </p>
             </div>
           </div>
 
           {/* Step 5: Existing Savings */}
           <div className="bg-card rounded-xl p-6 shadow-sm">
-            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">Step 5: How much have you saved toward this already?</h2>
+            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">{t('home.step5.title', 'Step 5: How much have you saved toward this already?')}</h2>
             <div className="flex justify-between mb-2">
-              <span className="text-sm font-body text-muted-foreground">Current savings</span>
+              <span className="text-sm font-body text-muted-foreground">{t('home.step5.label', 'Current savings')}</span>
               <span className="font-heading font-semibold text-foreground">{formatAmount(existingSavings)}</span>
             </div>
             <Slider value={[existingSavings]} onValueChange={([v]) => setExistingSavings(v)} min={0} max={50000000} step={500000} />
@@ -170,15 +176,15 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
             initial={{ opacity: 0.8 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}
           >
             <p className="text-sm text-white/70 font-body mb-3">
-              Your {PROPERTY_TYPES.find(p => p.id === propertyType)?.label || 'home'}{city ? ` in ${city}` : ''} plan
+              {t('home.result.plan', 'Your {{type}} plan{{city}}', { type: PROPERTY_TYPES.find(p => p.id === propertyType)?.label || t('home.result.defaultType', 'home'), city: city ? ` in ${city}` : '' })}
             </p>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <p className="text-xs text-white/60">Down payment needed</p>
+                <p className="text-xs text-white/60">{t('home.result.downpayment', 'Down payment needed')}</p>
                 <p className="font-heading font-bold text-3xl">{formatAmount(calc.downPayment)}</p>
               </div>
               <div>
-                <p className="text-xs text-white/60">Monthly SIP to reach it</p>
+                <p className="text-xs text-white/60">{t('home.result.sip', 'Monthly SIP to reach it')}</p>
                 <p className="font-heading font-bold text-3xl text-saffron">{formatAmount(calc.sipNeeded)}/mo</p>
               </div>
             </div>
@@ -192,35 +198,35 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
 
           {/* Step 6: Get Plan */}
           <div className="bg-card rounded-xl p-6 shadow-sm">
-            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">Step 6: Get Your Home Buying Roadmap</h2>
+            <h2 className="font-heading font-semibold text-xl text-foreground mb-4">{t('home.step6.title', 'Step 6: Get Your Home Buying Roadmap')}</h2>
             {!submitted ? (
               <div className="space-y-3">
-                <Input placeholder="Your name (e.g. Priya)" value={name} onChange={e => setName(e.target.value)} />
-                <Input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} />
-                <Input type="tel" placeholder="WhatsApp (e.g. 98XXXXXXXX)" value={phone} onChange={e => setPhone(e.target.value)} />
+                <Input placeholder={t('home.step6.name', 'Your name (e.g. Priya)')} value={name} onChange={e => setName(e.target.value)} />
+                <Input type="email" placeholder={t('home.step6.email', 'Email address')} value={email} onChange={e => setEmail(e.target.value)} />
+                <Input type="tel" placeholder={t('home.step6.phone', 'WhatsApp (e.g. 98XXXXXXXX)')} value={phone} onChange={e => setPhone(e.target.value)} />
                 <p className="text-xs text-muted-foreground font-body">
-                  We'll send you: SIP plan to reach your down payment, home loan eligibility estimate, and the best time to buy based on your savings rate.
+                  {t('home.step6.desc', "We'll send you: SIP plan to reach your down payment, home loan eligibility estimate, and the best time to buy based on your savings rate.")}
                 </p>
                 <button onClick={handleSubmit}
                   className="w-full bg-saffron text-white font-heading font-semibold py-3 rounded-lg hover:opacity-90 transition-opacity">
-                  Send My {formatAmount(calc.sipNeeded)}/mo Home Plan →
+                  {t('home.step6.submit', 'Send My {{amount}}/mo Home Plan →', { amount: formatAmount(calc.sipNeeded) })}
                 </button>
                 <a href={`${WHATSAPP_URL}?text=${waText}`} target="_blank" rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full py-3 rounded-lg font-heading font-semibold text-white hover:opacity-90 transition-opacity"
                   style={{ backgroundColor: '#25D366' }}>
-                  <MessageCircle size={18} /> Discuss on WhatsApp instead
+                  <MessageCircle size={18} /> {t('home.whatsapp.discuss', 'Discuss on WhatsApp instead')}
                 </a>
               </div>
             ) : (
               <div className="text-center py-6">
                 <Check className="mx-auto text-green mb-2" size={40} />
-                <p className="font-heading font-semibold text-lg text-foreground">Your home buying plan is ready!</p>
-                <p className="text-sm text-muted-foreground font-body mb-2">We'll call you within 24 hours to walk through it together.</p>
+                <p className="font-heading font-semibold text-lg text-foreground">{t('home.success.title', 'Your home buying plan is ready!')}</p>
+                <p className="text-sm text-muted-foreground font-body mb-2">{t('home.success.sub', "We'll call you within 24 hours to walk through it together.")}</p>
                 {relevantGuide && (
                   <p className="text-sm font-body mb-5">
                     In the meantime &mdash;{' '}
                     <a
-                      href={`/en/learn/${relevantGuide.slug}`}
+                      href={`/${currentLang}/learn/${relevantGuide.slug}`}
                       className="text-saffron underline underline-offset-2 hover:opacity-80 transition-opacity font-semibold"
                     >
                       {relevantGuide.title_en} &rarr;
@@ -241,7 +247,7 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
       {/* Right sidebar */}
       <div className="lg:col-span-2 space-y-6 lg:sticky lg:top-20 lg:self-start">
         <div className="bg-card rounded-xl p-5 shadow-sm">
-          <h3 className="font-heading font-semibold text-lg text-foreground mb-3">Typical prices in Odisha (2025)</h3>
+          <h3 className="font-heading font-semibold text-lg text-foreground mb-3">{t('home.sidebar.pricesTitle', 'Typical prices in Odisha (2025)')}</h3>
           <div className="space-y-2 text-sm">
             {[
               { city: 'Bhubaneswar (Patia/Nayapalli)', price: '₹50L – ₹1.2Cr' },
@@ -258,15 +264,15 @@ const HomeCalculator = ({ onBack }: HomeCalculatorProps) => {
           </div>
         </div>
         <div className="bg-saffron-light rounded-xl p-5">
-          <h3 className="font-heading font-semibold text-lg text-foreground mb-2">The 20% rule</h3>
+          <h3 className="font-heading font-semibold text-lg text-foreground mb-2">{t('home.sidebar.ruleTitle', 'The 20% rule')}</h3>
           <p className="text-sm font-body text-muted-foreground">
-            Banks typically require 20% down payment. On a ₹60L flat, that's ₹12L upfront. Starting a SIP today means you arrive at the bank with cash — not scrambling for a personal loan.
+            {t('home.sidebar.ruleBody', "Banks typically require 20% down payment. On a ₹60L flat, that's ₹12L upfront. Starting a SIP today means you arrive at the bank with cash — not scrambling for a personal loan.")}
           </p>
         </div>
         <div className="bg-green rounded-xl p-5 text-white text-center">
           <MessageCircle className="mx-auto mb-2" size={28} />
-          <h3 className="font-heading font-semibold text-lg mb-2">Talk to a home loan expert</h3>
-          <p className="text-sm text-white/80 font-body mb-3">We help with SIP planning + home loan eligibility</p>
+          <h3 className="font-heading font-semibold text-lg mb-2">{t('home.sidebar.expertTitle', 'Talk to a home loan expert')}</h3>
+          <p className="text-sm text-white/80 font-body mb-3">{t('home.sidebar.expertDesc', 'We help with SIP planning + home loan eligibility')}</p>
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"
             className="inline-block bg-white text-green font-heading font-semibold px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity">
             Chat Now →
