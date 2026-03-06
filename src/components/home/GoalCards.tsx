@@ -88,7 +88,7 @@ const GoalCards = ({ lang }: { lang: string }) => {
   const ctaHrefs: Record<string, string> = {
     card1: `/${lang}/services`,
     card2: `/${lang}/services`,
-    card3: `/${lang}/calculator`,
+    card3: `/${lang}/services#retirement`,
   };
   return (
     <section className="bg-card py-20">
