@@ -17,7 +17,6 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "@/components/ScrollToTop";
-import OdiaLanguageToast from "@/components/OdiaLanguageToast";
 
 const queryClient = new QueryClient();
 
@@ -62,7 +61,6 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
-        <OdiaLanguageToast />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
