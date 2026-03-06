@@ -173,6 +173,7 @@ export const TrustCard = () => {
 const HeroSection = ({ lang }: { lang: string }) => {
   const { t } = useTranslation();
   const [active, setActive] = useState(0);
+  const touchStartX = React.useRef<number | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => setActive((p) => (p + 1) % heroStates.length), 9000);
