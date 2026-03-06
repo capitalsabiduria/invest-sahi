@@ -190,7 +190,7 @@ const Book = () => {
                         key={ir.value}
                         type="button"
                         onClick={() => setIncome(ir.value)}
-                        className={`rounded-lg border-2 px-3 py-2 text-sm font-body transition-all text-left ${
+                        className={`rounded-lg border-2 px-3 py-3 text-sm font-body transition-all text-left ${
                           income === ir.value ? 'border-saffron bg-saffron-light text-foreground' : 'border-border text-muted-foreground hover:border-muted-foreground'
                         }`}
                       >
