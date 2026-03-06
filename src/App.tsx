@@ -14,6 +14,7 @@ import Admin from "./pages/admin/Admin";
 import AdminAuthGate from './components/AdminAuthGate';
 import GuidePage from "./pages/GuidePage";
 import Contact from "./pages/Contact";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "@/components/ScrollToTop";
 
@@ -53,6 +54,7 @@ const App = () => (
             <Route path="/:lang/learn/:slug" element={<LangRoute><Learn /></LangRoute>} />
             <Route path="/:lang/book" element={<LangRoute><Book /></LangRoute>} />
             <Route path="/:lang/contact" element={<LangRoute><Contact /></LangRoute>} />
+            <Route path="/:lang/about" element={<LangRoute><About /></LangRoute>} />
             <Route path="/admin" element={<AdminAuthGate><Admin /></AdminAuthGate>} />
             <Route path="/en/:slug" element={<PageWrap><GuidePage /></PageWrap>} />
             <Route path="/or/:slug" element={<PageWrap><GuidePage /></PageWrap>} />

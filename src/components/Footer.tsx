@@ -29,8 +29,7 @@ const Footer = () => {
   ];
 
   const aboutLinks = [
-    { key: 'footer.about.about', to: `/${currentLang}/about` },
-    { key: 'footer.about.team', to: `/${currentLang}/about#team` },
+    { key: 'footer.about.story', to: `/${currentLang}/about` },
     { key: 'footer.about.contact', to: `/${currentLang}/contact` },
     { key: 'footer.about.privacy', to: `/${currentLang}/privacy` },
   ];
