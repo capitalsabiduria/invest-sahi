@@ -35,6 +35,7 @@ const PageWrap = ({ children }: { children: React.ReactNode }) => (
 const LangRoute = ({ children }: { children: React.ReactNode }) => (
   <LanguageSync>
     <PageWrap>{children}</PageWrap>
+    <OdiaLanguageToast />
   </LanguageSync>
 );
 
