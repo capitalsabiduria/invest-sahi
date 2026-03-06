@@ -10,6 +10,7 @@ import {
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
+import MobileBottomBar from '@/components/MobileBottomBar';
 import RevealSection from '@/components/RevealSection';
 import { WHATSAPP_URL } from '@/config/constants';
 
@@ -201,6 +202,7 @@ const Services = () => {
 
       <Footer />
       <WhatsAppFAB />
+      <MobileBottomBar />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { Check, CheckCircle2, MessageCircle, Phone, Building2, MapPin, Clock } f
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
+import MobileBottomBar from '@/components/MobileBottomBar';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -396,6 +397,7 @@ const Book = () => {
 
       <Footer />
       <WhatsAppFAB />
+      <MobileBottomBar />
     </div>
   );
 };

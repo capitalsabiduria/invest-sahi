@@ -6,6 +6,7 @@ import { BookOpen, ArrowLeft } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
+import MobileBottomBar from '@/components/MobileBottomBar';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
@@ -279,6 +280,7 @@ const LearnList = () => {
 
       <Footer />
       <WhatsAppFAB />
+      <MobileBottomBar />
     </div>
   );
 };
@@ -428,6 +430,7 @@ const LearnDetail = () => {
       </div>
       <Footer />
       <WhatsAppFAB />
+      <MobileBottomBar />
     </div>
   );
 };
