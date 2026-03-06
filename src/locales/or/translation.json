@@ -287,7 +287,11 @@
       "profession": "CRPF ଜୱାନ, ଗଞ୍ଜାମ",
       "preview": "ସୁଶାନ୍ତ ପ୍ରତି ମାସ ଘରକୁ ଟଙ୍କା ପଠାଉଥିଲେ। ଜୀବନ ବୀମା ଛିଲ ନାହିଁ।"
     },
-    "readStory": "କାହାଣୀ ପଢ଼ନ୍ତୁ →"
+    "readStory": "କାହାଣୀ ପଢ଼ନ୍ତୁ →",
+    "heading": {
+      "en": "Odisha's Money Stories",
+      "or": "ଓଡ଼ିଶାର ଅର୍ଥ କଥା"
+    }
   },
   "odia": {
     "headline": "Odisha's Homegrown Financial Platform",

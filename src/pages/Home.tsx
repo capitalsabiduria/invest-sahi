@@ -13,7 +13,6 @@ import OdiaPromise from '@/components/home/OdiaPromise';
 import ServicesGrid from '@/components/home/ServicesGrid';
 import TrustSignals from '@/components/home/TrustSignals';
 import { mutualFundLogos, insuranceLogos } from '@/constants/partners';
-import Newsletter from '@/components/home/Newsletter';
 
 const Home = () => {
   const { lang } = useParams<{ lang: string }>();
@@ -32,12 +31,11 @@ const Home = () => {
       />
       <Navbar />
       <LandingHero lang={currentLang} />
-      <HeroSection lang={currentLang} />
-      <GoalCards lang={currentLang} />
-      <EducationTeaser lang={currentLang} />
-      <StoriesSection lang={currentLang} />
       <OdiaPromise />
+      <HeroSection lang={currentLang} />
       <ServicesGrid />
+      <EducationTeaser lang={currentLang} />
+      <GoalCards lang={currentLang} />
 
       {/* Partner logos ticker — between services and trust section */}
       <section className="py-10 bg-[#F5EDD8] overflow-hidden">
@@ -85,7 +83,7 @@ const Home = () => {
       </section>
 
       <TrustSignals />
-      <Newsletter />
+      <StoriesSection lang={currentLang} />
       <Footer />
       <WhatsAppFAB />
       <MobileBottomBar />

@@ -287,7 +287,11 @@
       "profession": "CRPF Jawan, Ganjam",
       "preview": "Sushanta sent money home every month. He had no life insurance. This is the conversation his family wishes they'd had."
     },
-    "readStory": "Read story →"
+    "readStory": "Read story →",
+    "heading": {
+      "en": "Odisha's Money Stories",
+      "or": "ଓଡ଼ିଶାର ଅର୍ଥ କଥା"
+    }
   },
   "odia": {
     "headline": "Odisha's Homegrown Financial Platform",
