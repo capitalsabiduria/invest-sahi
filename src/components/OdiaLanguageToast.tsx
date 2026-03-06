@@ -7,34 +7,32 @@ const OdiaLanguageToast = () => {
   const navigate = useNavigate();
 
   const [visible, setVisible] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+
+  const dismiss = () => {
+    setVisible(false);
+    sessionStorage.setItem('odia_toast_dismissed', 'true');
+  };
 
   useEffect(() => {
     if (currentLang !== 'en') return;
     if (sessionStorage.getItem('odia_toast_dismissed') === 'true') return;
+    // Don't silently consume the session on mobile where the toast is hidden
+    if (!window.matchMedia('(min-width: 1024px)').matches) return;
     const timer = setTimeout(() => setVisible(true), 3000);
     return () => clearTimeout(timer);
   }, [currentLang]);
 
   useEffect(() => {
     if (!visible) return;
-    const timer = setTimeout(() => {
-      setDismissed(true);
-      sessionStorage.setItem('odia_toast_dismissed', 'true');
-    }, 8000);
+    const timer = setTimeout(dismiss, 8000);
     return () => clearTimeout(timer);
   }, [visible]);
 
-  if (!visible || dismissed || currentLang !== 'en') return null;
+  if (!visible || currentLang !== 'en') return null;
 
   const switchToOdia = () => {
-    sessionStorage.setItem('odia_toast_dismissed', 'true');
+    dismiss();
     navigate(location.pathname.replace(/^\/en(\/|$)/, '/or$1') + location.search);
-  };
-
-  const dismiss = () => {
-    setDismissed(true);
-    sessionStorage.setItem('odia_toast_dismissed', 'true');
   };
 
   return (
@@ -99,3 +97,4 @@ const OdiaLanguageToast = () => {
 };
 
 export default OdiaLanguageToast;
+
