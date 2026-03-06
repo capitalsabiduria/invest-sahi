@@ -76,7 +76,8 @@ const StoriesSection = ({ lang }: { lang: string }) => {
     <section className="bg-background py-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <RevealSection className="text-center mb-12">
-          <h2 className="font-odia text-3xl md:text-[32px] text-foreground mb-1">ଓଡ଼ିଶାର ଅର୍ଥ କଥା</h2>
+          <h2 className="font-heading font-bold text-3xl md:text-[32px] text-foreground mb-1">{t('stories.heading.en', "Odisha's Money Stories")}</h2>
+          <p className="font-body text-muted-foreground text-xl">{t('stories.heading.or', 'ଓଡ଼ିଶାର ଅର୍ଥ କଥା')}</p>
           <p className="font-body text-muted-foreground">{t('stories.subtitle', 'Real money stories from Odisha')}</p>
         </RevealSection>
         <div className="flex gap-6 overflow-x-auto md:overflow-visible pb-4 md:pb-0 snap-x snap-mandatory md:snap-none md:grid md:grid-cols-3">
