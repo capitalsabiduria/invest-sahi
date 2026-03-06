@@ -185,7 +185,7 @@ const About = () => {
 
       {/* SECTION 6 — CTA */}
       <section style={{ backgroundColor: '#1B6B3A' }}>
-        <div className="py-16 px-4 text-white text-center">
+        <div className="py-16 pb-20 md:pb-16 px-4 text-white text-center">
           <h2 className="font-heading font-bold text-3xl mb-3">
             {currentLang === 'or' ? 'ଆପଣଙ୍କ ଯାତ୍ରା ଆରମ୍ଭ କରିବାକୁ ପ୍ରସ୍ତୁତ?' : 'Ready to start your journey?'}
           </h2>

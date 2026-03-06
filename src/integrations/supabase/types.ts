@@ -61,34 +61,73 @@ export type Database = {
       }
       calculator_leads: {
         Row: {
+          calculator_type: string | null
           child_age: number | null
           created_at: string | null
+          current_age: number | null
           email: string | null
+          existing_savings: number | null
           id: string
+          investment_years: number | null
+          lead_name: string | null
+          monthly_expenses: number | null
           monthly_sip_needed: number | null
           phone: string | null
+          property_budget: number | null
+          property_city: string | null
+          property_type: string | null
+          retire_age: number | null
+          step_up: boolean | null
           target_institution: string | null
+          timeline_years: number | null
           user_monthly_budget: number | null
+          whatsapp_message: string | null
         }
         Insert: {
+          calculator_type?: string | null
           child_age?: number | null
           created_at?: string | null
+          current_age?: number | null
           email?: string | null
+          existing_savings?: number | null
           id?: string
+          investment_years?: number | null
+          lead_name?: string | null
+          monthly_expenses?: number | null
           monthly_sip_needed?: number | null
           phone?: string | null
+          property_budget?: number | null
+          property_city?: string | null
+          property_type?: string | null
+          retire_age?: number | null
+          step_up?: boolean | null
           target_institution?: string | null
+          timeline_years?: number | null
           user_monthly_budget?: number | null
+          whatsapp_message?: string | null
         }
         Update: {
+          calculator_type?: string | null
           child_age?: number | null
           created_at?: string | null
+          current_age?: number | null
           email?: string | null
+          existing_savings?: number | null
           id?: string
+          investment_years?: number | null
+          lead_name?: string | null
+          monthly_expenses?: number | null
           monthly_sip_needed?: number | null
           phone?: string | null
+          property_budget?: number | null
+          property_city?: string | null
+          property_type?: string | null
+          retire_age?: number | null
+          step_up?: boolean | null
           target_institution?: string | null
+          timeline_years?: number | null
           user_monthly_budget?: number | null
+          whatsapp_message?: string | null
         }
         Relationships: []
       }

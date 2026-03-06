@@ -226,7 +226,7 @@ const LearnList = () => {
             <button
               key={f.key}
               onClick={() => setFilter(f.key)}
-              className={`px-4 py-2 rounded-full text-sm font-medium font-body transition-colors ${
+              className={`px-4 py-3 rounded-full text-sm font-medium font-body transition-colors ${
                 filter === f.key ? 'bg-saffron text-white' : 'border border-border text-foreground hover:border-saffron'
               }`}
             >
@@ -253,9 +253,9 @@ const LearnList = () => {
             <BookOpen className="mx-auto text-muted-foreground mb-4" size={48} />
             <h3 className="font-heading font-semibold text-xl text-foreground mb-2">{t('learn.empty.headline', 'Stories coming soon')}</h3>
             <p className="font-body text-muted-foreground mb-6">{t('learn.empty.subline', 'Subscribe to be notified when new content is published')}</p>
-            <form onSubmit={handleSubscribe} className="flex gap-2 max-w-sm mx-auto">
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2 max-w-sm mx-auto">
               <Input type="email" required placeholder={t('learn.empty.email', 'Your email')} value={nlEmail} onChange={(e) => setNlEmail(e.target.value)} />
-              <button type="submit" className="bg-saffron text-white font-heading font-semibold px-6 py-2 rounded-lg whitespace-nowrap hover:opacity-90">
+              <button type="submit" className="w-full sm:w-auto bg-saffron text-white font-heading font-semibold px-6 py-2 rounded-lg whitespace-nowrap hover:opacity-90">
                 {t('learn.empty.subscribe', 'Notify me')}
               </button>
             </form>

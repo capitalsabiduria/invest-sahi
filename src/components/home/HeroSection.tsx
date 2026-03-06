@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -173,6 +173,7 @@ export const TrustCard = () => {
 const HeroSection = ({ lang }: { lang: string }) => {
   const { t } = useTranslation();
   const [active, setActive] = useState(0);
+  const touchStartX = React.useRef<number | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => setActive((p) => (p + 1) % heroStates.length), 9000);
@@ -187,7 +188,18 @@ const HeroSection = ({ lang }: { lang: string }) => {
   };
 
   return (
-    <section className="bg-card py-20">
+    <section
+      className="bg-card py-20"
+      onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+      onTouchEnd={(e) => {
+        if (touchStartX.current === null) return;
+        const diff = touchStartX.current - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+          setActive((p) => diff > 0 ? (p + 1) % heroStates.length : (p - 1 + heroStates.length) % heroStates.length);
+        }
+        touchStartX.current = null;
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-20 grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
         <div className="md:col-span-3 relative overflow-hidden">
           <HeroBgDecoration />
@@ -229,23 +241,28 @@ const HeroSection = ({ lang }: { lang: string }) => {
           </AnimatePresence>
           <div className="flex gap-3 mt-8 items-center">
             {heroStates.map((_, i) => (
-              <button
+              <div
                 key={i}
+                className="flex items-center justify-center h-11 w-8 cursor-pointer"
                 onClick={() => setActive(i)}
-                className="relative h-1.5 rounded-full overflow-hidden transition-all duration-300"
-                style={{ width: i === active ? '48px' : '12px', backgroundColor: i === active ? 'transparent' : '#D4C5B0' }}
+                role="button"
                 aria-label={`Slide ${i + 1}`}
               >
-                {i === active && (
-                  <motion.div
-                    key={active}
-                    className="absolute inset-0 bg-saffron rounded-full origin-left"
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ duration: 9, ease: 'linear' }}
-                  />
-                )}
-              </button>
+                <div
+                  className="relative h-1.5 rounded-full overflow-hidden transition-all duration-300"
+                  style={{ width: i === active ? '48px' : '12px', backgroundColor: i === active ? 'transparent' : '#D4C5B0' }}
+                >
+                  {i === active && (
+                    <motion.div
+                      key={active}
+                      className="absolute inset-0 bg-saffron rounded-full origin-left"
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ duration: 9, ease: 'linear' }}
+                    />
+                  )}
+                </div>
+              </div>
             ))}
           </div>
           </div>

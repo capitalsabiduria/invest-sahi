@@ -39,7 +39,7 @@ const Navbar = () => {
     <div className="flex rounded-full border border-saffron overflow-hidden">
       <button
         onClick={() => switchLang('en')}
-        className={`px-3 py-1 text-sm font-body font-medium transition-colors ${
+        className={`h-11 px-4 text-sm font-body font-medium transition-colors ${
           currentLang === 'en'
             ? 'bg-saffron text-white'
             : 'text-saffron hover:bg-saffron/10'
@@ -49,7 +49,7 @@ const Navbar = () => {
       </button>
       <button
         onClick={() => switchLang('or')}
-        className={`px-3 py-1 text-sm font-odia font-medium transition-colors ${
+        className={`h-11 px-4 text-sm font-odia font-medium transition-colors ${
           currentLang === 'or'
             ? 'bg-saffron text-white'
             : 'text-saffron hover:bg-saffron/10'
@@ -104,7 +104,7 @@ const Navbar = () => {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden text-stone"
+            className="md:hidden text-stone p-3"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? <X size={28} /> : <Menu size={28} />}
