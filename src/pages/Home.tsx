@@ -3,6 +3,7 @@ import SEO from '@/components/SEO';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
+import MobileBottomBar from '@/components/MobileBottomBar';
 import LandingHero from '@/components/home/LandingHero';
 import HeroSection from '@/components/home/HeroSection';
 import GoalCards from '@/components/home/GoalCards';
@@ -87,6 +88,7 @@ const Home = () => {
       <Newsletter />
       <Footer />
       <WhatsAppFAB />
+      <MobileBottomBar />
     </div>
   );
 };

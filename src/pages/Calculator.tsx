@@ -7,6 +7,7 @@ import { GraduationCap, Stethoscope, Briefcase, BookOpen, Check, MessageCircle, 
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
+import MobileBottomBar from '@/components/MobileBottomBar';
 import RevealSection from '@/components/RevealSection';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
@@ -402,6 +403,7 @@ const Calculator = () => {
 
       <Footer />
       <WhatsAppFAB />
+      <MobileBottomBar />
     </div>
   );
 };
