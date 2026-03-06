@@ -161,7 +161,7 @@ const LearnList = () => {
     if (tab && tabMap[tab]) {
       setFilter(tabMap[tab]);
     }
-  }, []);
+  }, [searchParams]);
   const [content, setContent] = useState<ContentItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [nlEmail, setNlEmail] = useState('');

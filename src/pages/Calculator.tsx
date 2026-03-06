@@ -35,7 +35,7 @@ const Calculator = () => {
     if (goal && ['home', 'education', 'retirement', 'wealth'].includes(goal)) {
       setSelectedGoal(goal);
     }
-  }, []);
+  }, [searchParams]);
   const { toast } = useToast();
 
   const relevantGuide = useRelevantGuide('education', currentLang);
