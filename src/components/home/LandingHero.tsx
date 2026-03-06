@@ -112,11 +112,11 @@ const LandingHero = ({ lang }: { lang: string }) => {
 
         {/* LEFT — brand story (3/5) */}
         <div className="md:col-span-3">
-          <div className="flex justify-center mb-6">
+          <div className="mb-6">
             <img
               src="/investsahi-logo.png"
               alt="InvestSahi"
-              className="h-20 w-auto"
+              className="h-16 w-auto"
             />
           </div>
           <span className="inline-block px-4 py-1.5 rounded-full bg-saffron text-white text-sm font-semibold font-body mb-6 tracking-wide">
