@@ -725,7 +725,7 @@
     "office": {
       "title": "Our Bhubaneswar Office",
       "address": "Bhubaneswar, Odisha",
-      "phone": "+91 98765 43210",
+      "phone": "+91 93373 70992",
       "hours": "Mon-Sat, 10 AM - 6 PM",
       "map": "Google Maps"
     }
@@ -940,5 +940,11 @@
       "chatDesc": "Talk to us in English or Odia. No jargon, no pressure.",
       "chatNow": "Chat Now →"
     }
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "subtitle": "We're based in Bhubaneswar. Come visit, call, or WhatsApp us.",
+    "office": "Our Office",
+    "hours": "Office Hours"
   }
 }

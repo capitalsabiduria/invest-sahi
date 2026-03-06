@@ -385,7 +385,10 @@ const Book = () => {
                 Rasulgarh, Bhubaneswar — 751010
               </p>
               <div className="flex items-center gap-2 text-sm text-muted-foreground font-body mb-2">
-                <Phone size={14} /> {t('book.office.phone', OFFICE_PHONE)}
+                <Phone size={14} />
+                <a href="tel:+919337370992" className="hover:text-foreground transition-colors">
+                  {t('book.office.phone', OFFICE_PHONE)}
+                </a>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground font-body mb-4">
                 <Clock size={14} /> {t('book.office.hours', 'Mon-Sat, 10 AM - 6 PM')}
