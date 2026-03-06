@@ -284,6 +284,30 @@ const HeroSection = ({ lang }: { lang: string }) => {
               </motion.div>
             </AnimatePresence>
           </motion.div>
+          <Link
+            to={`/${lang}/crore-plan`}
+            className="block mt-3 rounded-2xl p-4 transition-colors group"
+            style={{ backgroundColor: '#2C1810' }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#3d2415')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2C1810')}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-heading font-bold text-white text-base leading-tight mb-1">
+                  Can you reach ₹1 crore?
+                </p>
+                <p className="text-xs font-body" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                  Most families can. Find out how much you need to invest monthly.
+                </p>
+              </div>
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center ml-3 flex-shrink-0 group-hover:scale-110 transition-transform"
+                style={{ backgroundColor: '#E8820C' }}
+              >
+                <span className="text-white font-bold text-sm">→</span>
+              </div>
+            </div>
+          </Link>
         </div>
       </div>
     </section>

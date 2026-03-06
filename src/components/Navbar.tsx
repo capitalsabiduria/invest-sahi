@@ -181,6 +181,13 @@ const Navbar = () => {
               )}
             </div>
             <Link
+              to={`/${currentLang}/crore-plan`}
+              className="font-heading font-semibold text-sm px-3 py-2 rounded-lg transition-colors hover:bg-[#E8820C]/10"
+              style={{ color: '#E8820C' }}
+            >
+              ₹1Cr Plan
+            </Link>
+            <Link
               to={`/${currentLang}/book`}
               className="bg-saffron text-white font-heading font-semibold text-sm px-5 py-2 rounded-lg hover:bg-saffron/90 transition-colors"
             >
