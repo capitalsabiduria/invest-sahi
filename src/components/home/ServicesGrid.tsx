@@ -10,6 +10,8 @@ export const ICON_MAP: Record<string, React.ElementType> = {
   TrendingUp, Shield, Heart, Briefcase, HomeIcon, Car, Umbrella, Wallet, PiggyBank, Landmark, Star, Baby, BookOpen, GraduationCap,
 };
 
+const RETIREMENT_SLUGS = new Set(['nps', 'gold-investment', 'fixed-deposits', 'investment-insurance']);
+
 export const SERVICES = [
   { nameKey: 'services.s1.name', amountKey: 'services.s1.amount', descKey: 'services.s1.desc', iconName: 'TrendingUp', iconColor: 'text-saffron', iconBg: 'bg-saffron-light', slug: 'sip-mutual-funds' },
   { nameKey: 'services.s2.name', amountKey: 'services.s2.amount', descKey: 'services.s2.desc', iconName: 'PiggyBank', iconColor: 'text-green', iconBg: 'bg-green-light', slug: 'term-life-insurance' },
@@ -41,7 +43,7 @@ const ServicesGrid = () => {
             return (
               <RevealSection key={i} delay={i * 0.05}>
                 <Link
-                  to={`/${currentLang}/services#${svc.slug}`}
+                  to={RETIREMENT_SLUGS.has(svc.slug) ? `/${currentLang}/services#retirement` : `/${currentLang}/services`}
                   className="block group"
                 >
                   <div className="bg-card rounded-xl border border-border p-5 hover:border-l-4 hover:border-l-saffron hover:shadow-md transition-all h-full group-hover:shadow-md group-hover:border-saffron cursor-pointer">
