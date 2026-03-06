@@ -214,7 +214,7 @@ const Services = () => {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 pb-20 md:pb-12">
         {(filter === 'all' || filter === 'family') && (
           <div id="family">
             <ServiceCategory title="svc.family.title" services={FAMILY_SERVICES} accent="border-green" IconComp={Home} lang={currentLang} expandSlug={expandSlug} />

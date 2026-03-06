@@ -241,23 +241,28 @@ const HeroSection = ({ lang }: { lang: string }) => {
           </AnimatePresence>
           <div className="flex gap-3 mt-8 items-center">
             {heroStates.map((_, i) => (
-              <button
+              <div
                 key={i}
+                className="flex items-center justify-center h-11 w-8 cursor-pointer"
                 onClick={() => setActive(i)}
-                className="relative h-1.5 rounded-full overflow-hidden transition-all duration-300"
-                style={{ width: i === active ? '48px' : '12px', backgroundColor: i === active ? 'transparent' : '#D4C5B0' }}
+                role="button"
                 aria-label={`Slide ${i + 1}`}
               >
-                {i === active && (
-                  <motion.div
-                    key={active}
-                    className="absolute inset-0 bg-saffron rounded-full origin-left"
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ duration: 9, ease: 'linear' }}
-                  />
-                )}
-              </button>
+                <div
+                  className="relative h-1.5 rounded-full overflow-hidden transition-all duration-300"
+                  style={{ width: i === active ? '48px' : '12px', backgroundColor: i === active ? 'transparent' : '#D4C5B0' }}
+                >
+                  {i === active && (
+                    <motion.div
+                      key={active}
+                      className="absolute inset-0 bg-saffron rounded-full origin-left"
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ duration: 9, ease: 'linear' }}
+                    />
+                  )}
+                </div>
+              </div>
             ))}
           </div>
           </div>

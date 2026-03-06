@@ -131,7 +131,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 md:px-8 pb-6">
-          <p className="text-[10px] text-white/30 font-body leading-relaxed">
+          <p className="text-xs text-white/50 font-body leading-relaxed">
             {t('footer.disclaimer', 'Mutual fund investments are subject to market risks. Read all scheme related documents carefully before investing. Past performance is not indicative of future returns.')}
           </p>
         </div>
