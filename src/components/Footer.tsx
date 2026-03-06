@@ -9,10 +9,10 @@ const Footer = () => {
   const currentLang = lang || 'en';
 
   const serviceLinks = [
-    { key: 'footer.services.mutualFunds', to: `/${currentLang}/services` },
-    { key: 'footer.services.sip', to: `/${currentLang}/services` },
-    { key: 'footer.services.insurance', to: `/${currentLang}/services` },
-    { key: 'footer.services.childEducation', to: `/${currentLang}/services` },
+    { key: 'footer.services.mutualFunds', to: `/${currentLang}/services#family` },
+    { key: 'footer.services.sip', to: `/${currentLang}/services#family` },
+    { key: 'footer.services.insurance', to: `/${currentLang}/services#family` },
+    { key: 'footer.services.childEducation', to: `/${currentLang}/services#family` },
     { key: 'footer.services.retirement', to: `/${currentLang}/services#retirement` },
     { key: 'footer.services.tax', to: `/${currentLang}/services#retirement` },
     { key: 'footer.services.gold', to: `/${currentLang}/services#retirement` },
@@ -22,10 +22,10 @@ const Footer = () => {
     { key: 'footer.learn.stories', to: `/${currentLang}/learn?tab=stories` },
     { key: 'footer.learn.glossary', to: `/${currentLang}/learn?tab=glossary` },
     { key: 'footer.learn.guides', to: `/${currentLang}/learn?tab=guides` },
-    { key: 'footer.learn.eduCalc', to: `/${currentLang}/calculators?goal=education` },
-    { key: 'footer.learn.homeCalc', to: `/${currentLang}/calculators?goal=home` },
-    { key: 'footer.learn.retirementCalc', to: `/${currentLang}/calculators?goal=retirement` },
-    { key: 'footer.learn.wealthCalc', to: `/${currentLang}/calculators?goal=wealth` },
+    { key: 'footer.learn.eduCalc', to: `/${currentLang}/calculator?goal=education` },
+    { key: 'footer.learn.homeCalc', to: `/${currentLang}/calculator?goal=home` },
+    { key: 'footer.learn.retirementCalc', to: `/${currentLang}/calculator?goal=retirement` },
+    { key: 'footer.learn.wealthCalc', to: `/${currentLang}/calculator?goal=wealth` },
   ];
 
   const aboutLinks = [
@@ -36,7 +36,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="text-white" style={{ backgroundColor: '#3D2314' }}>
+    <footer className="text-white" style={{ backgroundColor: '#5C3D2E' }}>
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Col 1 - Logo */}
@@ -55,11 +55,10 @@ const Footer = () => {
               style={{ backgroundColor: '#25D366' }}
             >
               <MessageCircle size={18} />
-              WhatsApp
+              {t('footer.whatsapp', 'Contact us on WhatsApp')}
             </a>
-            <div className="mt-4 text-xs text-white/50 font-body leading-relaxed">
+            <div className="mt-4 text-xs text-white/50 font-body">
               <p>Bhubaneswar, Odisha, India</p>
-              <p className="mt-1">{t('footer.sebi', 'SEBI Registered Investment Advisor')}</p>
             </div>
           </div>
 
@@ -121,7 +120,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-white/10">
+      <div className="border-t border-white/20">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-3">
           <p className="text-xs text-white/50 font-body">
             © {new Date().getFullYear()} InvestSahi. {t('footer.rights', 'All rights reserved.')}
