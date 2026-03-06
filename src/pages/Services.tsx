@@ -13,7 +13,6 @@ import WhatsAppFAB from '@/components/WhatsAppFAB';
 import MobileBottomBar from '@/components/MobileBottomBar';
 import RevealSection from '@/components/RevealSection';
 import { WHATSAPP_URL } from '@/config/constants';
-import Mascot from '@/components/Mascot';
 
 const ICON_MAP: Record<string, React.ElementType> = {
   TrendingUp, Shield, Heart, GraduationCap, Umbrella, PiggyBank, Landmark, Wallet, Car, Briefcase, Home, Sun,
@@ -161,7 +160,6 @@ const Services = () => {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = lang || 'en';
   const [filter, setFilter] = useState<Filter>('all');
-  const [mascotMessage, setMascotMessage] = useState<string | null>(null);
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const expandSlug = searchParams.get('expand');
@@ -175,12 +173,6 @@ const Services = () => {
       }
     }
   }, [location.hash]);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setMascotMessage('Not sure where to start? Try SIP at ₹500/month.');
-    }, 4000);
-    return () => clearTimeout(timer);
-  }, []);
 
   const filters: { key: Filter; label: string }[] = [
     { key: 'all', label: t('services.filter.all', 'All') },
@@ -241,11 +233,6 @@ const Services = () => {
       <Footer />
       <WhatsAppFAB />
       <MobileBottomBar />
-      <Mascot
-        mood="idle"
-        message={mascotMessage}
-        onMessageDismiss={() => setMascotMessage(null)}
-      />
     </div>
   );
 };

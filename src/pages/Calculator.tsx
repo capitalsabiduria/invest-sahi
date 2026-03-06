@@ -21,7 +21,6 @@ import { WHATSAPP_URL } from '@/config/constants';
 import { useRelevantGuide } from '@/hooks/useRelevantGuide';
 import GoalSelector, { type GoalType } from '@/components/calculator/GoalSelector';
 import BasicWealthCalculator from '@/components/calculator/BasicWealthCalculator';
-import Mascot from '@/components/Mascot';
 
 const ICON_MAP: Record<string, React.ElementType> = { GraduationCap, Stethoscope, Briefcase, BookOpen };
 
@@ -31,19 +30,12 @@ const Calculator = () => {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = lang || 'en';
   const [searchParams] = useSearchParams();
-  const [mascotMessage, setMascotMessage] = useState<string | null>(null);
   useEffect(() => {
     const goal = searchParams.get('goal') as GoalType | null;
     if (goal && ['home', 'education', 'retirement', 'wealth'].includes(goal)) {
       setSelectedGoal(goal);
     }
   }, [searchParams]);
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setMascotMessage('Every rupee counts. Let\'s plan yours.');
-    }, 2000);
-    return () => clearTimeout(t);
-  }, []);
   const { toast } = useToast();
 
   const relevantGuide = useRelevantGuide('education', currentLang);
@@ -419,11 +411,6 @@ const Calculator = () => {
       <Footer />
       <WhatsAppFAB />
       <MobileBottomBar />
-      <Mascot
-        mood="idle"
-        message={mascotMessage}
-        onMessageDismiss={() => setMascotMessage(null)}
-      />
     </div>
   );
 };
