@@ -380,15 +380,27 @@ const Book = () => {
                 <MapPin className="text-saffron" size={20} />
                 <h3 className="font-heading font-semibold text-foreground">{t('book.office.title', `Our ${OFFICE_ADDRESS.split(',')[0]} Office`)}</h3>
               </div>
-              <p className="text-sm text-muted-foreground font-body mb-2">{t('book.office.address', `Address placeholder, ${OFFICE_ADDRESS}`)}</p>
+              <p className="text-sm font-body text-muted-foreground mt-1">
+                604A, 6th Floor, Nexus Esplanade Mall<br />
+                Rasulgarh, Bhubaneswar — 751010
+              </p>
               <div className="flex items-center gap-2 text-sm text-muted-foreground font-body mb-2">
                 <Phone size={14} /> {t('book.office.phone', OFFICE_PHONE)}
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground font-body mb-4">
                 <Clock size={14} /> {t('book.office.hours', 'Mon-Sat, 10 AM - 6 PM')}
               </div>
-              <div className="bg-muted rounded-lg h-[200px] flex items-center justify-center">
-                <span className="text-sm text-muted-foreground">{t('book.office.map', 'Google Maps placeholder')}</span>
+              <div className="rounded-xl overflow-hidden mt-4" style={{ height: '220px' }}>
+                <iframe
+                  title="InvestSahi Office — Nexus Esplanade Mall, Bhubaneswar"
+                  src="https://www.google.com/maps?q=604A,+Nexus+Esplanade+Mall,+Rasulgarh,+Bhubaneswar,+Odisha+751010&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
               </div>
             </div>
           </div>
