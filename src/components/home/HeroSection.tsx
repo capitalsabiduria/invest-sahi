@@ -188,7 +188,18 @@ const HeroSection = ({ lang }: { lang: string }) => {
   };
 
   return (
-    <section className="bg-card py-20">
+    <section
+      className="bg-card py-20"
+      onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+      onTouchEnd={(e) => {
+        if (touchStartX.current === null) return;
+        const diff = touchStartX.current - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+          setActive((p) => diff > 0 ? (p + 1) % heroStates.length : (p - 1 + heroStates.length) % heroStates.length);
+        }
+        touchStartX.current = null;
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-20 grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
         <div className="md:col-span-3 relative overflow-hidden">
           <HeroBgDecoration />
