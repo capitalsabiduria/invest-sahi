@@ -16,6 +16,7 @@ import GuidePage from "./pages/GuidePage";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import CrorePlan from "./pages/CrorePlan";
 import ScrollToTop from "@/components/ScrollToTop";
 
 const queryClient = new QueryClient();
@@ -55,6 +56,7 @@ const App = () => (
             <Route path="/:lang/book" element={<LangRoute><Book /></LangRoute>} />
             <Route path="/:lang/contact" element={<LangRoute><Contact /></LangRoute>} />
             <Route path="/:lang/about" element={<LangRoute><About /></LangRoute>} />
+            <Route path="/:lang/crore-plan" element={<LangRoute><CrorePlan /></LangRoute>} />
             <Route path="/admin" element={<AdminAuthGate><Admin /></AdminAuthGate>} />
             <Route path="/en/:slug" element={<PageWrap><GuidePage /></PageWrap>} />
             <Route path="/or/:slug" element={<PageWrap><GuidePage /></PageWrap>} />

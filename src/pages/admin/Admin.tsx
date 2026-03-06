@@ -16,6 +16,7 @@ import AdminContent from './AdminContent';
 import AdminCalculatorLeads from './AdminCalculatorLeads';
 import AdminSettings from './AdminSettings';
 import SeoManager from '@/components/admin/SeoManager';
+import CrorePlanLeadsTab from '@/components/admin/CrorePlanLeadsTab';
 import { supabase } from '@/integrations/supabase/client';
 
 const navItems = [
@@ -24,6 +25,7 @@ const navItems = [
   { key: 'subscribers', icon: Users, label: 'Subscribers' },
   { key: 'content', icon: FileText, label: 'Content' },
   { key: 'leads', icon: TrendingUp, label: 'Calculator Leads' },
+  { key: 'crore', icon: TrendingUp, label: 'Crore Plan' },
   { key: 'seo', icon: Globe, label: 'SEO Pages' },
   { key: 'settings', icon: Settings, label: 'Settings' },
 ];
@@ -31,6 +33,7 @@ const navItems = [
 const Admin = () => {
   const [active, setActive] = useState('dashboard');
   const [livePageCount, setLivePageCount] = useState<number | null>(null);
+  const [newCroreLeadsCount, setNewCroreLeadsCount] = useState<number | null>(null);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -39,6 +42,11 @@ const Admin = () => {
       .select('*', { count: 'exact', head: true })
       .eq('status', 'live')
       .then(({ count }: { count: number | null }) => setLivePageCount(count ?? 0));
+    (supabase as any)
+      .from('crore_plan_leads')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'new')
+      .then(({ count }: { count: number | null }) => setNewCroreLeadsCount(count ?? 0));
   }, []);
 
   const renderContent = () => {
@@ -48,6 +56,7 @@ const Admin = () => {
       case 'subscribers': return <AdminSubscribers />;
       case 'content': return <AdminContent />;
       case 'leads': return <AdminCalculatorLeads />;
+      case 'crore': return <CrorePlanLeadsTab />;
       case 'seo': return <SeoManager />;
       case 'settings': return <AdminSettings />;
       default: return <AdminDashboard />;
@@ -78,6 +87,11 @@ const Admin = () => {
               {item.key === 'seo' && livePageCount !== null && livePageCount > 0 && (
                 <span className="ml-auto text-xs font-bold px-1.5 py-0.5 rounded-full bg-green text-white leading-none">
                   {livePageCount}
+                </span>
+              )}
+              {item.key === 'crore' && newCroreLeadsCount !== null && newCroreLeadsCount > 0 && (
+                <span className="ml-auto text-xs font-bold px-1.5 py-0.5 rounded-full bg-green text-white leading-none">
+                  {newCroreLeadsCount}
                 </span>
               )}
             </button>

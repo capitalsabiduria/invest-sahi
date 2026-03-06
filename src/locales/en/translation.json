@@ -8,7 +8,12 @@
     "learn": "Money School",
     "newsletter": "Newsletter",
     "book": "Book a Free Call",
-    "tagline": "ଇନ୍ଭେଷ୍ଟ ସହି"
+    "tagline": "ଇନ୍ଭେଷ୍ଟ ସହି",
+    "crorePlan": "₹1Cr Plan"
+  },
+  "crore": {
+    "title": "Your Path to ₹1 Crore",
+    "subtitle": "Most families can get there. Find out exactly how."
   },
   "hero": {
     "state1": {
