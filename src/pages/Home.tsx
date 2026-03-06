@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import SEO from '@/components/SEO';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -13,10 +14,20 @@ import OdiaPromise from '@/components/home/OdiaPromise';
 import ServicesGrid from '@/components/home/ServicesGrid';
 import TrustSignals from '@/components/home/TrustSignals';
 import { mutualFundLogos, insuranceLogos } from '@/constants/partners';
+import Mascot from '@/components/Mascot';
 
 const Home = () => {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = lang || 'en';
+  const [mascotMessage, setMascotMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setMascotMessage('ନମସ୍କାର! Start your journey with ₹500 today.');
+    }, 3000);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <div className="min-h-screen">
       <SEO
@@ -87,6 +98,11 @@ const Home = () => {
       <Footer />
       <WhatsAppFAB />
       <MobileBottomBar />
+      <Mascot
+        mood="idle"
+        message={mascotMessage}
+        onMessageDismiss={() => setMascotMessage(null)}
+      />
     </div>
   );
 };
