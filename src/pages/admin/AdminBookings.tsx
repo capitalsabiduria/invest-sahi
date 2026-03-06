@@ -10,6 +10,19 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 const STATUSES = ['pending', 'confirmed', 'completed', 'cancelled'] as const;
 const PAGE_SIZE = 20;
 
+const formatService = (s: string) =>
+  s.replace('book.service.', '')
+   .split('.')
+   .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+   .join(' ');
+
+const connectLabel = (val: string) => {
+  if (val === 'whatsapp') return <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">WhatsApp</span>;
+  if (val === 'call' || val === 'phone') return <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Phone Call</span>;
+  if (val === 'visit') return <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Visit Office</span>;
+  return <span>{val || '—'}</span>;
+};
+
 const AdminBookings = () => {
   const [bookings, setBookings] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
@@ -18,7 +31,9 @@ const AdminBookings = () => {
   const [search, setSearch] = useState('');
 
   const fetchBookings = useCallback(async () => {
-    let query = supabase.from('bookings').select('*', { count: 'exact' });
+    let query = supabase
+      .from('bookings')
+      .select('id, name, email, phone, service_interest, monthly_income_range, message, preferred_contact, source, status, created_at', { count: 'exact' });
     if (statusFilter !== 'all') query = query.eq('status', statusFilter);
     if (search) query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%`);
     query = query.order('created_at', { ascending: false }).range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
@@ -35,7 +50,9 @@ const AdminBookings = () => {
   };
 
   const exportCSV = async () => {
-    let query = supabase.from('bookings').select('*');
+    let query = supabase
+      .from('bookings')
+      .select('id, name, email, phone, service_interest, monthly_income_range, message, preferred_contact, source, status, created_at');
     if (statusFilter !== 'all') query = query.eq('status', statusFilter);
     if (search) query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%`);
     query = query.order('created_at', { ascending: false });
@@ -44,17 +61,16 @@ const AdminBookings = () => {
     if (!data || data.length === 0) return;
     const headers = [
       'Name', 'Email', 'Phone', 'Service Interest',
-      'Income Range', 'Preferred Contact', 'Language',
-      'Source', 'Status', 'Message', 'Date'
+      'Monthly Surplus', 'Connect Via',
+      'Source', 'Status', 'Notes', 'Date'
     ];
     const rows = data.map(b => [
       b.name,
       b.email,
       b.phone,
-      (b.service_interest || []).join(' | '),
+      (b.service_interest || []).map(formatService).join(' | '),
       b.monthly_income_range || '',
       b.preferred_contact || '',
-      b.preferred_language || '',
       b.source || '',
       b.status || '',
       (b.message || '').replace(/\n/g, ' '),
@@ -101,7 +117,8 @@ const AdminBookings = () => {
         </Button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      {/* Desktop table */}
+      <div className="bg-white rounded-xl shadow-sm overflow-hidden hidden md:block">
         <Table>
           <TableHeader>
             <TableRow>
@@ -109,8 +126,9 @@ const AdminBookings = () => {
               <TableHead>Email</TableHead>
               <TableHead>Phone</TableHead>
               <TableHead>Service Interest</TableHead>
-              <TableHead>Income Range</TableHead>
-              <TableHead>Language</TableHead>
+              <TableHead>Monthly Surplus</TableHead>
+              <TableHead>Connect Via</TableHead>
+              <TableHead>Notes</TableHead>
               <TableHead>Source</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Date</TableHead>
@@ -123,9 +141,12 @@ const AdminBookings = () => {
                 <TableCell>{b.name}</TableCell>
                 <TableCell>{b.email}</TableCell>
                 <TableCell>{b.phone}</TableCell>
-                <TableCell>{b.service_interest?.join(', ') || '-'}</TableCell>
-                <TableCell>{b.monthly_income_range || '-'}</TableCell>
-                <TableCell>{b.preferred_language}</TableCell>
+                <TableCell>{(b.service_interest || []).map(formatService).join(', ')}</TableCell>
+                <TableCell>{b.monthly_income_range || '—'}</TableCell>
+                <TableCell>{connectLabel(b.preferred_contact)}</TableCell>
+                <TableCell title={b.message || ''} className="text-xs text-muted-foreground max-w-[120px] truncate">
+                  {b.message ? (b.message.length > 40 ? b.message.slice(0, 40) + '...' : b.message) : '—'}
+                </TableCell>
                 <TableCell>{b.source}</TableCell>
                 <TableCell>
                   <span className={`text-xs px-2 py-1 rounded-full font-medium ${statusColors[b.status] || ''}`}>{b.status}</span>
@@ -143,9 +164,41 @@ const AdminBookings = () => {
                 </TableCell>
               </TableRow>
             ))}
-            {bookings.length === 0 && <TableRow><TableCell colSpan={10} className="text-center text-stone/40 py-8">No bookings found</TableCell></TableRow>}
+            {bookings.length === 0 && <TableRow><TableCell colSpan={11} className="text-center text-stone/40 py-8">No bookings found</TableCell></TableRow>}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Mobile card view */}
+      <div className="md:hidden space-y-4">
+        {bookings.map((b) => (
+          <div key={b.id} className="bg-white rounded-xl shadow-sm p-4 space-y-2">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="font-semibold text-foreground">{b.name}</p>
+                <p className="text-sm text-muted-foreground">{b.email}</p>
+                <p className="text-sm text-muted-foreground">{b.phone}</p>
+              </div>
+              <span className={`text-xs px-2 py-1 rounded-full font-medium ${statusColors[b.status] || ''}`}>{b.status}</span>
+            </div>
+            <p className="text-xs text-muted-foreground"><strong>Services:</strong> {(b.service_interest || []).map(formatService).join(', ') || '—'}</p>
+            <p className="text-xs text-muted-foreground"><strong>Monthly Surplus:</strong> {b.monthly_income_range || '—'}</p>
+            <div className="text-xs text-muted-foreground flex items-center gap-1"><strong>Connect Via:</strong> {connectLabel(b.preferred_contact)}</div>
+            {b.message && <p className="text-xs text-muted-foreground"><strong>Notes:</strong> {b.message.length > 80 ? b.message.slice(0, 80) + '...' : b.message}</p>}
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-muted-foreground">{new Date(b.created_at).toLocaleDateString()}</p>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {STATUSES.filter(s => s !== b.status).map(s => (
+                    <DropdownMenuItem key={s} onClick={() => updateStatus(b.id, s)} className="capitalize">Mark {s}</DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+        ))}
+        {bookings.length === 0 && <p className="text-center text-stone/40 py-8">No bookings found</p>}
       </div>
 
       {totalPages > 1 && (

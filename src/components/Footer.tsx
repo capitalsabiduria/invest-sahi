@@ -9,13 +9,13 @@ const Footer = () => {
   const currentLang = lang || 'en';
 
   const serviceLinks = [
-    { key: 'footer.services.mutualFunds', to: `/${currentLang}/services#family` },
-    { key: 'footer.services.sip', to: `/${currentLang}/services#family` },
-    { key: 'footer.services.insurance', to: `/${currentLang}/services#family` },
-    { key: 'footer.services.childEducation', to: `/${currentLang}/services#family` },
-    { key: 'footer.services.retirement', to: `/${currentLang}/services#retirement` },
-    { key: 'footer.services.tax', to: `/${currentLang}/services#retirement` },
-    { key: 'footer.services.gold', to: `/${currentLang}/services#retirement` },
+    { key: 'footer.services.mutualFunds', to: `/${currentLang}/services?expand=sip-mutual-funds#family` },
+    { key: 'footer.services.sip', to: `/${currentLang}/services?expand=sip-mutual-funds#family` },
+    { key: 'footer.services.insurance', to: `/${currentLang}/services?expand=term-life-insurance#family` },
+    { key: 'footer.services.childEducation', to: `/${currentLang}/services?expand=education-loans#family` },
+    { key: 'footer.services.retirement', to: `/${currentLang}/services?expand=national-pension-system#retirement` },
+    { key: 'footer.services.tax', to: `/${currentLang}/services?expand=national-pension-system#retirement` },
+    { key: 'footer.services.gold', to: `/${currentLang}/services?expand=sovereign-gold-bonds#retirement` },
   ];
 
   const learnLinks = [
@@ -56,8 +56,9 @@ const Footer = () => {
               <MessageCircle size={18} />
               {t('footer.whatsapp', 'Contact us on WhatsApp')}
             </a>
-            <div className="mt-4 text-xs text-white/50 font-body">
-              <p>Bhubaneswar, Odisha, India</p>
+            <div className="mt-4 text-xs text-white/50 font-body leading-relaxed">
+              <p>604A, 6th Floor, Nexus Esplanade Mall</p>
+              <p>Rasulgarh, Bhubaneswar — 751010</p>
             </div>
           </div>
 
