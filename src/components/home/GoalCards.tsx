@@ -86,7 +86,7 @@ const goalCards = [
 const GoalCards = ({ lang }: { lang: string }) => {
   const { t } = useTranslation();
   const ctaHrefs: Record<string, string> = {
-    card1: `/${lang}/services`,
+    card1: `/${lang}/services#family`,
     card2: `/${lang}/services`,
     card3: `/${lang}/services#retirement`,
   };

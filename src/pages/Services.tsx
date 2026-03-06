@@ -201,7 +201,9 @@ const Services = () => {
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
         {(filter === 'all' || filter === 'family') && (
-          <ServiceCategory title="svc.family.title" services={FAMILY_SERVICES} accent="border-green" IconComp={Home} lang={currentLang} />
+          <div id="family">
+            <ServiceCategory title="svc.family.title" services={FAMILY_SERVICES} accent="border-green" IconComp={Home} lang={currentLang} />
+          </div>
         )}
         {(filter === 'all' || filter === 'future') && (
           <div id="retirement">
