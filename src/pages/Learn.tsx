@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BookOpen, ArrowLeft } from 'lucide-react';
 import Navbar from '@/components/Navbar';
@@ -154,6 +154,14 @@ const LearnList = () => {
   const { toast } = useToast();
 
   const [filter, setFilter] = useState('all');
+  const [searchParams] = useSearchParams();
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    const tabMap: Record<string, string> = { stories: 'story', glossary: 'glossary', guides: 'guide' };
+    if (tab && tabMap[tab]) {
+      setFilter(tabMap[tab]);
+    }
+  }, []);
   const [content, setContent] = useState<ContentItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [nlEmail, setNlEmail] = useState('');

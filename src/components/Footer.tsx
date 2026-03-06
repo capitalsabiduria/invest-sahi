@@ -4,44 +4,39 @@ import { MessageCircle } from 'lucide-react';
 import { WHATSAPP_URL, AMFI_ARN, IRDAI_REG } from '@/config/constants';
 
 const Footer = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { lang } = useParams<{ lang: string }>();
   const currentLang = lang || 'en';
 
-  const switchLang = (newLang: string) => {
-    i18n.changeLanguage(newLang);
-    localStorage.setItem('investsahi-lang', newLang);
-  };
-
   const serviceLinks = [
-    'footer.services.mutualFunds',
-    'footer.services.sip',
-    'footer.services.insurance',
-    'footer.services.childEducation',
-    'footer.services.retirement',
-    'footer.services.tax',
-    'footer.services.gold',
+    { key: 'footer.services.mutualFunds', to: `/${currentLang}/services` },
+    { key: 'footer.services.sip', to: `/${currentLang}/services` },
+    { key: 'footer.services.insurance', to: `/${currentLang}/services` },
+    { key: 'footer.services.childEducation', to: `/${currentLang}/services` },
+    { key: 'footer.services.retirement', to: `/${currentLang}/services#retirement` },
+    { key: 'footer.services.tax', to: `/${currentLang}/services#retirement` },
+    { key: 'footer.services.gold', to: `/${currentLang}/services#retirement` },
   ];
 
   const learnLinks = [
-    'footer.learn.stories',
-    'footer.learn.glossary',
-    'footer.learn.guides',
-    'footer.learn.calculators',
-    'footer.learn.whatsapp',
-    'footer.learn.videos',
+    { key: 'footer.learn.stories', to: `/${currentLang}/learn?tab=stories` },
+    { key: 'footer.learn.glossary', to: `/${currentLang}/learn?tab=glossary` },
+    { key: 'footer.learn.guides', to: `/${currentLang}/learn?tab=guides` },
+    { key: 'footer.learn.eduCalc', to: `/${currentLang}/calculators?goal=education` },
+    { key: 'footer.learn.homeCalc', to: `/${currentLang}/calculators?goal=home` },
+    { key: 'footer.learn.retirementCalc', to: `/${currentLang}/calculators?goal=retirement` },
+    { key: 'footer.learn.wealthCalc', to: `/${currentLang}/calculators?goal=wealth` },
   ];
 
   const aboutLinks = [
-    'footer.about.about',
-    'footer.about.team',
-    'footer.about.contact',
-    'footer.about.careers',
-    'footer.about.privacy',
+    { key: 'footer.about.about', to: `/${currentLang}/about` },
+    { key: 'footer.about.team', to: `/${currentLang}/about#team` },
+    { key: 'footer.about.contact', to: `/${currentLang}/contact` },
+    { key: 'footer.about.privacy', to: `/${currentLang}/privacy` },
   ];
 
   return (
-    <footer className="bg-stone text-white">
+    <footer className="text-white" style={{ backgroundColor: '#3D2314' }}>
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Col 1 - Logo */}
@@ -62,16 +57,20 @@ const Footer = () => {
               <MessageCircle size={18} />
               WhatsApp
             </a>
+            <div className="mt-4 text-xs text-white/50 font-body leading-relaxed">
+              <p>Bhubaneswar, Odisha, India</p>
+              <p className="mt-1">{t('footer.sebi', 'SEBI Registered Investment Advisor')}</p>
+            </div>
           </div>
 
           {/* Col 2 - Services */}
           <div>
             <h4 className="font-heading font-semibold text-base mb-4">{t('footer.ourServices', 'Our Services')}</h4>
             <ul className="space-y-2">
-              {serviceLinks.map((key) => (
-                <li key={key}>
-                  <Link to={`/${currentLang}/services`} className="text-sm text-white/70 hover:text-saffron transition-colors font-body">
-                    {t(key, key)}
+              {serviceLinks.map((link) => (
+                <li key={link.key}>
+                  <Link to={link.to} className="text-sm text-white/70 hover:text-saffron transition-colors font-body">
+                    {t(link.key, link.key)}
                   </Link>
                 </li>
               ))}
@@ -80,12 +79,15 @@ const Footer = () => {
 
           {/* Col 3 - Learn */}
           <div>
-            <h4 className="font-heading font-semibold text-base mb-4">{t('footer.learnInOdia', 'Learn in Odia')}</h4>
+            <h4 className="font-heading font-semibold text-base mb-4">
+              {t('footer.learnInOdia.en', 'Learn in Odia')} —{' '}
+              <span className="font-odia">{t('footer.learnInOdia.or', 'ଶିଖନ୍ତୁ')}</span>
+            </h4>
             <ul className="space-y-2">
-              {learnLinks.map((key) => (
-                <li key={key}>
-                  <Link to={`/${currentLang}/learn`} className="text-sm text-white/70 hover:text-saffron transition-colors font-body">
-                    {t(key, key)}
+              {learnLinks.map((link) => (
+                <li key={link.key}>
+                  <Link to={link.to} className="text-sm text-white/70 hover:text-saffron transition-colors font-body">
+                    {t(link.key, link.key)}
                   </Link>
                 </li>
               ))}
@@ -96,16 +98,16 @@ const Footer = () => {
           <div>
             <h4 className="font-heading font-semibold text-base mb-4">{t('footer.aboutTitle', 'About')}</h4>
             <ul className="space-y-2">
-              {aboutLinks.map((key) => (
-                <li key={key}>
-                  <Link to={`/${currentLang}`} className="text-sm text-white/70 hover:text-saffron transition-colors font-body">
-                    {t(key, key)}
+              {aboutLinks.map((link) => (
+                <li key={link.key}>
+                  <Link to={link.to} className="text-sm text-white/70 hover:text-saffron transition-colors font-body">
+                    {t(link.key, link.key)}
                   </Link>
                 </li>
               ))}
               <li>
                 <a
-                  href="https://sabiduracapital.com"
+                  href="https://sabiduriacapital.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-white/70 hover:text-saffron transition-colors font-body"
@@ -127,20 +129,6 @@ const Footer = () => {
           <div className="flex items-center gap-4 text-xs text-white/50 font-body">
             <span>ARN: {AMFI_ARN}</span>
             <span>IRDAI: {IRDAI_REG}</span>
-            <div className="flex rounded-full border border-white/30 overflow-hidden">
-              <button
-                onClick={() => switchLang('en')}
-                className={`px-2 py-0.5 text-xs ${currentLang === 'en' ? 'bg-saffron text-white' : 'text-white/60'}`}
-              >
-                EN
-              </button>
-              <button
-                onClick={() => switchLang('or')}
-                className={`px-2 py-0.5 text-xs font-odia ${currentLang === 'or' ? 'bg-saffron text-white' : 'text-white/60'}`}
-              >
-                ଓଡ଼ିଆ
-              </button>
-            </div>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 md:px-8 pb-6">

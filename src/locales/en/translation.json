@@ -606,10 +606,10 @@
     "error": "Something went wrong. Please try again."
   },
   "footer": {
-    "tagline": "Odisha's bilingual financial advisory platform",
+    "tagline": "Odisha's homegrown financial services platform",
     "whatsapp": "Chat with us",
     "ourServices": "Our Services",
-    "learnInOdia": "Learn in Odia — ଶିଖନ୍ତୁ",
+    "learnInOdia": "Learn in Odia",
     "aboutTitle": "About",
     "services": {
       "header": "Our Services",
@@ -632,7 +632,11 @@
       "districts": "District Guides",
       "calculators": "Education Cost Calculator",
       "whatsapp": "WhatsApp Financial Tips",
-      "videos": "Video Explainers"
+      "videos": "Video Explainers",
+      "eduCalc": "Education Cost Calculator",
+      "homeCalc": "Home Buying Calculator",
+      "retirementCalc": "Retirement Calculator",
+      "wealthCalc": "Wealth Builder Calculator"
     },
     "about": {
       "header": "About",
@@ -649,7 +653,10 @@
     },
     "rights": "All rights reserved.",
     "copyright": "© 2026 InvestSahi | AMFI ARN: XXXXXX | IRDAI Reg: XXXXXX",
-    "disclaimer": "Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully. InvestSahi is not a bank. Loans are subject to eligibility and credit assessment."
+    "disclaimer": "Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully. InvestSahi is not a bank. Loans are subject to eligibility and credit assessment.",
+    "learnInOdia.en": "Learn in Odia",
+    "learnInOdia.or": "ଶିଖନ୍ତୁ",
+    "sebi": "SEBI Registered Investment Advisor"
   },
   "book": {
     "error": "Something went wrong. Please try again.",

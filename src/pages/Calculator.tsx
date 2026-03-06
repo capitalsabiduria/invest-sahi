@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import SEO from '@/components/SEO';
 import { motion } from 'framer-motion';
 import { GraduationCap, Stethoscope, Briefcase, BookOpen, Check, MessageCircle, Clock, Wallet, PiggyBank } from 'lucide-react';
@@ -29,6 +29,13 @@ const Calculator = () => {
   const [selectedGoal, setSelectedGoal] = useState<GoalType | null>(null);
   const { lang } = useParams<{ lang: string }>();
   const currentLang = lang || 'en';
+  const [searchParams] = useSearchParams();
+  useEffect(() => {
+    const goal = searchParams.get('goal') as GoalType | null;
+    if (goal && ['home', 'education', 'retirement', 'wealth'].includes(goal)) {
+      setSelectedGoal(goal);
+    }
+  }, []);
   const { toast } = useToast();
 
   const relevantGuide = useRelevantGuide('education', currentLang);
