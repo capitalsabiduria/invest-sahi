@@ -130,6 +130,13 @@ const Navbar = () => {
 
           {/* Right section */}
           <div className="hidden md:flex items-center gap-4">
+            <Link
+              to={`/${currentLang}/crore-plan`}
+              className="hidden lg:flex items-center gap-1 font-heading font-semibold text-sm px-3 py-2 rounded-lg border transition-colors hover:bg-[#E8820C]/10"
+              style={{ borderColor: '#E8820C', color: '#E8820C' }}
+            >
+              Build ₹1 Crore
+            </Link>
             <div className="relative hidden lg:flex items-center">
               {/* Pulse rings — only render when showPulse is true */}
               {showPulse && (
@@ -180,13 +187,6 @@ const Navbar = () => {
                 </div>
               )}
             </div>
-            <Link
-              to={`/${currentLang}/crore-plan`}
-              className="font-heading font-semibold text-sm px-3 py-2 rounded-lg transition-colors hover:bg-[#E8820C]/10"
-              style={{ color: '#E8820C' }}
-            >
-              ₹1Cr Plan
-            </Link>
             <Link
               to={`/${currentLang}/book`}
               className="bg-saffron text-white font-heading font-semibold text-sm px-5 py-2 rounded-lg hover:bg-saffron/90 transition-colors"

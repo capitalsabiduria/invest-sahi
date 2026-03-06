@@ -294,10 +294,10 @@ const HeroSection = ({ lang }: { lang: string }) => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-heading font-bold text-white text-base leading-tight mb-1">
-                  Can you reach ₹1 crore?
+                  Build your ₹1 Crore plan
                 </p>
                 <p className="text-xs font-body" style={{ color: 'rgba(255,255,255,0.6)' }}>
-                  Most families can. Find out how much you need to invest monthly.
+                  Most families can get there. Find out exactly how much you need to invest every month.
                 </p>
               </div>
               <div
