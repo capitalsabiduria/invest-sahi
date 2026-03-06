@@ -8,6 +8,7 @@ import WhatsAppFAB from '@/components/WhatsAppFAB';
 import MobileBottomBar from '@/components/MobileBottomBar';
 import SEO from '@/components/SEO';
 import { TrendingUp, Target, Clock, CheckCircle, ChevronRight, Phone, MessageCircle } from 'lucide-react';
+import Mascot from '@/components/Mascot';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -137,6 +138,7 @@ const CrorePlan = () => {
   const [yearsToGoal, setYearsToGoal] = useState<number | null>(null);
   const [ageAtGoal, setAgeAtGoal] = useState<number | null>(null);
 
+  const [mascotMessage, setMascotMessage] = useState<string | null>('Move the slider to see your future!');
   const [showLeadForm, setShowLeadForm] = useState(false);
   const [leadName, setLeadName] = useState('');
   const [leadPhone, setLeadPhone] = useState('');
@@ -768,6 +770,11 @@ const CrorePlan = () => {
         <Footer />
         <WhatsAppFAB />
         <MobileBottomBar />
+        <Mascot
+          mood="idle"
+          message={mascotMessage}
+          onMessageDismiss={() => setMascotMessage(null)}
+        />
       </div>
     </>
   );
