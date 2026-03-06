@@ -15,22 +15,10 @@ const MobileBottomBar = () => {
     const newLang = currentLang === 'en' ? 'or' : 'en';
     i18n.changeLanguage(newLang);
     localStorage.setItem('investsahi-lang', newLang);
-    const newPath = currentLang === 'en'
-      ? location.pathname.replace('/en/', '/or/') + location.search
-      : location.pathname.replace('/or/', '/en/') + location.search;
-    navigate(newPath);
-  };
-
-  const switchLanguage = () => {
     const { pathname, search } = location;
-    let newPath: string;
-
-    if (currentLang === 'en') {
-      newPath = pathname.replace(/^\/en(\/|$)/, '/or$1');
-    } else {
-      newPath = pathname.replace(/^\/or(\/|$)/, '/en$1');
-    }
-
+    const newPath = currentLang === 'en'
+      ? pathname.replace(/^\/en(\/|$)/, '/or$1')
+      : pathname.replace(/^\/or(\/|$)/, '/en$1');
     navigate(newPath + search);
   };
 
@@ -64,15 +52,13 @@ const MobileBottomBar = () => {
           style={{ backgroundColor: '#2C1810' }}
         >
           {currentLang === 'en' ? (
-            <>
-              <span style={{ fontFamily: "'Noto Sans Oriya', sans-serif", fontSize: '14px', color: '#E8820C', fontWeight: 700 }}>ଓଡ଼ିଆ</span>
-              <span style={{ fontSize: '9px', color: 'rgba(245,237,216,0.6)' }}>Read in Odia</span>
-            </>
+            <span style={{ fontFamily: 'Noto Sans Oriya, sans-serif', fontSize: '13px', color: '#E8820C', fontWeight: 700 }}>
+              {t('mobilebar.odia', 'ଓଡ଼ିଆରେ ପଢ଼ନ୍ତୁ')}
+            </span>
           ) : (
-            <>
-              <span style={{ fontSize: '13px', color: '#E8820C', fontWeight: 700 }}>EN</span>
-              <span style={{ fontSize: '9px', color: 'rgba(245,237,216,0.6)' }}>Read in English</span>
-            </>
+            <span style={{ fontSize: '13px', color: '#E8820C', fontWeight: 700 }}>
+              {t('mobilebar.english', 'Read in English')}
+            </span>
           )}
         </button>
       </div>

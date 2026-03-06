@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const OdiaLanguageToast = () => {
-  const { lang } = useParams<{ lang: string }>();
-  const currentLang = lang || 'en';
   const location = useLocation();
+  const currentLang = location.pathname.startsWith('/or') ? 'or' : 'en';
   const navigate = useNavigate();
 
   const [visible, setVisible] = useState(false);
@@ -30,7 +29,7 @@ const OdiaLanguageToast = () => {
 
   const switchToOdia = () => {
     sessionStorage.setItem('odia_toast_dismissed', 'true');
-    navigate(location.pathname.replace('/en/', '/or/') + location.search);
+    navigate(location.pathname.replace(/^\/en(\/|$)/, '/or$1') + location.search);
   };
 
   const dismiss = () => {
