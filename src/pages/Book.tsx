@@ -202,7 +202,7 @@ const Book = () => {
 
                 <div>
                   <label className="font-heading font-semibold text-sm text-foreground mb-3 block">{t('book.contactLabel', 'How would you like to connect?')}</label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     {CONTACT_METHODS.map((cm) => (
                       <button
                         key={cm.value}
