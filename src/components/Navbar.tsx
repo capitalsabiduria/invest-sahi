@@ -58,7 +58,7 @@ const Navbar = () => {
 
   const navLinks = [
     { key: 'nav.offer', fallback: 'What We Offer', href: `/${currentLang}/services` },
-    { key: 'nav.plan', fallback: 'Build Your Free Wealth Plan', href: `/${currentLang}/calculator` },
+    { key: 'nav.plan', fallback: 'Plan My Future', href: `/${currentLang}/calculator` },
     { key: 'nav.learn', fallback: 'Money School', href: `/${currentLang}/learn` },
   ];
 
