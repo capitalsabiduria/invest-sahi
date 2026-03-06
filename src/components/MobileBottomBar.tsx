@@ -21,6 +21,19 @@ const MobileBottomBar = () => {
     navigate(newPath);
   };
 
+  const switchLanguage = () => {
+    const { pathname, search } = location;
+    let newPath: string;
+
+    if (currentLang === 'en') {
+      newPath = pathname.replace(/^\/en(\/|$)/, '/or$1');
+    } else {
+      newPath = pathname.replace(/^\/or(\/|$)/, '/en$1');
+    }
+
+    navigate(newPath + search);
+  };
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
       <div className="flex items-stretch shadow-2xl" style={{ height: '56px' }}>
