@@ -208,7 +208,7 @@ const Book = () => {
                         key={cm.value}
                         type="button"
                         onClick={() => setContact(cm.value)}
-                        className={`rounded-lg border-2 p-3 text-center transition-all ${
+                        className={`rounded-lg border-2 p-3 py-3 min-h-[44px] text-center transition-all ${
                           contact === cm.value ? 'border-saffron bg-saffron-light' : 'border-border hover:border-muted-foreground'
                         }`}
                       >
