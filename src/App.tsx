@@ -15,6 +15,7 @@ import AdminAuthGate from './components/AdminAuthGate';
 import GuidePage from "./pages/GuidePage";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
         <AnimatePresence mode="wait">
           <Routes>
             <Route path="/" element={<Navigate to="/en" replace />} />
