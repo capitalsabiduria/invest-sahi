@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams, useLocation, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
@@ -12,9 +12,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const location = useLocation();
   const currentLang = lang || 'en';
-  const isHomePage = location.pathname === '/' || location.pathname === '/en' || location.pathname === '/en/' || location.pathname === '/or' || location.pathname === '/or/';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
