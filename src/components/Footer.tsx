@@ -46,12 +46,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Col 1 - Logo */}
           <div>
-            <div className="flex items-baseline mb-1">
-              <span className="font-heading text-xl text-saffron">Invest</span>
-              <span className="font-heading text-xl font-semibold text-white">Sahi</span>
-              <span className="font-heading text-sm text-green-light ml-0.5">.in</span>
-            </div>
-            <p className="font-odia text-sm text-blue-light mb-3">ଇନ୍ଭେଷ୍ଟ ସହି</p>
+            <img
+              src="/investsahi-logo.png"
+              alt="InvestSahi"
+              className="h-8 w-auto mb-3"
+            />
             <p className="text-sm text-white/70 font-body mb-4">{t('footer.tagline', 'footer.tagline')}</p>
             <a
               href={WHATSAPP_URL}
