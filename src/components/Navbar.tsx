@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
@@ -12,7 +12,9 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const location = useLocation();
   const currentLang = lang || 'en';
+  const isHomePage = location.pathname === '/' || location.pathname === '/en' || location.pathname === '/en/' || location.pathname === '/or' || location.pathname === '/or/';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -70,13 +72,15 @@ const Navbar = () => {
       >
         <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo */}
-          <Link to={`/${currentLang}`}>
-            <img
-              src="/investsahi-logo.png"
-              alt="InvestSahi"
-              className="h-10 w-auto"
-            />
-          </Link>
+          {!isHomePage && (
+            <Link to={`/${currentLang}`}>
+              <img
+                src="/investsahi-logo.png"
+                alt="InvestSahi"
+                className="h-14 w-auto"
+              />
+            </Link>
+          )}
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8">
