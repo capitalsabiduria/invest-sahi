@@ -16,8 +16,6 @@ const OdiaLanguageToast = () => {
   useEffect(() => {
     if (currentLang !== 'en') return;
     if (sessionStorage.getItem('odia_toast_dismissed') === 'true') return;
-    // Don't silently consume the session on mobile where the toast is hidden
-    if (!window.matchMedia('(min-width: 1024px)').matches) return;
     const timer = setTimeout(() => setVisible(true), 3000);
     return () => clearTimeout(timer);
   }, [currentLang]);
@@ -36,7 +34,7 @@ const OdiaLanguageToast = () => {
   };
 
   return (
-    <div className="hidden lg:block">
+    <div>
       <style>{`
         @keyframes shrinkProgress {
           from { width: 100%; }
