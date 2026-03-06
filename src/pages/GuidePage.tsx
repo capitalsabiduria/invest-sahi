@@ -256,7 +256,7 @@ export default function GuidePage() {
           <span style={{ color: '#1B6B3A', fontSize: '0.6em' }}>.in</span>
         </Link>
         <Link to={BOOKING_FORM_URL}
-          className="bg-[#E8820C] text-white font-body text-sm px-4 py-2 rounded-lg hover:bg-[#C45C00] transition-colors">
+          className="bg-[#E8820C] text-white font-body text-sm px-4 py-3 rounded-lg hover:bg-[#C45C00] transition-colors">
           <span className="sm:hidden">Book a Call →</span>
           <span className="hidden sm:inline">Book a Free Call →</span>
         </Link>

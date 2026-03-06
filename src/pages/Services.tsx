@@ -102,7 +102,7 @@ const ServiceCard = ({ svc, lang, expandSlug }: { svc: ServiceItem; lang: string
                 <Link
                   to={`/${lang}/book`}
                   onClick={(e) => e.stopPropagation()}
-                  className="flex-1 text-center bg-saffron text-white text-xs font-semibold px-3 py-2 rounded-full hover:opacity-90 transition-opacity"
+                  className="flex-1 text-center bg-saffron text-white text-xs font-semibold px-3 py-3 rounded-full hover:opacity-90 transition-opacity"
                 >
                   {t('svc.bookCta', 'Schedule a Free Consultation')} →
                 </Link>
@@ -111,7 +111,7 @@ const ServiceCard = ({ svc, lang, expandSlug }: { svc: ServiceItem; lang: string
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex-1 flex items-center justify-center gap-1 text-xs font-medium border border-green bg-green text-white px-3 py-2 rounded-full hover:bg-transparent hover:text-green transition-all"
+                  className="flex-1 flex items-center justify-center gap-1 text-xs font-medium border border-green bg-green text-white px-3 py-3 rounded-full hover:bg-transparent hover:text-green transition-all"
                 >
                   <MessageCircle size={13} /> {t('svc.whatsappCta', 'Chat Now on WhatsApp')}
                 </a>
@@ -214,7 +214,7 @@ const Services = () => {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 pb-20 md:pb-12">
         {(filter === 'all' || filter === 'family') && (
           <div id="family">
             <ServiceCategory title="svc.family.title" services={FAMILY_SERVICES} accent="border-green" IconComp={Home} lang={currentLang} expandSlug={expandSlug} />

@@ -156,7 +156,7 @@ const Book = () => {
     <div className="min-h-screen">
       <Navbar />
 
-      <div className={`max-w-7xl mx-auto px-4 md:px-8 py-12 ${!submitted ? 'grid grid-cols-1 lg:grid-cols-11 gap-10' : ''}`}>
+      <div className={`max-w-7xl mx-auto px-4 md:px-8 py-12 pb-20 md:pb-12 ${!submitted ? 'grid grid-cols-1 lg:grid-cols-11 gap-10' : ''}`}>
         <div className={!submitted ? 'lg:col-span-6' : ''}>
           {!submitted ? (
             <>
@@ -190,7 +190,7 @@ const Book = () => {
                         key={ir.value}
                         type="button"
                         onClick={() => setIncome(ir.value)}
-                        className={`rounded-lg border-2 px-3 py-2 text-sm font-body transition-all text-left ${
+                        className={`rounded-lg border-2 px-3 py-3 text-sm font-body transition-all text-left ${
                           income === ir.value ? 'border-saffron bg-saffron-light text-foreground' : 'border-border text-muted-foreground hover:border-muted-foreground'
                         }`}
                       >
@@ -202,13 +202,13 @@ const Book = () => {
 
                 <div>
                   <label className="font-heading font-semibold text-sm text-foreground mb-3 block">{t('book.contactLabel', 'How would you like to connect?')}</label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     {CONTACT_METHODS.map((cm) => (
                       <button
                         key={cm.value}
                         type="button"
                         onClick={() => setContact(cm.value)}
-                        className={`rounded-lg border-2 p-3 text-center transition-all ${
+                        className={`rounded-lg border-2 p-3 py-3 min-h-[44px] text-center transition-all ${
                           contact === cm.value ? 'border-saffron bg-saffron-light' : 'border-border hover:border-muted-foreground'
                         }`}
                       >

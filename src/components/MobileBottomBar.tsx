@@ -1,16 +1,25 @@
-import { MessageCircle, Phone, Globe } from 'lucide-react';
+import { MessageCircle, Phone } from 'lucide-react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { WHATSAPP_URL } from '@/config/constants';
 
 const MobileBottomBar = () => {
   const { lang } = useParams<{ lang: string }>();
+  const { t, i18n } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const currentLang = lang || 'en';
+  const bookingUrl = `/${currentLang}/book`;
 
-  const currentLang = location.pathname.startsWith('/or') ? 'or' : 'en';
-  const bookingUrl = `/${lang || 'en'}/book`;
+  const switchLanguage = () => {
+    const newLang = currentLang === 'en' ? 'or' : 'en';
+    i18n.changeLanguage(newLang);
+    localStorage.setItem('investsahi-lang', newLang);
+    const newPath = currentLang === 'en'
+      ? location.pathname.replace('/en/', '/or/') + location.search
+      : location.pathname.replace('/or/', '/en/') + location.search;
+    navigate(newPath);
+  };
 
   const switchLanguage = () => {
     const { pathname, search } = location;
@@ -31,7 +40,7 @@ const MobileBottomBar = () => {
         {/* Book a Free Call — saffron/orange */}
         <a
           href={bookingUrl}
-          className="flex-1 flex items-center justify-center gap-2 font-heading font-semibold text-sm text-white"
+          className="flex-1 flex flex-col items-center justify-center gap-0.5 font-heading font-semibold text-sm text-white"
           style={{ backgroundColor: '#E8820C' }}
         >
           <Phone size={16} />
@@ -42,25 +51,28 @@ const MobileBottomBar = () => {
           href={`${WHATSAPP_URL}?text=${encodeURIComponent(t('mobilebar.waText', "Hi, I'd like to know more about InvestSahi"))}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 font-heading font-semibold text-sm text-white"
+          className="flex-1 flex flex-col items-center justify-center gap-0.5 font-heading font-semibold text-sm text-white"
           style={{ backgroundColor: '#1B6B3A' }}
         >
           <MessageCircle size={16} />
           {t('mobilebar.whatsapp', 'WhatsApp Us')}
         </a>
-        {/* Language switch — stone/dark */}
+        {/* Language switch */}
         <button
           onClick={switchLanguage}
-          className="flex-1 flex items-center justify-center gap-1.5 font-heading font-semibold text-xs text-white"
+          className="flex-1 flex flex-col items-center justify-center gap-0.5"
           style={{ backgroundColor: '#2C1810' }}
         >
-          <Globe size={14} />
           {currentLang === 'en' ? (
-            <span style={{ fontFamily: 'Noto Sans Oriya, sans-serif' }}>
-              {t('mobilebar.odia', 'ଓଡ଼ିଆରେ ପଢ଼ନ୍ତୁ')}
-            </span>
+            <>
+              <span style={{ fontFamily: "'Noto Sans Oriya', sans-serif", fontSize: '14px', color: '#E8820C', fontWeight: 700 }}>ଓଡ଼ିଆ</span>
+              <span style={{ fontSize: '9px', color: 'rgba(245,237,216,0.6)' }}>Read in Odia</span>
+            </>
           ) : (
-            <span>{t('mobilebar.english', 'Read in English')}</span>
+            <>
+              <span style={{ fontSize: '13px', color: '#E8820C', fontWeight: 700 }}>EN</span>
+              <span style={{ fontSize: '9px', color: 'rgba(245,237,216,0.6)' }}>Read in English</span>
+            </>
           )}
         </button>
       </div>
