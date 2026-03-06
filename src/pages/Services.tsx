@@ -193,7 +193,9 @@ const Services = () => {
           <ServiceCategory title="svc.family.title" services={FAMILY_SERVICES} accent="border-green" IconComp={Home} lang={currentLang} />
         )}
         {(filter === 'all' || filter === 'future') && (
-          <ServiceCategory title="svc.future.title" services={FUTURE_SERVICES} accent="border-saffron" IconComp={Sun} lang={currentLang} />
+          <div id="retirement">
+            <ServiceCategory title="svc.future.title" services={FUTURE_SERVICES} accent="border-saffron" IconComp={Sun} lang={currentLang} />
+          </div>
         )}
         {(filter === 'all' || filter === 'business') && (
           <ServiceCategory title="svc.business.title" services={BUSINESS_SERVICES} accent="border-blue" IconComp={Briefcase} lang={currentLang} />
