@@ -14,5 +14,5 @@ export const insuranceLogos = [
   { name: 'ICICI Prudential Life', src: '/partners/icici-life.jpeg' },
   { name: 'Star Health', src: '/partners/star-health.png' },
   { name: 'Niva Bupa', src: '/partners/niva-bupa.png' },
-  { name: 'Bajaj Allianz', src: '/partners/bajaj-allianz.png },
+  { name: 'Bajaj Allianz', src: '/partners/bajaj-allianz.png' },
 ];
