@@ -84,7 +84,7 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
           </div>
 
           {/* Institution pills */}
-          <div className="flex flex-wrap justify-center gap-2 mb-4 md:mb-8">
+          <div className="flex flex-wrap justify-center gap-2 mb-1 md:mb-2">
             {institutionPills.map((pill) => {
               const selected = institution === pill.name;
               return (
@@ -105,6 +105,9 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
               );
             })}
           </div>
+          <p className="text-center text-xs text-muted-foreground mt-1 mb-4 md:mb-8">
+            Current total fees · Course duration
+          </p>
 
           {/* Calculator card */}
           <div ref={calcRef} className="bg-white rounded-2xl shadow-md px-4 py-5 md:px-8 md:py-8 mb-6">
@@ -168,18 +171,13 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
               ) : (
                 <>
                   <p className="font-heading font-bold text-2xl text-[#2C1810] mb-1">
-                    {t('calc.youllHave', "You'll have:")} {formatCurrency(calc.projected)}
+                    Your SIP will grow to {formatCurrency(calc.projected)} by {new Date().getFullYear() + years}
                   </p>
                   <p className="text-sm font-body text-muted-foreground mb-2">
-                    {t('calc.target', '{{institution}} fees in {{year}}:', {
-                      institution,
-                      year: new Date().getFullYear() + years,
-                    })} ~{formatCurrency(calc.target)}
+                    Due to inflation (~8%/yr), {institution} fees will be ~{formatCurrency(calc.target)} in {new Date().getFullYear() + years}
                   </p>
                   <span className="inline-block rounded-full px-3 py-1 text-xs font-medium bg-[#C45C00]/10 text-[#C45C00]">
-                    {t('calc.moreNeeded', '₹{{amount}} more/month needed', {
-                      amount: extraNeeded.toLocaleString('en-IN'),
-                    })}
+                    Increase your SIP by ₹{extraNeeded.toLocaleString('en-IN')}/month to bridge the gap
                   </span>
                 </>
               )}
