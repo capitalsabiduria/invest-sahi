@@ -58,9 +58,9 @@ const App = () => (
             <Route path="/:lang/about" element={<LangRoute><About /></LangRoute>} />
             <Route path="/:lang/crore-plan" element={<LangRoute><CrorePlan /></LangRoute>} />
             <Route path="/admin" element={<AdminAuthGate><Admin /></AdminAuthGate>} />
-            <Route path="/en/:slug" element={<PageWrap><GuidePage /></PageWrap>} />
-            <Route path="/or/:slug" element={<PageWrap><GuidePage /></PageWrap>} />
-            <Route path="/odia/:slug" element={<PageWrap><GuidePage /></PageWrap>} />
+            <Route path="/en/:slug"   element={<PageWrap><GuidePage key="en" /></PageWrap>} />
+            <Route path="/or/:slug"   element={<PageWrap><GuidePage key="or" /></PageWrap>} />
+            <Route path="/odia/:slug" element={<PageWrap><GuidePage key="odia" /></PageWrap>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
