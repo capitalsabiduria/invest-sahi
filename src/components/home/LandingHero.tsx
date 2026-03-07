@@ -151,9 +151,19 @@ const LandingHero = ({ lang }: { lang: string }) => {
             >
               {t('landing.cta1', 'Build Your Wealth Plan →')}
             </Link>
+            {/* Mobile only — Build ₹1 Crore button */}
+            <Link
+              to={`/${lang}/crore-plan`}
+              className="md:hidden font-heading font-semibold px-6 py-3 rounded-lg transition-opacity hover:opacity-90 text-white"
+              style={{ backgroundColor: '#1B6B3A' }}
+            >
+              {lang === 'or' ? 'Build ₹1 Crore →' : 'Build ₹1 Crore →'}
+            </Link>
+            {/* Desktop only — Book a free consultation as outlined button */}
             <Link
               to={`/${lang}/book`}
-              className="text-saffron font-body text-sm hover:underline"
+              className="hidden md:inline-flex items-center font-heading font-semibold px-6 py-3 rounded-lg border-2 text-sm transition-colors hover:bg-saffron hover:text-white"
+              style={{ borderColor: '#E8820C', color: '#E8820C' }}
             >
               {t('landing.cta2', 'Book a free consultation')}
             </Link>
