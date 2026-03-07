@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useLocation, Link } from "react-router-dom";
+import { useParams, useLocation, Link, useNavigate } from "react-router-dom";
 import { Helmet } from 'react-helmet-async';
 import { supabase } from "@/integrations/supabase/client";
 import { BRAND } from "@/constants/brand";
@@ -85,6 +85,38 @@ function SchemaMarkup({ page, content, baseSlug, currentUrl }: { page: SeoPage; 
   );
 }
 
+function buildWhatsAppUrl(slug: string | undefined, language: string): string {
+  const base = 'https://wa.me/919337370992';
+  if (!slug) return base;
+
+  let message: string;
+
+  if (slug.includes('how-much-sip-for-1-crore')) {
+    const cityRaw = slug.replace('how-much-sip-for-1-crore', '').replace(/^-/, '');
+    const city = cityRaw ? cityRaw.charAt(0).toUpperCase() + cityRaw.slice(1) : '';
+    if (language === 'or') {
+      message = city
+        ? `ନମସ୍କାର! ମୁଁ ${city}ରେ ₹1 କୋଟି SIP ଗାଇଡ୍ ଦେଖିଲି। ଆମ ଏକ ଯୋଜନା ବିଷୟରେ କଥା ହୁଅନ୍ତୁ।`
+        : `ନମସ୍କାର! ₹1 କୋଟି SIP ଯୋଜନା ବିଷୟରେ ଆଲୋଚନା କରିବାକୁ ଚାହୁଁଛି।`;
+    } else {
+      message = city
+        ? `Hi! I read your guide on how much SIP I need for ₹1 Crore in ${city}. Can we build a plan for me?`
+        : `Hi! I read your guide on how much SIP I need for ₹1 Crore. Can we build a plan for me?`;
+    }
+  } else {
+    const readable = slug
+      .replace(/-/g, ' ')
+      .replace(/\b\w/g, c => c.toUpperCase());
+    if (language === 'or') {
+      message = `ନମସ୍କାର! ମୁଁ InvestSahi ଗାଇଡ୍ ଦେଖିଲି (${readable})। ଅଧିକ ଜାଣିବାକୁ ଚାହୁଁଛି।`;
+    } else {
+      message = `Hi! I found your guide on "${readable}" at InvestSahi. I'd like to learn more about investing.`;
+    }
+  }
+
+  return `${base}?text=${encodeURIComponent(message)}`;
+}
+
 function LoadingSpinner() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#F5EDD8]">
@@ -115,16 +147,22 @@ function NotFound() {
 export default function GuidePage() {
   const { slug } = useParams<{ slug: string }>();
   const location = useLocation();
+  const navigate = useNavigate();
   const [page, setPage] = useState<SeoPage | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [pillDismissed, setPillDismissed] = useState(() => {
+    try { return sessionStorage.getItem('odia-pill-dismissed') === '1'; } catch { return false; }
+  });
+  const [scrolledPast, setScrolledPast] = useState(false);
 
   const isOdia = location.pathname.startsWith('/or/');
   const language = isOdia ? 'or' : 'en';
   const isOdiaFormal = slug?.endsWith('-odia');
   const audience_style = !isOdia ? 'standard' : isOdiaFormal ? 'pure_odia' : 'mixed';
   const baseSlug = isOdiaFormal ? slug!.replace(/-odia$/, '') : slug!;
+  const otherLangUrl = isOdia ? `/en/${slug}` : `/or/${slug}`;
 
   const t = {
     caseStudyHeading: audience_style === 'pure_odia' ? 'ଆମେ କିପରି ସାହାଯ୍ୟ କଲୁ — ଏକ ବାସ୍ତବ ଉଦାହରଣ' : 'How We Helped — A Real Example',
@@ -148,6 +186,11 @@ export default function GuidePage() {
   };
 
   const BOOKING_FORM_URL = `/${language}/book`;
+
+  const dismissPill = () => {
+    setPillDismissed(true);
+    try { sessionStorage.setItem('odia-pill-dismissed', '1'); } catch {}
+  };
 
   useEffect(() => {
     if (!slug) return;
@@ -225,6 +268,12 @@ export default function GuidePage() {
     };
   }, [baseSlug, location.pathname]);
 
+  useEffect(() => {
+    const handler = () => setScrolledPast(window.scrollY > 400);
+    window.addEventListener('scroll', handler, { passive: true });
+    return () => window.removeEventListener('scroll', handler);
+  }, []);
+
   if (loading) return <LoadingSpinner />;
   if (notFound || !page) return <NotFound />;
 
@@ -248,6 +297,56 @@ export default function GuidePage() {
       />
       <SchemaMarkup page={page} content={content as GuideContent} baseSlug={baseSlug} currentUrl={`https://investsahi.in${location.pathname}`} />
 
+      {/* Sticky mini-navbar */}
+      <div className="sticky top-0 z-50 bg-[#FAF6EF] border-b border-stone/10 shadow-sm">
+        <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+          <a href={`/${language}`} className="flex items-center gap-2">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <circle cx="14" cy="14" r="3" fill="#E8820C"/>
+              {[0,45,90,135,180,225,270,315].map((deg, i) => {
+                const len = i % 2 === 0 ? 9 : 5;
+                const rad = (deg * Math.PI) / 180;
+                return (
+                  <line
+                    key={deg}
+                    x1={14 + 4 * Math.cos(rad)}
+                    y1={14 + 4 * Math.sin(rad)}
+                    x2={14 + (4 + len) * Math.cos(rad)}
+                    y2={14 + (4 + len) * Math.sin(rad)}
+                    stroke="#E8820C"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                );
+              })}
+            </svg>
+            <span className="font-heading font-semibold text-base" style={{ color: '#2C1810' }}>
+              <span style={{ color: '#E8820C' }}>Invest</span>Sahi
+            </span>
+          </a>
+          <a
+            href="https://wa.me/919337370992?text=Hi, I found InvestSahi and want to know more"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium text-white"
+            style={{ background: '#25D366' }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
+            </svg>
+            <span className="hidden sm:inline">WhatsApp Us</span>
+          </a>
+        </div>
+      </div>
+
+      {/* Mission strip */}
+      <div className="w-full py-2 px-4 text-center text-sm font-medium text-white" style={{ background: '#E8820C' }}>
+        Investing is for everyone. Let's prove it.{' '}
+        <a href={`/${language}/about`} className="underline underline-offset-2 opacity-90 hover:opacity-100">
+          Our story →
+        </a>
+      </div>
+
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#F5EDD8] border-b border-[#E8820C]/20 px-4 md:px-8 py-3 flex items-center justify-between">
         <Link to="/" className="text-xl font-heading font-bold">
@@ -264,6 +363,26 @@ export default function GuidePage() {
 
       <main className="pt-16 pb-20 md:pb-0" lang={language}>
 
+        {/* Desktop dismissable language pill */}
+        {!pillDismissed && !scrolledPast && (
+          <div className="hidden md:flex items-center gap-2 mb-4 justify-end px-4 pt-4 max-w-4xl mx-auto">
+            <a
+              href={otherLangUrl}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
+              style={{ background: '#F5EDD8', color: '#1A6B9A', border: '1px solid #1A6B9A33' }}
+            >
+              {isOdia ? 'Read in English →' : 'ଓଡ଼ିଆରେ ପଢ଼ନ୍ତୁ →'}
+            </a>
+            <button
+              onClick={dismissPill}
+              className="text-stone/40 hover:text-stone/70 transition-colors text-xs leading-none"
+              aria-label="Dismiss"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
         {/* Hero */}
         <section className="bg-[#F5EDD8] py-12 md:py-24 px-4 md:px-8 min-h-[60vh] flex items-center">
           <div className="max-w-6xl mx-auto w-full flex flex-col md:flex-row items-center gap-10">
@@ -275,7 +394,7 @@ export default function GuidePage() {
                 {content.hero_subline}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
+                <a href={buildWhatsAppUrl(baseSlug, language)} target="_blank" rel="noopener noreferrer"
                   className="w-full sm:w-auto text-center bg-[#E8820C] text-white font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#C45C00] transition-colors duration-200">
                   {t.heroCtaPrimary}
                 </a>
@@ -307,6 +426,29 @@ export default function GuidePage() {
             </div>
           </div>
         </section>
+
+        {/* Services ribbon */}
+        <div className="w-full py-3 px-4 border-b border-stone/10 bg-white">
+          <div className="max-w-4xl mx-auto flex flex-wrap gap-2 items-center">
+            <span className="text-xs text-stone/40 font-medium mr-1">Our services:</span>
+            {[
+              'SIP & Mutual Funds',
+              'Term Insurance',
+              'NPS & Retirement',
+              'Personal Loan',
+              'Fixed Deposit',
+            ].map((label) => (
+              <a
+                key={label}
+                href={`/${language}/services`}
+                className="text-xs px-3 py-1.5 rounded-full border transition-colors hover:border-[#E8820C] hover:text-[#E8820C]"
+                style={{ borderColor: '#D1D5DB', color: '#6B7280' }}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+        </div>
 
         {/* Story */}
         {content.story_paragraph && (
@@ -411,7 +553,7 @@ export default function GuidePage() {
                     <h3 className="font-heading font-bold text-[#2C1810] mb-2">{service.name}</h3>
                     <p className="font-body text-[#2C1810] opacity-75 text-sm leading-relaxed">{service.description}</p>
                   </div>
-                  <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
+                  <a href={buildWhatsAppUrl(baseSlug, language)} target="_blank" rel="noopener noreferrer"
                     className="mt-5 w-full text-center bg-[#F5EDD8] hover:bg-[#E8820C] text-[#E8820C] hover:text-white font-body text-sm font-semibold py-2.5 px-4 rounded-lg transition-colors duration-200 border border-[#E8820C]">
                     {t.bookConsultation}
                   </a>
@@ -470,6 +612,24 @@ export default function GuidePage() {
           </div>
         </section>
 
+        {/* Trust bar */}
+        <div className="w-full py-4 px-4 rounded-xl mt-8" style={{ background: '#F5EDD8' }}>
+          <div className="max-w-4xl mx-auto flex flex-wrap gap-4 justify-center items-center text-center">
+            {[
+              { icon: '🛡️', label: 'SEBI Compliant', sub: 'AMFI ARN: 322625' },
+              { icon: '📍', label: 'Bhubaneswar Office', sub: '604A, 6th Floor, Nexus Esplanade Mall' },
+              { icon: '🇮🇳', label: 'Odisha-first', sub: 'Serving families in Odisha' },
+              { icon: '💬', label: 'Odia & English', sub: 'Your language, your comfort' },
+            ].map(({ icon, label, sub }) => (
+              <div key={label} className="flex flex-col items-center gap-0.5 min-w-[120px]">
+                <span className="text-xl">{icon}</span>
+                <span className="text-xs font-semibold text-stone">{label}</span>
+                <span className="text-[10px] text-stone/50">{sub}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* CTA */}
         <section className="bg-[#E8820C] py-16 px-4 md:px-8 text-center">
           <div className="max-w-2xl mx-auto">
@@ -480,7 +640,7 @@ export default function GuidePage() {
                 className="bg-white text-[#E8820C] font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#F5EDD8] transition-colors">
                 {t.bookCall}
               </Link>
-              <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
+              <a href={buildWhatsAppUrl(baseSlug, language)} target="_blank" rel="noopener noreferrer"
                 className="border-2 border-white text-white font-body px-6 py-3 rounded-lg hover:bg-white hover:text-[#E8820C] transition-colors">
                 {t.whatsapp}
               </a>
@@ -499,15 +659,69 @@ export default function GuidePage() {
 
       </main>
 
-      {/* Mobile WhatsApp sticky bar */}
-      <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
-        className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-[#1B6B3A] text-white font-body font-semibold text-base py-4 px-6 flex items-center justify-center gap-3 shadow-lg">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-          <path d="M11 1C5.477 1 1 5.477 1 11c0 1.89.525 3.655 1.438 5.163L1 21l4.837-1.438A9.956 9.956 0 0011 21c5.523 0 10-4.477 10-10S16.523 1 11 1z" fill="white" opacity="0.2" stroke="white" strokeWidth="1.5"/>
-          <path d="M7.5 8.5c.5 1 1.5 2.5 3 3.5s2.5 1.5 3 1.5c.3-.5.8-1.5.5-2-.5-.5-1.5-.5-1.5-.5s-.5 0-1 .5c-.3-.3-1-1-1.5-1.5-.5-.5-.5-1-.5-1s0-1-.5-1.5c-.5-.3-1.5 0-2 .5-.3.5 0 1.5 0 1.5z" fill="white"/>
-        </svg>
-        {t.chatWhatsapp}
-      </a>
+      {/* Mobile FABs: Language + WhatsApp */}
+      <div className="fixed bottom-4 right-4 z-50 md:hidden flex items-center gap-3">
+        <button
+          onClick={() => navigate(otherLangUrl)}
+          className="w-14 h-14 rounded-full text-white text-sm font-semibold shadow-lg flex items-center justify-center"
+          style={{ background: '#1A6B9A' }}
+        >
+          {isOdia ? 'EN' : 'ଓ'}
+        </button>
+        <a href={buildWhatsAppUrl(baseSlug, language)} target="_blank" rel="noopener noreferrer"
+          className="w-14 h-14 rounded-full bg-[#1B6B3A] text-white font-body font-semibold shadow-lg flex items-center justify-center">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M11 1C5.477 1 1 5.477 1 11c0 1.89.525 3.655 1.438 5.163L1 21l4.837-1.438A9.956 9.956 0 0011 21c5.523 0 10-4.477 10-10S16.523 1 11 1z" fill="white" opacity="0.2" stroke="white" strokeWidth="1.5"/>
+            <path d="M7.5 8.5c.5 1 1.5 2.5 3 3.5s2.5 1.5 3 1.5c.3-.5.8-1.5.5-2-.5-.5-1.5-.5-1.5-.5s-.5 0-1 .5c-.3-.3-1-1-1.5-1.5-.5-.5-.5-1-.5-1s0-1-.5-1.5c-.5-.3-1.5 0-2 .5-.3.5 0 1.5 0 1.5z" fill="white"/>
+          </svg>
+        </a>
+      </div>
+
+      {/* Slim footer */}
+      <footer className="w-full mt-12 py-8 px-4" style={{ background: '#2C1810' }}>
+        <div className="max-w-4xl mx-auto">
+          <div className="flex flex-wrap justify-between gap-6 mb-6">
+            <div>
+              <div className="text-white font-heading font-semibold text-base mb-1">
+                <span style={{ color: '#E8820C' }}>Invest</span>Sahi
+              </div>
+              <p className="text-xs text-white/50">Odisha's Homegrown Financial Services Platform</p>
+              <a
+                href="https://wa.me/919337370992"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 mt-3 px-3 py-1.5 rounded-full text-xs font-medium text-white"
+                style={{ background: '#25D366' }}
+              >
+                WhatsApp: +91 93373 70992
+              </a>
+            </div>
+            <div className="flex gap-8">
+              <div>
+                <p className="text-[10px] text-white/30 uppercase tracking-wider mb-2">Services</p>
+                {['SIP & Mutual Funds', 'Term Insurance', 'NPS', 'Personal Loan', 'Fixed Deposit'].map(s => (
+                  <a key={s} href={`/${language}/services`} className="block text-xs text-white/60 hover:text-white mb-1">{s}</a>
+                ))}
+              </div>
+              <div>
+                <p className="text-[10px] text-white/30 uppercase tracking-wider mb-2">About</p>
+                {[
+                  { label: 'Our Story', href: `/${language}/about` },
+                  { label: 'Book a Meeting', href: `/${language}/book` },
+                  { label: 'Money School', href: `/${language}/learn` },
+                ].map(({ label, href }) => (
+                  <a key={label} href={href} className="block text-xs text-white/60 hover:text-white mb-1">{label}</a>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="border-t border-white/10 pt-4 text-[10px] text-white/30 text-center">
+            © 2026 InvestSahi · AMFI ARN: 322625 · Part of Sabiduria Capital Group
+            <br />
+            Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully.
+          </div>
+        </div>
+      </footer>
     </>
   );
 }
