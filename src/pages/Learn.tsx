@@ -171,7 +171,6 @@ const LearnList = () => {
     { key: 'story', label: t('learn.filter.stories', 'Stories') },
     { key: 'glossary', label: t('learn.filter.glossary', 'Glossary') },
     { key: 'guide', label: t('learn.filter.guides', 'Guides') },
-    { key: 'whatsapp_post', label: t('learn.filter.schemes', 'Schemes') },
   ];
 
   useEffect(() => {
