@@ -9,10 +9,10 @@ export const mutualFundLogos = [
 ];
 
 export const insuranceLogos = [
-  { name: 'HDFC Life', src: '/partners/hdfc-life.svg' },
-  { name: 'SBI Life', src: '/partners/sbi-life.svg' },
-  { name: 'ICICI Prudential Life', src: '/partners/icici-life.svg' },
-  { name: 'Star Health', src: '/partners/star-health.svg' },
-  { name: 'Niva Bupa', src: '/partners/niva-bupa.svg' },
-  { name: 'Bajaj Allianz', src: '/partners/bajaj-allianz.svg' },
+  { name: 'HDFC Life', src: '/partners/hdfc-life.png' },
+  { name: 'SBI Life', src: '/partners/sbi-life.png' },
+  { name: 'ICICI Prudential Life', src: '/partners/icici-life.jpeg' },
+  { name: 'Star Health', src: '/partners/star-health.png' },
+  { name: 'Niva Bupa', src: '/partners/niva-bupa.png' },
+  { name: 'Bajaj Allianz', src: '/partners/bajaj-allianz.webp' },
 ];
