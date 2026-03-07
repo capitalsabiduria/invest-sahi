@@ -15,7 +15,7 @@ export const BRAND = {
     email: 'hello@investsahi.in',
   },
   registration: {
-    amfi_arn: 'ARN-XXXXXX',
+    amfi_arn: 'ARN-322625',
     irdai_reg: 'XXXXXX',
   },
   social: {

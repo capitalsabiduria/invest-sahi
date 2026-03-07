@@ -57,7 +57,7 @@
     },
     "card3": {
       "title": "Protected & Regulated",
-      "item1": "AMFI Registered — ARN: XXXXXX",
+      "item1": "AMFI Registered — ARN: 322625",
       "item2": "Your money goes to SEBI-regulated funds, never to us",
       "item3": "Check your balance directly with the fund house anytime",
       "item4": "Physical office in Bhubaneswar — come visit us"
@@ -580,7 +580,7 @@
     },
     "reg": {
       "title": "Regulated & Registered",
-      "line1": "AMFI Registered — ARN: XXXXXX",
+      "line1": "AMFI Registered — ARN: 322625",
       "line2": "IRDAI Licensed",
       "note": "Your money goes to SEBI-regulated funds — never to us"
     },
@@ -657,7 +657,7 @@
       "group": "↗ Sabiduria Capital Group"
     },
     "rights": "All rights reserved.",
-    "copyright": "© 2026 InvestSahi | AMFI ARN: XXXXXX | IRDAI Reg: XXXXXX",
+    "copyright": "© 2026 InvestSahi | AMFI ARN: 322625 | IRDAI Reg: XXXXXX",
     "disclaimer": "Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully. InvestSahi is not a bank. Loans are subject to eligibility and credit assessment.",
     "learnInOdia.en": "Learn in Odia",
     "learnInOdia.or": "ଶିଖନ୍ତୁ",
