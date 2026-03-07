@@ -309,7 +309,7 @@ export default function GuidePage() {
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
               style={{ background: '#F5EDD8', color: '#1A6B9A', border: '1px solid #1A6B9A33' }}
             >
-              <span className="sm:hidden">{isOdia ? 'EN' : 'ଓ'}</span>
+              <span className="sm:hidden">{isOdia ? 'EN' : 'ଓଡ଼ିଆ'}</span>
               <span className="hidden sm:inline">{isOdia ? 'Read in English →' : 'ଓଡ଼ିଆରେ ପଢ଼ନ୍ତୁ →'}</span>
             </a>
             <a
