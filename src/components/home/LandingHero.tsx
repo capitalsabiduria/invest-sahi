@@ -162,8 +162,7 @@ const LandingHero = ({ lang }: { lang: string }) => {
             {/* Desktop only — Book a free consultation as outlined button */}
             <Link
               to={`/${lang}/book`}
-              className="hidden md:inline-flex items-center font-heading font-semibold px-6 py-3 rounded-lg border-2 text-sm transition-colors hover:bg-saffron hover:text-white"
-              style={{ borderColor: '#E8820C', color: '#E8820C' }}
+              className="hidden md:inline-flex items-center font-heading font-semibold px-6 py-3 rounded-lg border-2 border-[#E8820C] text-[#E8820C] text-sm transition-colors hover:bg-[#E8820C] hover:text-white"
             >
               {t('landing.cta2', 'Book a free consultation')}
             </Link>
