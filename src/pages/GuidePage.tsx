@@ -244,7 +244,7 @@ export default function GuidePage() {
     }
 
     fetchPage();
-  }, [slug]);
+  }, [slug, audience_style]);
 
   if (loading) return (
     <>
