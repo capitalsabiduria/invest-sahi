@@ -1,11 +1,11 @@
 export const mutualFundLogos = [
   { name: 'SBI Mutual Fund', src: '/partners/SBI-Mutual-Fund-Logo.jpg' },
-  { name: 'HDFC Mutual Fund', src: '/partners/hdfc-mf.svg' },
-  { name: 'ICICI Prudential', src: '/partners/icici-mf.svg' },
-  { name: 'Nippon India', src: '/partners/nippon-mf.svg' },
-  { name: 'Axis Mutual Fund', src: '/partners/axis-mf.svg' },
-  { name: 'Mirae Asset', src: '/partners/mirae-mf.svg' },
-  { name: 'Parag Parikh', src: '/partners/ppfas-mf.svg' },
+  { name: 'HDFC Mutual Fund', src: '/partners/hdfc-mf.webp' },
+  { name: 'ICICI Prudential', src: '/partners/icici-mf.webp' },
+  { name: 'Nippon India', src: '/partners/nippon-mf.jpg' },
+  { name: 'Axis Mutual Fund', src: '/partners/axis-mf.jpg' },
+  { name: 'Mirae Asset', src: '/partners/mirae-mf.jpg' },
+  { name: 'Parag Parikh', src: '/partners/ppfas-mf.jpg' },
 ];
 
 export const insuranceLogos = [
