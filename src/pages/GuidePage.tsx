@@ -469,7 +469,7 @@ export default function GuidePage() {
             <h2 className="font-heading font-bold text-3xl text-white mb-3">{content.cta_headline}</h2>
             <p className="font-body text-white opacity-90 mb-8">{content.cta_subline}</p>
             <div className="flex flex-wrap justify-center gap-4">
-              {slug === 'how-much-sip-for-1-crore-odisha' ? (
+              {slug?.includes('how-much-sip-for-1-crore') ? (
                 <a href={`/${language}/crore-plan`}>
                   <button className="bg-[#E8820C] hover:bg-[#C45C00] text-white font-semibold px-8 py-4 rounded-full text-lg transition-colors w-full sm:w-auto">
                     Build ₹1 Crore. Find out how.
