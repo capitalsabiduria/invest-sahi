@@ -25,43 +25,47 @@ const SIPCard = () => {
   ];
 
   return (
-    <div ref={ref} className="bg-card rounded-xl shadow-lg p-6">
-      <div className="flex items-center gap-2 mb-1">
-        <Wallet className="text-saffron" size={22} />
+    <div ref={ref} className="bg-card rounded-2xl border border-border shadow-xl p-7 md:p-8">
+      <div className="flex items-center gap-2.5 mb-2">
+        <div className="w-9 h-9 rounded-lg bg-saffron/10 flex items-center justify-center">
+          <Wallet className="text-saffron" size={20} />
+        </div>
         <h3 className="font-heading font-semibold text-lg text-foreground">
           {t('landing.card.title', '₹2,500/month SIP')}
         </h3>
       </div>
-      <p className="text-sm text-muted-foreground font-body mb-5">
+      <p className="text-sm text-muted-foreground font-body mb-6 ml-[2.875rem]">
         {t('landing.card.subtitle', 'With 10% annual step-up from ₹500/month')}
       </p>
 
-      {rows.map((row, i) => (
-        <div key={i} className="mb-4">
-          <div className="flex justify-between items-baseline mb-1">
-            <span className="text-sm text-muted-foreground font-body">{row.label}</span>
-            <span className={`font-heading ${row.color}`}>
-              {formatValue(row.count)}
-            </span>
+      <div className="space-y-5">
+        {rows.map((row, i) => (
+          <div key={i}>
+            <div className="flex justify-between items-baseline mb-1.5">
+              <span className="text-sm text-muted-foreground font-body">{row.label}</span>
+              <span className={`font-heading ${row.color}`}>
+                {formatValue(row.count)}
+              </span>
+            </div>
+            <div className="h-2 bg-muted rounded-full overflow-hidden">
+              <motion.div
+                className={`h-full ${row.bar} rounded-full`}
+                initial={{ width: 0 }}
+                animate={visible ? { width: `${row.pct}%` } : {}}
+                transition={{ duration: 1.2, delay: row.delay }}
+              />
+            </div>
           </div>
-          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-            <motion.div
-              className={`h-full ${row.bar} rounded-full`}
-              initial={{ width: 0 }}
-              animate={visible ? { width: `${row.pct}%` } : {}}
-              transition={{ duration: 1.2, delay: row.delay }}
-            />
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
-      <hr className="border-border my-3" />
-      <p className="text-xs text-muted-foreground italic">
+      <hr className="border-border my-5" />
+      <p className="text-xs text-muted-foreground italic leading-relaxed">
         {t('landing.card.disclaimer', '₹2,500/month starting SIP, 10% step-up yearly, 12% annual return. Not guaranteed.')}
       </p>
 
-      <div className="bg-muted rounded-lg px-4 py-3 mt-4">
-        <p className="text-sm font-body text-foreground">
+      <div className="bg-saffron/5 border border-saffron/20 rounded-xl px-5 py-3.5 mt-5">
+        <p className="text-sm font-body font-medium text-foreground">
           {t('landing.card.footer', 'Start at ₹500. Step up yearly. Build ₹1 crore.')}
         </p>
       </div>
@@ -80,7 +84,6 @@ const LandingHero = ({ lang }: { lang: string }) => {
 
   return (
     <section className="relative overflow-hidden min-h-0 md:min-h-screen bg-background flex items-center">
-      {/* Konark chakra watermark */}
       <svg
         viewBox="0 0 200 200"
         fill="none"
@@ -108,69 +111,66 @@ const LandingHero = ({ lang }: { lang: string }) => {
         <circle cx="154" cy="154" r="2.5" fill="#2C1810"/>
       </svg>
 
-      <div className="relative max-w-7xl mx-auto px-4 md:px-8 py-10 md:py-20 grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
+      <div className="relative max-w-7xl mx-auto px-5 md:px-10 py-14 md:py-24 grid grid-cols-1 md:grid-cols-5 gap-10 md:gap-16 items-center">
 
-        {/* LEFT — brand story (3/5) */}
-        <div className="md:col-span-3">
-          <div className="mb-6">
+        <div className="md:col-span-3 space-y-7">
+          <div>
             <img
               src="/investsahi-logo.png"
               alt="InvestSahi"
-              className="h-16 w-auto"
+              className="h-14 md:h-16 w-auto"
             />
           </div>
-          <span className="inline-block px-4 py-1.5 rounded-full bg-saffron text-white text-sm font-semibold font-body mb-6 tracking-wide">
+
+          <span className="inline-block px-4 py-1.5 rounded-full bg-saffron/10 text-saffron text-xs font-semibold font-body tracking-wide uppercase border border-saffron/20">
             {t('landing.tag', "Odisha's Homegrown Financial Services Platform")}
           </span>
 
-          <div className="mb-6">
-            <h1 className="font-body font-bold text-3xl md:text-[38px] leading-tight text-foreground mb-0">
+          <div className="space-y-1">
+            <h1 className="font-body font-bold text-2xl md:text-4xl lg:text-[40px] leading-snug text-foreground">
               {t('landing.headline1', 'Most people wait until they\'re "rich enough" to start investing.')}
             </h1>
-            <h2 className="font-body font-bold text-3xl md:text-[38px] leading-tight text-saffron mt-1">
+            <h2 className="font-body font-bold text-2xl md:text-4xl lg:text-[40px] leading-snug text-saffron">
               {t('landing.headline2', 'InvestSahi was built right here in Odisha to prove them wrong.')}
             </h2>
           </div>
 
-          <p className="font-body text-lg text-muted-foreground max-w-lg mb-6">
+          <p className="font-body text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed">
             {t('landing.body', 'Most people wait until they\'re "rich enough" to start investing. InvestSahi was built right here in Odisha to prove them wrong.')}
           </p>
 
-          <div className="flex flex-wrap gap-2 mb-7">
+          <div className="flex flex-wrap gap-2.5">
             {trustPills.map((pill, i) => (
-              <span key={i} className="border border-border text-xs font-body text-foreground px-3 py-1 rounded-full">
+              <span key={i} className="border border-border bg-card text-xs font-body font-medium text-foreground px-3.5 py-1.5 rounded-full">
                 {pill}
               </span>
             ))}
           </div>
 
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
             <Link
               to={`/${lang}/calculator`}
-              className="bg-saffron text-white font-heading font-semibold px-6 py-3 rounded-lg hover:opacity-90 transition-opacity"
+              className="bg-saffron text-white font-heading font-semibold px-7 py-3.5 rounded-lg hover:opacity-90 transition-opacity text-center text-base shadow-md"
             >
               {t('landing.cta1', 'Build Your Wealth Plan →')}
             </Link>
-            {/* Mobile only — Build ₹1 Crore button */}
             <Link
               to={`/${lang}/crore-plan`}
-              className="md:hidden font-heading font-semibold px-6 py-3 rounded-lg transition-opacity hover:opacity-90 text-white"
+              className="md:hidden font-heading font-semibold px-7 py-3.5 rounded-lg transition-opacity hover:opacity-90 text-white text-center text-base"
               style={{ backgroundColor: '#1B6B3A' }}
             >
               {lang === 'or' ? 'Build ₹1 Crore →' : 'Build ₹1 Crore →'}
             </Link>
-            {/* Desktop only — Book a free consultation as outlined button */}
             <Link
               to={`/${lang}/book`}
-              className="hidden md:inline-flex items-center font-heading font-semibold px-6 py-3 rounded-lg border-2 border-[#E8820C] text-[#E8820C] text-sm transition-colors hover:bg-[#E8820C] hover:text-white"
+              className="hidden md:inline-flex items-center justify-center font-heading font-semibold px-7 py-3.5 rounded-lg border-2 border-saffron text-saffron text-sm transition-colors hover:bg-saffron hover:text-white"
             >
               {t('landing.cta2', 'Book a free consultation')}
             </Link>
           </div>
         </div>
 
-        {/* RIGHT — SIP card (2/5) */}
-        <div className="md:col-span-2">
+        <div className="md:col-span-2 pt-2 md:pt-0">
           <motion.div
             animate={{ y: [0, -6, 0] }}
             transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
