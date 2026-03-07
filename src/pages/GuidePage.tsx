@@ -185,6 +185,18 @@ export default function GuidePage() {
     storyAttribution: audience_style === 'pure_odia' ? '— ଓଡ଼ିଶାର ଏକ କାହାଣୀ। ଗୋପନୀୟତା ପାଇଁ ନାମ ପରିବର୍ତ୍ତନ କରାଯାଇଛି।' : '— A story from Odisha. Names changed for privacy.',
     localInsightLabel: audience_style === 'pure_odia' ? 'ସ୍ଥାନୀୟ ଜ୍ଞାନ' : 'Local Insight',
     chatWhatsapp: audience_style === 'pure_odia' ? 'WhatsApp ରେ କଥା ହୁଅନ୍ତୁ' : 'Chat with us on WhatsApp',
+    ourServicesLabel: audience_style === 'pure_odia' ? 'ଆମ ସେବା:' : 'Our services:',
+    missionText: audience_style === 'pure_odia' ? 'Investment ସମସ୍ତଙ୍କ ପାଇଁ। ଆସନ୍ତୁ ପ୍ରମାଣ କରୁ।' : "Investing is for everyone. Let's prove it.",
+    ourStory: audience_style === 'pure_odia' ? 'ଆମ କାହାଣୀ →' : 'Our story →',
+    slimTagline: audience_style === 'pure_odia' ? 'ଓଡ଼ିଶାର ନିଜ Financial Services Platform' : "Odisha's Homegrown Financial Services Platform",
+    servicesNav: audience_style === 'pure_odia' ? 'ସେବା' : 'Services',
+    aboutNav: audience_style === 'pure_odia' ? 'ଆମ ବିଷୟରେ' : 'About',
+    serviceRibbonItems: audience_style === 'pure_odia'
+      ? ['SIP ଏବଂ Mutual Funds', 'Term Insurance', 'NPS ଏବଂ ଅବସର', 'Personal Loan', 'Fixed Deposit']
+      : ['SIP & Mutual Funds', 'Term Insurance', 'NPS & Retirement', 'Personal Loan', 'Fixed Deposit'],
+    footerAboutItems: audience_style === 'pure_odia'
+      ? ['ଆମ କାହାଣୀ', 'ମିଟିଂ ବୁକ୍ କରନ୍ତୁ', 'ଟଙ୍କା ସ୍କୁଲ']
+      : ['Our Story', 'Book a Meeting', 'Money School'],
   };
 
   const BOOKING_FORM_URL = `/${language}/book`;
@@ -310,7 +322,7 @@ export default function GuidePage() {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
               </svg>
-              <span>WhatsApp Us</span>
+              <span>{t.whatsapp}</span>
             </a>
           </div>
         </div>
@@ -318,9 +330,9 @@ export default function GuidePage() {
 
       {/* Mission strip */}
       <div className="w-full py-2 px-4 text-center text-sm font-medium text-white" style={{ background: '#E8820C' }}>
-        Investing is for everyone. Let's prove it.{' '}
+        {t.missionText}{' '}
         <a href={`/${language}/about`} className="underline underline-offset-2 opacity-90 hover:opacity-100">
-          Our story →
+          {t.ourStory}
         </a>
       </div>
 
@@ -373,14 +385,8 @@ export default function GuidePage() {
         {/* Services ribbon */}
         <div className="w-full py-3 border-b border-stone/10 bg-white">
           <div className="max-w-4xl mx-auto px-4 flex flex-wrap gap-2 items-center">
-            <span className="text-xs text-stone/40 font-medium mr-1">Our services:</span>
-            {[
-              'SIP & Mutual Funds',
-              'Term Insurance',
-              'NPS & Retirement',
-              'Personal Loan',
-              'Fixed Deposit',
-            ].map((label) => (
+            <span className="text-xs text-stone/40 font-medium mr-1">{t.ourServicesLabel}</span>
+            {t.serviceRibbonItems.map((label) => (
               <a
                 key={label}
                 href={`/${language}/services`}
@@ -609,7 +615,7 @@ export default function GuidePage() {
               <div className="text-white font-heading font-semibold text-base mb-1">
                 <span style={{ color: '#E8820C' }}>Invest</span>Sahi
               </div>
-              <p className="text-xs text-white/50">Odisha's Homegrown Financial Services Platform</p>
+              <p className="text-xs text-white/50">{t.slimTagline}</p>
               <a
                 href="https://wa.me/919337370992"
                 target="_blank"
@@ -622,17 +628,17 @@ export default function GuidePage() {
             </div>
             <div className="flex gap-8">
               <div>
-                <p className="text-[10px] text-white/30 uppercase tracking-wider mb-2">Services</p>
-                {['SIP & Mutual Funds', 'Term Insurance', 'NPS', 'Personal Loan', 'Fixed Deposit'].map(s => (
+                <p className="text-[10px] text-white/30 uppercase tracking-wider mb-2">{t.servicesNav}</p>
+                {t.serviceRibbonItems.map(s => (
                   <a key={s} href={`/${language}/services`} className="block text-xs text-white/60 hover:text-white mb-1">{s}</a>
                 ))}
               </div>
               <div>
-                <p className="text-[10px] text-white/30 uppercase tracking-wider mb-2">About</p>
+                <p className="text-[10px] text-white/30 uppercase tracking-wider mb-2">{t.aboutNav}</p>
                 {[
-                  { label: 'Our Story', href: `/${language}/about` },
-                  { label: 'Book a Meeting', href: `/${language}/book` },
-                  { label: 'Money School', href: `/${language}/learn` },
+                  { label: t.footerAboutItems[0], href: `/${language}/about` },
+                  { label: t.footerAboutItems[1], href: `/${language}/book` },
+                  { label: t.footerAboutItems[2], href: `/${language}/learn` },
                 ].map(({ label, href }) => (
                   <a key={label} href={href} className="block text-xs text-white/60 hover:text-white mb-1">{label}</a>
                 ))}
