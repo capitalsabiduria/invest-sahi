@@ -63,9 +63,9 @@ export const heroStates = [
     ctaText: 'hero.state3.cta', ctaColor: 'bg-blue',
     secondaryText: 'hero.state3.secondary',
     cardType: 'trust' as const,
-    ctaHref: 'services',
-    secondaryHref: 'services',
-    secondaryLabel: 'Read our credentials →',
+    ctaHref: 'about',
+    secondaryHref: 'book',
+    secondaryLabel: 'Book a free consultation →',
   },
 ];
 
@@ -163,7 +163,7 @@ export const TrustCard = () => {
         </div>
         <div className="bg-card rounded-lg px-4 py-2 text-center flex-1">
           <span className="text-xs text-muted-foreground font-body">IRDAI</span>
-          <p className="font-heading font-semibold text-sm text-foreground">REG-{IRDAI_REG}</p>
+          <p className="font-heading font-semibold text-sm text-foreground">Compliant</p>
         </div>
       </div>
     </div>
