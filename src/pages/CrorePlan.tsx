@@ -97,26 +97,26 @@ const targets = [
   { label: '₹2 Crore', value: 20000000 },
 ];
 
-const contextCards: Record<number, { icon: string; heading: string; body: string }[]> = {
+const contextCards: Record<number, { icon: string; headingEN: string; headingOR: string; bodyEN: string; bodyOR: string }[]> = {
   2500000: [
-    { icon: '🛡️', heading: 'Emergency Fund', body: 'Six months of expenses, covered. Never scramble for money during a crisis again.' },
-    { icon: '🎓', heading: "Child's School Fees", body: "Cover your child's schooling from Class 1 to 12 at a top private school in Odisha — fully funded." },
-    { icon: '🏠', heading: 'Home Renovation', body: 'Transform your home — new roof, kitchen, or an extra room — without a single loan.' },
+    { icon: '🛡️', headingEN: 'Emergency Fund', headingOR: 'ଜରୁରୀ ସ୍ଥିତି ପାଣ୍ଠି', bodyEN: 'Six months of expenses, covered. Never scramble for money during a crisis again.', bodyOR: 'ଛଅ ମାସର ଖର୍ଚ୍ଚ, ସୁରକ୍ଷିତ। ଆଉ କୌଣସି ଜରୁରୀ ସ୍ଥିତିରେ ଅର୍ଥ ପାଇଁ ଦୌଡ଼ ନ ହୁଅ।' },
+    { icon: '🎓', headingEN: "Child's School Fees", headingOR: 'ଶିଶୁର ବିଦ୍ୟାଳୟ ଶୁଳ୍କ', bodyEN: "Cover your child's schooling from Class 1 to 12 at a top private school in Odisha — fully funded.", bodyOR: 'ଓଡ଼ିଶାର ଏକ ଉତ୍ତମ ଘରୋଇ ବିଦ୍ୟାଳୟରେ Class 1 ଠାରୁ 12 ପର୍ଯ୍ୟନ୍ତ ଆପଣଙ୍କ ସନ୍ତାନର ଶିକ୍ଷା — ସମ୍ପୂର୍ଣ୍ଣ ଖର୍ଚ୍ଚ।' },
+    { icon: '🏠', headingEN: 'Home Renovation', headingOR: 'ଘର ସଂସ୍କାର', bodyEN: 'Transform your home — new roof, kitchen, or an extra room — without a single loan.', bodyOR: 'ଆପଣଙ୍କ ଘରକୁ ନୂଆ ରୂପ ଦିଅନ୍ତୁ — ଛାଦ, ରୋଷେଇ ଘର, ବା ଅତିରିକ୍ତ ଘର — ଏକ ଟଙ୍କା ଋଣ ବିନା।' },
   ],
   5000000: [
-    { icon: '🏠', heading: 'Down Payment on a Home', body: 'A 50% down payment on a comfortable home in Bhubaneswar. Your EMI stays manageable.' },
-    { icon: '🎓', heading: "Child's Higher Education", body: "Fund a full engineering or medical degree — NIT, SCB Medical, or a private college — without loans." },
-    { icon: '💼', heading: 'Start a Business', body: 'The capital to start a retail shop, service business, or franchise in Odisha — without risking family savings.' },
+    { icon: '🏠', headingEN: 'Down Payment on a Home', headingOR: 'ଘର ପାଇଁ Down Payment', bodyEN: 'A 50% down payment on a comfortable home in Bhubaneswar. Your EMI stays manageable.', bodyOR: 'ଭୁବନେଶ୍ୱରରେ ଏକ ଆରାମଦାୟକ ଘରର 50% Down Payment। ଆପଣଙ୍କ EMI ସହଜ ରହିବ।' },
+    { icon: '🎓', headingEN: "Child's Higher Education", headingOR: 'ଶିଶୁର ଉଚ୍ଚ ଶିକ୍ଷା', bodyEN: "Fund a full engineering or medical degree — NIT, SCB Medical, or a private college — without loans.", bodyOR: 'ଇଞ୍ଜିନିୟରିଂ ବା ଡାକ୍ତରୀ ଡିଗ୍ରି — NIT, SCB Medical, ବା ଘରୋଇ କଲେଜ — ଋଣ ବିନା ସମ୍ଭବ।' },
+    { icon: '💼', headingEN: 'Start a Business', headingOR: 'ବ୍ୟବସାୟ ଆରମ୍ଭ', bodyEN: 'The capital to start a retail shop, service business, or franchise in Odisha — without risking family savings.', bodyOR: 'ଓଡ଼ିଶାରେ ଏକ ଦୋକାନ, ସେବା ବ୍ୟବସାୟ, ବା franchise ଆରମ୍ଭ ପାଇଁ ପୁଞ୍ଜି — ପରିବାରର ସଞ୍ଚୟ ବିନା ଜୋଖ।' },
   ],
   10000000: [
-    { icon: '🎓', heading: 'Complete Education', body: "Your child's education at any college in India — NIT, AIIMS, IIT — fully funded with no loan needed." },
-    { icon: '🏠', heading: 'A Home in Bhubaneswar', body: 'A comfortable home in Bhubaneswar or any Tier 2 city in Odisha — owned outright, no EMI burden.' },
-    { icon: '🌅', heading: '20 Years of Retirement', body: '₹40,000 every month for 20 years after you retire. Live with dignity, on your own terms.' },
+    { icon: '🎓', headingEN: 'Complete Education', headingOR: 'ସମ୍ପୂର୍ଣ୍ଣ ଶିକ୍ଷା', bodyEN: "Your child's education at any college in India — NIT, AIIMS, IIT — fully funded with no loan needed.", bodyOR: 'ଭାରତର ଯେକୌଣସି କଲେଜ — NIT, AIIMS, IIT — ଆପଣଙ୍କ ସନ୍ତାନର ସମ୍ପୂର୍ଣ୍ଣ ଶିକ୍ଷା ଋଣ ବିନା ସମ୍ଭବ।' },
+    { icon: '🏠', headingEN: 'A Home in Bhubaneswar', headingOR: 'ଭୁବନେଶ୍ୱରରେ ଏକ ଘର', bodyEN: 'A comfortable home in Bhubaneswar or any Tier 2 city in Odisha — owned outright, no EMI burden.', bodyOR: 'ଭୁବନେଶ୍ୱର ବା ଓଡ଼ିଶାର ଯେକୌଣସି Tier 2 ସହରରେ ଏକ ଆରାମଦାୟକ ଘର — EMI ବୋଝ ବିନା।' },
+    { icon: '🌅', headingEN: '20 Years of Retirement', headingOR: '୨୦ ବର୍ଷର ଅବସର', bodyEN: '₹40,000 every month for 20 years after you retire. Live with dignity, on your own terms.', bodyOR: 'ଅବସର ପରେ ୨୦ ବର୍ଷ ପର୍ଯ୍ୟନ୍ତ ପ୍ରତି ମାସ ₹୪୦,୦୦୦। ଆପଣଙ୍କ ଶର୍ତ୍ତରେ, ଆପଣଙ୍କ ମର୍ଯ୍ୟାଦାରେ ବଞ୍ଚନ୍ତୁ।' },
   ],
   20000000: [
-    { icon: '🌅', heading: 'Full Retirement Corpus', body: '₹80,000 every month for 20+ years. Complete financial independence in retirement.' },
-    { icon: '💍', heading: "Children's Weddings", body: 'Give your children a memorable start to their married life without borrowing a single rupee.' },
-    { icon: '🏛️', heading: 'Leave a Legacy', body: 'A meaningful inheritance for your children and grandchildren. Your wealth becomes generational.' },
+    { icon: '🌅', headingEN: 'Full Retirement Corpus', headingOR: 'ସମ୍ପୂର୍ଣ୍ଣ ଅବସର ପାଣ୍ଠି', bodyEN: '₹80,000 every month for 20+ years. Complete financial independence in retirement.', bodyOR: '20+ ବର୍ଷ ପର୍ଯ୍ୟନ୍ତ ପ୍ରତି ମାସ ₹80,000। ଅବସରରେ ସମ୍ପୂର୍ଣ୍ଣ ଆର୍ଥିକ ସ୍ୱାଧୀନତା।' },
+    { icon: '💍', headingEN: "Children's Weddings", headingOR: 'ଶିଶୁମାନଙ୍କ ବିବାହ', bodyEN: 'Give your children a memorable start to their married life without borrowing a single rupee.', bodyOR: 'ଏକ ଟଙ୍କା ଋଣ ନ ନେଇ ଆପଣଙ୍କ ସନ୍ତାନମାନଙ୍କୁ ଏକ ଅବିସ୍ମରଣୀୟ ବୈବାହିକ ଜୀବନ ଆରମ୍ଭ ଦିଅନ୍ତୁ।' },
+    { icon: '🏛️', headingEN: 'Leave a Legacy', headingOR: 'ଉତ୍ତରାଧିକାର ଛାଡ଼ନ୍ତୁ', bodyEN: 'A meaningful inheritance for your children and grandchildren. Your wealth becomes generational.', bodyOR: 'ଆପଣଙ୍କ ପୁତ୍ରପୌତ୍ର ପାଇଁ ଏକ ଅର୍ଥବହ ଉତ୍ତରାଧିକାର। ଆପଣଙ୍କ ସମ୍ପଦ ପିଢ଼ି ପରେ ପିଢ଼ି ଚଲୁଥିବ।' },
   ],
 };
 
@@ -589,8 +589,8 @@ const CrorePlan = () => {
                   className="bg-white rounded-2xl p-5 border border-[#E8820C]/10 text-center"
                 >
                   <div className="text-3xl mb-3">{card.icon}</div>
-                  <p className="font-heading font-bold text-base text-[#2C1810] mb-1">{card.heading}</p>
-                  <p className="text-sm text-[#2C1810]/60 font-body">{card.body}</p>
+                  <p className="font-heading font-bold text-base text-[#2C1810] mb-1">{isEN ? card.headingEN : card.headingOR}</p>
+                  <p className="text-sm text-[#2C1810]/60 font-body">{isEN ? card.bodyEN : card.bodyOR}</p>
                 </div>
               ))}
             </div>
@@ -629,6 +629,9 @@ const CrorePlan = () => {
                 className="w-full rounded-xl px-4 py-3 text-sm font-body focus:outline-none focus:ring-2 focus:ring-[#E8820C] mb-3 bg-[#F5EDD8]"
                 style={{ border: '1px solid rgba(44,24,16,0.15)' }}
               />
+              <p className="text-xs font-body text-[#2C1810]/50 mb-2">
+                {isEN ? 'How would you like us to reach you?' : 'ଆମେ ଆପଣଙ୍କୁ କିପରି ଯୋଗାଯୋଗ କରିବୁ?'}
+              </p>
               <div className="flex gap-3 mb-4">
                 <button
                   onClick={() => setLeadPreference('whatsapp')}
@@ -683,25 +686,18 @@ const CrorePlan = () => {
               </h2>
               <p className="text-sm text-[#2C1810]/60 font-body mb-6">
                 {isEN
-                  ? `Our advisor will call you within one working day to walk you through your ${formatCorpus(targetCorpus)} roadmap.`
-                  : `ଆମ advisor ଗୋଟିଏ କାର୍ଯ୍ୟ ଦିନ ମଧ୍ୟରେ ଆପଣଙ୍କ ${formatCorpus(targetCorpus)} ଯୋଜନା ବୁଝାଇ ଦେବ।`}
+                  ? "Our advisor will be in touch within one working day. If you'd like to chat sooner, message us on WhatsApp."
+                  : 'ଆମ advisor ଗୋଟିଏ କାର୍ଯ୍ୟ ଦିନ ମଧ୍ୟରେ ଯୋଗାଯୋଗ କରିବ। ଯଦି ଆଗରୁ କଥା ହେବାକୁ ଚାହୁଁଛନ୍ତି, WhatsApp ରେ ବାର୍ତ୍ତା ପଠାନ୍ତୁ।'}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
-                <Link
-                  to={`/${currentLang}/book`}
-                  className="px-6 py-3 rounded-xl font-heading font-semibold text-white text-sm"
-                  style={{ backgroundColor: '#E8820C' }}
-                >
-                  {isEN ? 'Book a Call Now' : 'ଏବେ Call ବୁକ କରନ୍ତୁ'}
-                </Link>
                 <a
-                  href={WHATSAPP_URL}
+                  href={`${WHATSAPP_URL}?text=${encodeURIComponent(isEN ? 'Hi! I just submitted my ₹1 Crore plan on InvestSahi. Can we chat about next steps?' : 'ନମସ୍କାର! ମୁଁ InvestSahi ରେ ମୋ ₹1 Crore ଯୋଜନା ଦାଖଲ କଲି। ପରବର୍ତ୍ତୀ ପଦକ୍ଷେପ ବିଷୟରେ କଥା ହେବା?')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-6 py-3 rounded-xl font-heading font-semibold text-white text-sm"
                   style={{ backgroundColor: '#1B6B3A' }}
                 >
-                  {isEN ? 'WhatsApp Us Instead' : 'WhatsApp କରନ୍ତୁ'}
+                  {isEN ? 'Chat with us instantly on WhatsApp' : 'WhatsApp ରେ ତୁରନ୍ତ କଥା ହୁଅନ୍ତୁ'}
                 </a>
               </div>
             </div>
@@ -754,7 +750,7 @@ const CrorePlan = () => {
                 {isEN ? 'Book a Free Call →' : 'ନିଃଶୁଳ୍କ Call ବୁକ କରନ୍ତୁ →'}
               </Link>
               <a
-                href={WHATSAPP_URL}
+                href={`${WHATSAPP_URL}?text=${encodeURIComponent(isEN ? 'Hi! I want to start building my ₹1 Crore plan with InvestSahi. Can you help me get started?' : 'ନମସ୍କାର! ମୁଁ InvestSahi ସହ ମୋ ₹1 Crore ଯୋଜନା ଆରମ୍ଭ କରିବାକୁ ଚାହୁଁଛି।')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="border-2 border-white text-white font-heading font-semibold px-8 py-4 rounded-xl text-base hover:bg-white/10 transition-colors"
