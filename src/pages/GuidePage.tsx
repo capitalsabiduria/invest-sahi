@@ -44,13 +44,13 @@ interface SeoPage {
   content: GuideContent | null;
 }
 
-function SchemaMarkup({ page, content, baseSlug, currentUrl }: { page: SeoPage; content: GuideContent; baseSlug: string; currentUrl: string }) {
-  const schema = {
+function SchemaMarkup({ page, content, baseSlug }: { page: SeoPage; content: GuideContent; baseSlug: string }) {
+  const finSvcSchema = {
     "@context": "https://schema.org",
     "@type": "FinancialService",
     "name": BRAND.name,
     "description": content.meta_description || page.meta_description,
-    "url": currentUrl,
+    "url": `https://investsahi.in/en/${baseSlug}`,
     "telephone": BRAND.contact.phone,
     "email": BRAND.contact.email,
     "address": {
@@ -69,19 +69,26 @@ function SchemaMarkup({ page, content, baseSlug, currentUrl }: { page: SeoPage; 
         "@type": "Offer",
         "itemOffered": { "@type": "Service", "name": s.name, "description": s.description }
       }))
-    },
-    ...(content.faqs && content.faqs.length > 0 && {
-      "mainEntity": content.faqs.map(faq => ({
-        "@type": "Question",
-        "name": faq.question,
-        "acceptedAnswer": { "@type": "Answer", "text": faq.answer }
-      }))
-    })
+    }
   };
+
+  const faqSchema = content.faqs && content.faqs.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": content.faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": { "@type": "Answer", "text": faq.answer }
+    }))
+  } : null;
+
   return (
-    <Helmet>
-      <script type="application/ld+json">{JSON.stringify(schema)}</script>
-    </Helmet>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(faqSchema ? [finSvcSchema, faqSchema] : finSvcSchema)
+      }}
+    />
   );
 }
 
@@ -228,44 +235,19 @@ export default function GuidePage() {
     fetchPage();
   }, [slug]);
 
-  useEffect(() => {
-    const hreflangs = [
-      { lang: 'en-IN', href: `https://investsahi.in/en/${baseSlug}` },
-      { lang: 'or', href: `https://investsahi.in/or/${baseSlug}` },
-      { lang: 'or-IN', href: `https://investsahi.in/odia/${baseSlug}` },
-      { lang: 'x-default', href: `https://investsahi.in/en/${baseSlug}` },
-    ];
-
-    const injected: HTMLLinkElement[] = [];
-    hreflangs.forEach(({ lang, href }) => {
-      const link = document.createElement('link');
-      link.setAttribute('rel', 'alternate');
-      link.setAttribute('hreflang', lang);
-      link.setAttribute('href', href);
-      document.head.appendChild(link);
-      injected.push(link);
-    });
-
-    const existingCanonical = document.querySelector('link[rel="canonical"]');
-    if (existingCanonical) existingCanonical.remove();
-    const canonical = document.createElement('link');
-    canonical.setAttribute('rel', 'canonical');
-    canonical.setAttribute('href', `https://investsahi.in${location.pathname}`);
-    document.head.appendChild(canonical);
-
-    return () => {
-      injected.forEach(el => el.remove());
-    };
-  }, [baseSlug, location.pathname]);
-
-
-  if (loading) return <LoadingSpinner />;
+  if (loading) return (
+    <>
+      <Helmet><meta name="robots" content="noindex" /></Helmet>
+      <LoadingSpinner />
+    </>
+  );
   if (notFound || !page) return <NotFound />;
 
   const content = page.content as GuideContent | null;
 
   if (!content) return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#F5EDD8] gap-4 px-4">
+      <Helmet><meta name="robots" content="noindex" /></Helmet>
       <h1 className="font-heading font-bold text-xl text-[#2C1810]">Content coming soon</h1>
       <Link to="/" className="bg-[#E8820C] text-white font-body px-6 py-3 rounded-lg">Go to Homepage</Link>
     </div>
@@ -280,7 +262,7 @@ export default function GuidePage() {
         lang={language as 'en' | 'or'}
         slug={baseSlug}
       />
-      <SchemaMarkup page={page} content={content as GuideContent} baseSlug={baseSlug} currentUrl={`https://investsahi.in${location.pathname}`} />
+      <SchemaMarkup page={page} content={content as GuideContent} baseSlug={baseSlug} />
 
       {/* Sticky mini-navbar */}
       <div className="sticky top-0 z-50 bg-[#FAF6EF] border-b border-stone/10 shadow-sm">
@@ -537,11 +519,9 @@ export default function GuidePage() {
                       <span className="font-body font-semibold text-sm md:text-base text-[#2C1810] pr-4">{faq.question}</span>
                       <span className="text-[#E8820C] flex-shrink-0 text-xl font-bold">{openFaq === i ? '−' : '+'}</span>
                     </button>
-                    {openFaq === i && (
-                      <div className="px-4 py-4 bg-white">
-                        <p className="font-body text-[#2C1810] opacity-80 leading-relaxed text-sm">{faq.answer}</p>
-                      </div>
-                    )}
+                    <div className={`px-4 py-4 bg-white transition-all ${openFaq === i ? 'block' : 'hidden'}`}>
+                      <p className="font-body text-[#2C1810] opacity-80 leading-relaxed text-sm">{faq.answer}</p>
+                    </div>
                   </div>
                 ))}
               </div>
