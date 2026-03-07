@@ -79,7 +79,7 @@ const LandingHero = ({ lang }: { lang: string }) => {
   ];
 
   return (
-    <section className="relative overflow-hidden min-h-screen bg-background flex items-center">
+    <section className="relative overflow-hidden min-h-0 md:min-h-screen bg-background flex items-center">
       {/* Konark chakra watermark */}
       <svg
         viewBox="0 0 200 200"
@@ -108,7 +108,7 @@ const LandingHero = ({ lang }: { lang: string }) => {
         <circle cx="154" cy="154" r="2.5" fill="#2C1810"/>
       </svg>
 
-      <div className="relative max-w-7xl mx-auto px-4 md:px-8 py-20 grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
+      <div className="relative max-w-7xl mx-auto px-4 md:px-8 py-10 md:py-20 grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
 
         {/* LEFT — brand story (3/5) */}
         <div className="md:col-span-3">
@@ -151,9 +151,19 @@ const LandingHero = ({ lang }: { lang: string }) => {
             >
               {t('landing.cta1', 'Build Your Wealth Plan →')}
             </Link>
+            {/* Mobile only — Build ₹1 Crore button */}
+            <Link
+              to={`/${lang}/crore-plan`}
+              className="md:hidden font-heading font-semibold px-6 py-3 rounded-lg transition-opacity hover:opacity-90 text-white"
+              style={{ backgroundColor: '#1B6B3A' }}
+            >
+              {lang === 'or' ? 'Build ₹1 Crore →' : 'Build ₹1 Crore →'}
+            </Link>
+            {/* Desktop only — Book a free consultation as outlined button */}
             <Link
               to={`/${lang}/book`}
-              className="text-saffron font-body text-sm hover:underline"
+              className="hidden md:inline-flex items-center font-heading font-semibold px-6 py-3 rounded-lg border-2 text-sm transition-colors hover:bg-saffron hover:text-white"
+              style={{ borderColor: '#E8820C', color: '#E8820C' }}
             >
               {t('landing.cta2', 'Book a free consultation')}
             </Link>

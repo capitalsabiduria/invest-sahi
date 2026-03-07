@@ -33,9 +33,9 @@ const OdiaPromise = () => {
   };
   const currentLang = i18n.language;
   return (
-    <section className="bg-card py-20">
+    <section className="bg-card py-10 md:py-20">
       <RevealSection className="max-w-2xl mx-auto px-4 text-center">
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-4 scale-75 md:scale-100 origin-center">
           <CoinPlantIcon />
         </div>
         <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-2">

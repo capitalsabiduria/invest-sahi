@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router-dom';
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, Phone } from 'lucide-react';
 import { WHATSAPP_URL, AMFI_ARN, IRDAI_REG } from '@/config/constants';
 
 const Footer = () => {
@@ -35,7 +35,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="text-white" style={{ backgroundColor: '#5C3D2E' }}>
+    <footer className="text-white" style={{ backgroundColor: '#1A2E1A' }}>
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Col 1 - Logo */}
@@ -56,9 +56,29 @@ const Footer = () => {
               <MessageCircle size={18} />
               {t('footer.whatsapp', 'Contact us on WhatsApp')}
             </a>
+            <a
+              href="tel:+919337370992"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white mt-2"
+              style={{ backgroundColor: '#E8820C' }}
+            >
+              <Phone size={18} />
+              {currentLang === 'or' ? 'ଆମକୁ Call କରନ୍ତୁ' : 'Call Us Now'}
+            </a>
             <div className="mt-4 text-xs text-white/50 font-body leading-relaxed">
               <p>604A, 6th Floor, Nexus Esplanade Mall</p>
               <p>Rasulgarh, Bhubaneswar — 751010</p>
+            </div>
+            <div className="mt-3 rounded-xl overflow-hidden" style={{ height: '120px' }}>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.3!2d85.8245!3d20.2961!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a190906f6c0a4b1%3A0x7b1b1b1b1b1b1b1b!2sNexus%20Esplanade%20Mall%2C%20Rasulgarh%2C%20Bhubaneswar%2C%20Odisha%20751010!5e0!3m2!1sen!2sin!4v1234567890"
+                width="100%"
+                height="120"
+                style={{ border: 0 }}
+                allowFullScreen={false}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="InvestSahi Office Location"
+              />
             </div>
           </div>
 
@@ -127,7 +147,7 @@ const Footer = () => {
           </p>
           <div className="flex items-center gap-4 text-xs text-white/50 font-body">
             <span>ARN: {AMFI_ARN}</span>
-            <span>IRDAI: {IRDAI_REG}</span>
+            <span>IRDAI Compliant</span>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 md:px-8 pb-6">

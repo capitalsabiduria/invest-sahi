@@ -79,7 +79,7 @@ export const EducationCard = ({ lang }: { lang: string }) => {
     { label: t('hero.card1.corpus', 'Projected Corpus'), value: '₹8,42,000' },
   ];
   return (
-    <div className="bg-card rounded-xl shadow-lg p-6">
+    <div className="bg-card rounded-xl shadow-lg p-4 md:p-6">
       <div className="flex items-center gap-2 mb-4">
         <GraduationCap className="text-saffron" size={24} />
         <h3 className="font-heading font-semibold text-lg text-foreground">{t('hero.card1.title', "Child's Education Fund")}</h3>
@@ -109,7 +109,7 @@ export const GrowthCard = () => {
   ];
   const { ref, visible } = useScrollReveal(0.3);
   return (
-    <div ref={ref} className="bg-card rounded-xl shadow-lg p-6">
+    <div ref={ref} className="bg-card rounded-xl shadow-lg p-4 md:p-6">
       <div className="flex items-center gap-2 mb-4">
         <Clock className="text-green" size={24} />
         <h3 className="font-heading font-semibold text-lg text-foreground">{t('hero.card2.title', 'Power of Compounding')}</h3>
@@ -144,7 +144,7 @@ export const TrustCard = () => {
     t('hero.card3.item4', 'Zero Hidden Charges'),
   ];
   return (
-    <div className="bg-blue-light rounded-xl shadow-lg p-6">
+    <div className="bg-blue-light rounded-xl shadow-lg p-4 md:p-6">
       <div className="flex items-center gap-2 mb-4">
         <Shield className="text-blue" size={24} />
         <h3 className="font-heading font-semibold text-lg text-foreground">{t('hero.card3.title', 'Why Trust Us')}</h3>
@@ -189,7 +189,7 @@ const HeroSection = ({ lang }: { lang: string }) => {
 
   return (
     <section
-      className="bg-card py-20"
+      className="bg-card py-10 md:py-20"
       onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
       onTouchEnd={(e) => {
         if (touchStartX.current === null) return;
@@ -200,7 +200,7 @@ const HeroSection = ({ lang }: { lang: string }) => {
         touchStartX.current = null;
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-20 grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 md:py-20 grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
         <div className="md:col-span-3 relative overflow-hidden">
           <HeroBgDecoration />
           <div className="relative z-10">
@@ -286,7 +286,7 @@ const HeroSection = ({ lang }: { lang: string }) => {
           </motion.div>
           <Link
             to={`/${lang}/crore-plan`}
-            className="block mt-3 rounded-2xl p-4 transition-colors group"
+            className="block mt-3 rounded-2xl p-3 md:p-4 transition-colors group"
             style={{ backgroundColor: '#2C1810' }}
             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#3d2415')}
             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2C1810')}
