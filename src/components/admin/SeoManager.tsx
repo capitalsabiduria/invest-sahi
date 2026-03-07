@@ -845,9 +845,18 @@ const SeoManager = () => {
 
       if (error || !data?.content) throw new Error(error?.message || 'Generation failed');
 
-      const version = page.versions.find(v => v.language === language && v.audience_style === audience_style);
-      if (!version) throw new Error('Version row not found');
-
+      let version = page.versions.find(v => v.language === language && v.audience_style === audience_style);
+      if (!version) {
+        const { data: dbVersion } = await supabase
+          .from('page_versions' as any)
+          .select('id')
+          .eq('page_id', page.id)
+          .eq('language', language)
+          .eq('audience_style', audience_style)
+          .single();
+        if (!dbVersion) throw new Error('Version row not found — try refreshing the page');
+        version = dbVersion as PageVersion;
+      }
       await supabase
         .from('page_versions' as any)
         .update({ content: data.content, updated_at: new Date().toISOString() })
