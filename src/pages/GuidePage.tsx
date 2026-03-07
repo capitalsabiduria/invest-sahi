@@ -347,46 +347,31 @@ export default function GuidePage() {
         </a>
       </div>
 
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#F5EDD8] border-b border-[#E8820C]/20 px-4 md:px-8 py-3 flex items-center justify-between">
-        <Link to="/" className="text-xl font-heading font-bold">
-          <span style={{ color: '#E8820C' }}>Invest</span>
-          <span style={{ color: '#2C1810' }}>Sahi</span>
-          <span style={{ color: '#1B6B3A', fontSize: '0.6em' }}>.in</span>
-        </Link>
-        <Link to={BOOKING_FORM_URL}
-          className="bg-[#E8820C] text-white font-body text-sm px-4 py-3 rounded-lg hover:bg-[#C45C00] transition-colors">
-          <span className="sm:hidden">Book a Call →</span>
-          <span className="hidden sm:inline">Book a Free Call →</span>
-        </Link>
-      </header>
-
-      <main className="pt-16 pb-20 md:pb-0" lang={language}>
-
-        {/* Desktop dismissable language pill */}
-        {!pillDismissed && !scrolledPast && (
-          <div className="hidden md:flex items-center gap-2 mb-4 justify-end px-4 pt-4 max-w-4xl mx-auto">
-            <a
-              href={otherLangUrl}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
-              style={{ background: '#F5EDD8', color: '#1A6B9A', border: '1px solid #1A6B9A33' }}
-            >
-              {isOdia ? 'Read in English →' : 'ଓଡ଼ିଆରେ ପଢ଼ନ୍ତୁ →'}
-            </a>
-            <button
-              onClick={dismissPill}
-              className="text-stone/40 hover:text-stone/70 transition-colors text-xs leading-none"
-              aria-label="Dismiss"
-            >
-              ×
-            </button>
-          </div>
-        )}
+      <main className="pb-20 md:pb-0" lang={language}>
 
         {/* Hero */}
-        <section className="bg-[#F5EDD8] py-12 md:py-24 px-4 md:px-8 min-h-[60vh] flex items-center">
+        <section className="bg-[#F5EDD8] py-12 md:py-16 px-4 md:px-8">
           <div className="max-w-6xl mx-auto w-full flex flex-col md:flex-row items-center gap-10">
             <div className="flex-1">
+              {/* Desktop dismissable language pill */}
+              {!pillDismissed && !scrolledPast && (
+                <div className="hidden md:flex items-center gap-2 mb-3 justify-end">
+                  <a
+                    href={otherLangUrl}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
+                    style={{ background: '#F5EDD8', color: '#1A6B9A', border: '1px solid #1A6B9A33' }}
+                  >
+                    {isOdia ? 'Read in English →' : 'ଓଡ଼ିଆରେ ପଢ଼ନ୍ତୁ →'}
+                  </a>
+                  <button
+                    onClick={dismissPill}
+                    className="text-stone/40 hover:text-stone/70 transition-colors text-xs leading-none"
+                    aria-label="Dismiss"
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
               <h1 className="font-heading font-bold text-3xl md:text-5xl text-[#2C1810] leading-tight mb-4">
                 {content.hero_headline}
               </h1>
@@ -428,8 +413,8 @@ export default function GuidePage() {
         </section>
 
         {/* Services ribbon */}
-        <div className="w-full py-3 px-4 border-b border-stone/10 bg-white">
-          <div className="max-w-4xl mx-auto flex flex-wrap gap-2 items-center">
+        <div className="w-full py-3 border-b border-stone/10 bg-white">
+          <div className="max-w-4xl mx-auto px-4 flex flex-wrap gap-2 items-center">
             <span className="text-xs text-stone/40 font-medium mr-1">Our services:</span>
             {[
               'SIP & Mutual Funds',
