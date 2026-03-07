@@ -138,7 +138,7 @@ const LearnCTA = ({ slug, category, lang }: { slug: string; category: string | n
         </div>
       </div>
       <div className="bg-stone/5 border border-stone/10 px-6 py-3 flex flex-wrap items-center justify-center gap-4 text-xs text-stone/50">
-        <span>✓ {isOdia ? 'SEBI Registered' : 'SEBI Registered Advisor'}</span>
+        <span>✓ SEBI Compliant</span>
         <span>✓ {isOdia ? 'ବିନାମୂଲ୍ୟ ପ୍ରଥମ Call' : 'First call is free'}</span>
         <span>✓ {isOdia ? 'କୌଣସି Hidden Charge ନାହିଁ' : 'No hidden charges'}</span>
         <span>✓ {isOdia ? 'Bhubaneswar ରେ Office' : 'Office in Bhubaneswar'}</span>

@@ -450,7 +450,7 @@ export default function GuidePage() {
             </div>
             <p className="font-body text-[#2C1810] mb-6 max-w-xl mx-auto">{content.trust_note}</p>
             <div className="flex flex-wrap justify-center gap-4">
-              {['SEBI Registered', 'AMFI Certified', 'IRDAI Licensed'].map(badge => (
+              {['SEBI Compliant', 'AMFI Certified', 'IRDAI Licensed'].map(badge => (
                 <div key={badge} className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                     <circle cx="7" cy="7" r="6" fill="#1B6B3A" opacity="0.15" />

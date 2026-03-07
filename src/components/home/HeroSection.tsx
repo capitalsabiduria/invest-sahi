@@ -138,7 +138,7 @@ export const GrowthCard = () => {
 export const TrustCard = () => {
   const { t } = useTranslation();
   const items = [
-    t('hero.card3.item1', 'SEBI Registered'),
+    t('hero.card3.item1', 'SEBI Compliant'),
     t('hero.card3.item2', 'AMFI Certified'),
     t('hero.card3.item3', 'IRDAI Licensed'),
     t('hero.card3.item4', 'Zero Hidden Charges'),
