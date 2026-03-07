@@ -85,6 +85,38 @@ function SchemaMarkup({ page, content, baseSlug, currentUrl }: { page: SeoPage; 
   );
 }
 
+function buildWhatsAppUrl(slug: string | undefined, language: string): string {
+  const base = 'https://wa.me/919337370992';
+  if (!slug) return base;
+
+  let message: string;
+
+  if (slug.includes('how-much-sip-for-1-crore')) {
+    const cityRaw = slug.replace('how-much-sip-for-1-crore', '').replace(/^-/, '');
+    const city = cityRaw ? cityRaw.charAt(0).toUpperCase() + cityRaw.slice(1) : '';
+    if (language === 'or') {
+      message = city
+        ? `ନମସ୍କାର! ମୁଁ ${city}ରେ ₹1 କୋଟି SIP ଗାଇଡ୍ ଦେଖିଲି। ଆମ ଏକ ଯୋଜନା ବିଷୟରେ କଥା ହୁଅନ୍ତୁ।`
+        : `ନମସ୍କାର! ₹1 କୋଟି SIP ଯୋଜନା ବିଷୟରେ ଆଲୋଚନା କରିବାକୁ ଚାହୁଁଛି।`;
+    } else {
+      message = city
+        ? `Hi! I read your guide on how much SIP I need for ₹1 Crore in ${city}. Can we build a plan for me?`
+        : `Hi! I read your guide on how much SIP I need for ₹1 Crore. Can we build a plan for me?`;
+    }
+  } else {
+    const readable = slug
+      .replace(/-/g, ' ')
+      .replace(/\b\w/g, c => c.toUpperCase());
+    if (language === 'or') {
+      message = `ନମସ୍କାର! ମୁଁ InvestSahi ଗାଇଡ୍ ଦେଖିଲି (${readable})। ଅଧିକ ଜାଣିବାକୁ ଚାହୁଁଛି।`;
+    } else {
+      message = `Hi! I found your guide on "${readable}" at InvestSahi. I'd like to learn more about investing.`;
+    }
+  }
+
+  return `${base}?text=${encodeURIComponent(message)}`;
+}
+
 function LoadingSpinner() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#F5EDD8]">
@@ -275,7 +307,7 @@ export default function GuidePage() {
                 {content.hero_subline}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
+                <a href={buildWhatsAppUrl(baseSlug, language)} target="_blank" rel="noopener noreferrer"
                   className="w-full sm:w-auto text-center bg-[#E8820C] text-white font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#C45C00] transition-colors duration-200">
                   {t.heroCtaPrimary}
                 </a>
@@ -411,7 +443,7 @@ export default function GuidePage() {
                     <h3 className="font-heading font-bold text-[#2C1810] mb-2">{service.name}</h3>
                     <p className="font-body text-[#2C1810] opacity-75 text-sm leading-relaxed">{service.description}</p>
                   </div>
-                  <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
+                  <a href={buildWhatsAppUrl(baseSlug, language)} target="_blank" rel="noopener noreferrer"
                     className="mt-5 w-full text-center bg-[#F5EDD8] hover:bg-[#E8820C] text-[#E8820C] hover:text-white font-body text-sm font-semibold py-2.5 px-4 rounded-lg transition-colors duration-200 border border-[#E8820C]">
                     {t.bookConsultation}
                   </a>
@@ -480,7 +512,7 @@ export default function GuidePage() {
                 className="bg-white text-[#E8820C] font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#F5EDD8] transition-colors">
                 {t.bookCall}
               </Link>
-              <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
+              <a href={buildWhatsAppUrl(baseSlug, language)} target="_blank" rel="noopener noreferrer"
                 className="border-2 border-white text-white font-body px-6 py-3 rounded-lg hover:bg-white hover:text-[#E8820C] transition-colors">
                 {t.whatsapp}
               </a>
@@ -500,7 +532,7 @@ export default function GuidePage() {
       </main>
 
       {/* Mobile WhatsApp sticky bar */}
-      <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
+      <a href={buildWhatsAppUrl(baseSlug, language)} target="_blank" rel="noopener noreferrer"
         className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-[#1B6B3A] text-white font-body font-semibold text-base py-4 px-6 flex items-center justify-center gap-3 shadow-lg">
         <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
           <path d="M11 1C5.477 1 1 5.477 1 11c0 1.89.525 3.655 1.438 5.163L1 21l4.837-1.438A9.956 9.956 0 0011 21c5.523 0 10-4.477 10-10S16.523 1 11 1z" fill="white" opacity="0.2" stroke="white" strokeWidth="1.5"/>
