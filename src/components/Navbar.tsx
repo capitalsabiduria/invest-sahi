@@ -136,7 +136,7 @@ const Navbar = () => {
               className="hidden lg:flex items-center gap-1 font-heading font-semibold text-sm px-3 py-2 rounded-lg border transition-colors hover:bg-[#E8820C]/10"
               style={{ borderColor: '#E8820C', color: '#E8820C' }}
             >
-              Build ₹1 Crore
+              {t('nav.crorePlan', 'Build ₹1 Crore')}
             </Link>
             <div className="relative hidden lg:flex items-center">
               {/* Pulse rings — only render when showPulse is true */}
