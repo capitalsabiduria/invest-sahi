@@ -192,10 +192,10 @@ export default function GuidePage() {
     slimTagline: audience_style === 'pure_odia' ? 'ଓଡ଼ିଶାର ନିଜ Financial Services Platform' : "Odisha's Homegrown Financial Services Platform",
     servicesNav: audience_style === 'pure_odia' ? 'ସେବା' : 'Services',
     aboutNav: audience_style === 'pure_odia' ? 'ଆମ ବିଷୟରେ' : 'About',
-    serviceRibbonItems: audience_style
+    serviceRibbonItems: audience_style === 'pure_odia'
       ? ['SIP ଏବଂ Mutual Funds', 'Term Insurance', 'NPS ଏବଂ ଅବସର', 'Personal Loan', 'Fixed Deposit']
       : ['SIP & Mutual Funds', 'Term Insurance', 'NPS & Retirement', 'Personal Loan', 'Fixed Deposit'],
-    footerAboutItems: audience_style
+    footerAboutItems: audience_style === 'pure_odia'
       ? ['ଆମ କାହାଣୀ', 'ମିଟିଂ ବୁକ୍ କରନ୍ତୁ', 'ଟଙ୍କା ସ୍କୁଲ']
       : ['Our Story', 'Book a Meeting', 'Money School'],
   };
