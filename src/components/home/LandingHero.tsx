@@ -127,7 +127,7 @@ const LandingHero = ({ lang }: { lang: string }) => {
           </span>
 
           <div className="space-y-1">
-            <h1 className="font-body font-bold text-2xl md:text-4xl lg:text-[40px] leading-snug text-foreground">
+            <h1 className="font-body font-bold text-2xl md:text-4xl lg:text-[40px] leading-snug text-foreground mb-4">
               {t('landing.headline1', 'Most people wait until they\'re "rich enough" to start investing.')}
             </h1>
             <h2 className="font-body font-bold text-2xl md:text-4xl lg:text-[40px] leading-snug text-saffron">
