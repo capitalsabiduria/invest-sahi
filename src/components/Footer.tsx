@@ -35,7 +35,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="text-white" style={{ backgroundColor: '#1A2E1A' }}>
+    <footer className="text-white" style={{ backgroundColor: '#4A7C59' }}>
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Col 1 - Logo */}
@@ -70,7 +70,7 @@ const Footer = () => {
             </div>
             <div className="mt-3 rounded-xl overflow-hidden" style={{ height: '120px' }}>
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.3!2d85.8245!3d20.2961!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a190906f6c0a4b1%3A0x7b1b1b1b1b1b1b1b!2sNexus%20Esplanade%20Mall%2C%20Rasulgarh%2C%20Bhubaneswar%2C%20Odisha%20751010!5e0!3m2!1sen!2sin!4v1234567890"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.611!2d85.82145!3d20.28901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a190944e2c49b4f%3A0x6b2c3db49e43c6b5!2sNexus%20Esplanade%20Mall!5e0!3m2!1sen!2sin!4v1709123456789!5m2!1sen!2sin"
                 width="100%"
                 height="120"
                 style={{ border: 0 }}
