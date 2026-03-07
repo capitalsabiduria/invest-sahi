@@ -102,7 +102,7 @@ const LearnCTA = ({ slug, category, lang }: { slug: string; category: string | n
 
   const cta = getCTA();
   const bookingLink = `/${lang}/book`;
-  const whatsappLink = 'https://wa.me/917978987403';
+  const whatsappLink = 'https://wa.me/919337370992';
 
   return (
     <div className="mt-12 rounded-2xl overflow-hidden">
@@ -205,6 +205,14 @@ const LearnList = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title={currentLang === 'odia' || currentLang === 'or' ? 'ଅର୍ଥ ବିଦ୍ୟାଳୟ — Money School' : 'Money School — Financial Education in Odia & English'}
+        description={currentLang === 'odia' || currentLang === 'or'
+          ? 'ଓଡ଼ିଆ ଓ ଇଂରାଜୀରେ SIP, insurance, NPS, savings ବିଷୟରେ ଜ୍ଞାନ ଅର୍ଜନ କରନ୍ତୁ।'
+          : 'Learn about SIP, mutual funds, insurance, and savings in Odia and English. Guides, stories, and glossary from InvestSahi.'}
+        url={`/${currentLang}/learn`}
+        lang={currentLang as 'en' | 'or' | 'odia'}
+      />
       <Navbar />
 
       <section className="bg-background py-16 text-center">

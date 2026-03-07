@@ -97,7 +97,7 @@ Return ONLY this JSON structure with no other text:
     { "question": "second hyper-specific question", "answer": "2-3 sentence answer" },
     { "question": "third hyper-specific question", "answer": "2-3 sentence answer" }
   ],
-  "trust_note": "1-2 sentences about SEBI/AMFI/IRDAI regulation and transparent advisory (max 35 words)",
+  "trust_note": "DO NOT generate this field — it will be overridden by the server.",
   "cta_headline": "action-oriented headline specific to this audience (max 10 words)",
   "cta_subline": "warm encouraging closing line specific to this audience (max 20 words)"
 }
@@ -154,6 +154,13 @@ Every field must contain content that could only apply to this specific page. No
     if (!parsed.hero_headline || !parsed.why_section || !parsed.services || !parsed.faqs || !parsed.meta_description) {
       throw new Error('Generated content missing required fields');
     }
+
+    // Always hardcode trust_note — never allow AI to generate this legal claim
+    parsed.trust_note = (language === 'or' && audience_style === 'pure_odia')
+      ? 'InvestSahi SEBI Compliant ଏବଂ AMFI Certified ଅଟେ। ଆମେ ଓଡ଼ିଶାର ପ୍ରତ୍ୟେକ ପରିବାର ପାଇଁ ସ୍ୱଚ୍ଛ ଓ ନିଷ୍ପକ୍ଷ ଆର୍ଥିକ ପରାମର୍ଶ ଦେଇଥାଉ।'
+      : (language === 'or')
+      ? 'InvestSahi SEBI Compliant ଏବଂ AMFI Certified। ଆମେ ଓଡ଼ିଶାର ପ୍ରତ୍ୟେକ ପରିବାର ପାଇଁ ସ୍ୱଚ୍ଛ ଓ ନିରପେକ୍ଷ ଆର୍ଥିକ ପରାମର୍ଶ ଦେବାକୁ ପ୍ରତିବଦ୍ଧ।'
+      : 'InvestSahi is SEBI Compliant and AMFI Certified, committed to transparent, unbiased financial guidance for every family in Odisha.';
 
     return new Response(
       JSON.stringify({ content: parsed }),

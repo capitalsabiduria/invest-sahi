@@ -65,9 +65,9 @@ const JawanAvatar = () => (
 /* --- Stories data --- */
 
 const STORIES = [
-  { id: '1', categoryKey: 'stories.cat1', categoryColor: 'bg-saffron', nameKey: 'stories.name1', professionKey: 'stories.prof1', previewKey: 'stories.preview1', slug: 'story-1', Avatar: TeacherAvatar },
-  { id: '2', categoryKey: 'stories.cat2', categoryColor: 'bg-green', nameKey: 'stories.name2', professionKey: 'stories.prof2', previewKey: 'stories.preview2', slug: 'story-2', Avatar: DriverAvatar },
-  { id: '3', categoryKey: 'stories.cat3', categoryColor: 'bg-blue', nameKey: 'stories.name3', professionKey: 'stories.prof3', previewKey: 'stories.preview3', slug: 'story-3', Avatar: JawanAvatar },
+  { id: '1', categoryKey: 'stories.cat1', categoryColor: 'bg-saffron', nameKey: 'stories.name1', professionKey: 'stories.prof1', previewKey: 'stories.preview1', slug: 'mamata-savings-vs-sip', Avatar: TeacherAvatar },
+  { id: '2', categoryKey: 'stories.cat2', categoryColor: 'bg-green', nameKey: 'stories.name2', professionKey: 'stories.prof2', previewKey: 'stories.preview2', slug: 'rabi-auto-driver-sip', Avatar: DriverAvatar },
+  { id: '3', categoryKey: 'stories.cat3', categoryColor: 'bg-blue', nameKey: 'stories.name3', professionKey: 'stories.prof3', previewKey: 'stories.preview3', slug: 'sushanta-crpf-insurance', Avatar: JawanAvatar },
 ];
 
 const StoriesSection = ({ lang }: { lang: string }) => {
@@ -100,7 +100,7 @@ const StoriesSection = ({ lang }: { lang: string }) => {
                   <span className="text-xs border border-border rounded px-2 py-0.5 text-muted-foreground font-odia">ଓଡ଼ିଆ</span>
                 </div>
                 <Link to={`/${lang}/learn/${story.slug}`} className="text-sm text-saffron font-medium hover:underline">
-                  {t('stories.readMore', 'Read story')} →
+                  {t('stories.readMore', 'Read story →')}
                 </Link>
               </div>
             </RevealSection>
