@@ -31,9 +31,9 @@ const ServicesGrid = () => {
   const { lang } = useParams<{ lang: string }>();
   const currentLang = lang || 'en';
   return (
-    <section className="py-20" style={{ backgroundColor: '#F5F5F0' }}>
+    <section className="py-10 md:py-20" style={{ backgroundColor: '#F5F5F0' }}>
       <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <RevealSection className="text-center mb-12">
+        <RevealSection className="text-center mb-6 md:mb-12">
           <h2 className="font-heading font-bold text-3xl text-foreground">{t('servicesGrid.title', 'servicesGrid.title')}</h2>
           <p className="font-body text-muted-foreground mt-2">{t('servicesGrid.subtitle', 'servicesGrid.subtitle')}</p>
         </RevealSection>
@@ -50,8 +50,8 @@ const ServicesGrid = () => {
                   }
                   className="block group"
                 >
-                  <div className="bg-card rounded-xl border border-border p-5 hover:border-l-4 hover:border-l-saffron hover:shadow-md transition-all h-full group-hover:shadow-md group-hover:border-saffron cursor-pointer">
-                    <div className={`w-10 h-10 ${svc.iconBg} rounded-full flex items-center justify-center mb-3`}>
+                  <div className="bg-card rounded-xl border border-border p-3 md:p-5 hover:border-l-4 hover:border-l-saffron hover:shadow-md transition-all h-full group-hover:shadow-md group-hover:border-saffron cursor-pointer">
+                    <div className={`w-10 h-10 ${svc.iconBg} rounded-full flex items-center justify-center mb-2 md:mb-3`}>
                       <Icon className={svc.iconColor} size={20} />
                     </div>
                     <h3 className="font-heading font-semibold text-sm text-foreground">{t(svc.nameKey, svc.nameKey)}</h3>

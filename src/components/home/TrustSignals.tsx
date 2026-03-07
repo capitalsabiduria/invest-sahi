@@ -11,7 +11,7 @@ const TRUST_ITEMS = [
 const TrustSignals = () => {
   const { t } = useTranslation();
   return (
-    <section className="bg-background py-20">
+    <section className="bg-background py-10 md:py-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
         {TRUST_ITEMS.map((item, i) => (
           <RevealSection key={i} delay={i * 0.15} className="text-center">

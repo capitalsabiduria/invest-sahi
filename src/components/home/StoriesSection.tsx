@@ -73,9 +73,9 @@ const STORIES = [
 const StoriesSection = ({ lang }: { lang: string }) => {
   const { t } = useTranslation();
   return (
-    <section className="bg-background py-20">
+    <section className="bg-background py-10 md:py-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <RevealSection className="text-center mb-12">
+        <RevealSection className="text-center mb-6 md:mb-12">
           <h2 className="font-heading font-bold text-3xl md:text-[32px] text-foreground mb-1">{t('stories.heading.en', "Odisha's Money Stories")}</h2>
           <p className="font-body text-muted-foreground text-xl">{t('stories.heading.or', 'ଓଡ଼ିଶାର ଅର୍ଥ କଥା')}</p>
           <p className="font-body text-muted-foreground">{t('stories.subtitle', 'Real money stories from Odisha')}</p>
@@ -83,7 +83,7 @@ const StoriesSection = ({ lang }: { lang: string }) => {
         <div className="flex gap-6 overflow-x-auto md:overflow-visible pb-4 md:pb-0 snap-x snap-mandatory md:snap-none md:grid md:grid-cols-3">
           {STORIES.map((story, i) => (
             <RevealSection key={story.id} delay={i * 0.15} className="min-w-[300px] md:min-w-0 snap-start">
-              <div className="bg-card rounded-xl p-6 shadow-sm h-full flex flex-col">
+              <div className="bg-card rounded-xl p-4 md:p-6 shadow-sm h-full flex flex-col">
                 <div className="flex items-center gap-3 mb-3">
                   <story.Avatar />
                   <div>

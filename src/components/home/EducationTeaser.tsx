@@ -66,12 +66,12 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
   };
 
   return (
-    <section className="py-20" style={{ background: '#E8F5EE' }}>
+    <section className="py-10 md:py-20" style={{ background: '#E8F5EE' }}>
       <RevealSection>
         <div className="max-w-2xl mx-auto px-4" style={{ maxWidth: '680px' }}>
 
           {/* Heading */}
-          <div className="text-center mb-6">
+          <div className="text-center mb-4 md:mb-6">
             <span className="inline-block bg-[#1B6B3A] text-white text-xs font-medium px-3 py-1 rounded-full mb-4">
               {t('edu.tag', 'Most Popular Tool')}
             </span>
@@ -84,7 +84,7 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
           </div>
 
           {/* Institution pills */}
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
+          <div className="flex flex-wrap justify-center gap-2 mb-4 md:mb-8">
             {institutionPills.map((pill) => {
               const selected = institution === pill.name;
               return (
@@ -107,7 +107,7 @@ const EducationTeaser = ({ lang }: { lang: string }) => {
           </div>
 
           {/* Calculator card */}
-          <div ref={calcRef} className="bg-white rounded-2xl shadow-md px-8 py-8 mb-6">
+          <div ref={calcRef} className="bg-white rounded-2xl shadow-md px-4 py-5 md:px-8 md:py-8 mb-6">
             <h3 className="font-heading font-semibold text-lg text-foreground mb-5">
               {t('calc.quickEstimate', 'Quick Estimate')}
             </h3>

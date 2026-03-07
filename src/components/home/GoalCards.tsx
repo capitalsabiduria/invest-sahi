@@ -91,12 +91,12 @@ const GoalCards = ({ lang }: { lang: string }) => {
     card3: `/${lang}/services#retirement`,
   };
   return (
-    <section className="bg-card py-20">
+    <section className="bg-card py-10 md:py-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-6">
         {goalCards.map((card, i) => (
           <RevealSection key={i} delay={i * 0.15}>
-            <div className={`bg-card rounded-xl border-l-4 ${card.accent} p-6 shadow-sm h-full`}>
-              <div className="mb-4">
+            <div className={`bg-card rounded-xl border-l-4 ${card.accent} p-4 md:p-6 shadow-sm h-full`}>
+              <div className="mb-2 md:mb-4">
                 <card.Scene />
               </div>
               <h3 className="font-heading font-semibold text-xl text-foreground mb-2">{t(card.titleKey, card.titleKey)}</h3>
