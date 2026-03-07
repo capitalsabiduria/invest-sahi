@@ -111,13 +111,14 @@ function buildWhatsAppUrl(slug: string | undefined, language: string): string {
         : `Hi! I read your guide on how much SIP I need for ₹1 Crore. Can we build a plan for me?`;
     }
   } else {
-    const readable = slug
-      .replace(/-/g, ' ')
-      .replace(/\b\w/g, c => c.toUpperCase());
+    const readable =
+      slug
+        .replace(/-/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
     if (language === 'or') {
       message = `ନମସ୍କାର! ମୁଁ InvestSahi ଗାଇଡ୍ ଦେଖିଲି (${readable})। ଅଧିକ ଜାଣିବାକୁ ଚାହୁଁଛି।`;
     } else {
-      message = `Hi! I found your guide on "${readable}" at InvestSahi. I'd like to learn more about investing.`;
+      message = `Hi! I found your guide on \"${readable}\" at InvestSahi. I'd like to learn more about investing.`;
     }
   }
 
@@ -191,10 +192,10 @@ export default function GuidePage() {
     slimTagline: audience_style === 'pure_odia' ? 'ଓଡ଼ିଶାର ନିଜ Financial Services Platform' : "Odisha's Homegrown Financial Services Platform",
     servicesNav: audience_style === 'pure_odia' ? 'ସେବା' : 'Services',
     aboutNav: audience_style === 'pure_odia' ? 'ଆମ ବିଷୟରେ' : 'About',
-    serviceRibbonItems: audience_style === 'pure_odia'
+    serviceRibbonItems: audience_style
       ? ['SIP ଏବଂ Mutual Funds', 'Term Insurance', 'NPS ଏବଂ ଅବସର', 'Personal Loan', 'Fixed Deposit']
       : ['SIP & Mutual Funds', 'Term Insurance', 'NPS & Retirement', 'Personal Loan', 'Fixed Deposit'],
-    footerAboutItems: audience_style === 'pure_odia'
+    footerAboutItems: audience_style
       ? ['ଆମ କାହାଣୀ', 'ମିଟିଂ ବୁକ୍ କରନ୍ତୁ', 'ଟଙ୍କା ସ୍କୁଲ']
       : ['Our Story', 'Book a Meeting', 'Money School'],
   };
@@ -205,7 +206,6 @@ export default function GuidePage() {
     if (!slug) return;
 
     async function fetchPage() {
-      // Get base page
       const { data: pageData, error: pageError } = await supabase
         .from('seo_pages')
         .select('id, title, meta_description, type, slug')
@@ -218,7 +218,6 @@ export default function GuidePage() {
         return;
       }
 
-      // Get specific version
       const { data: versionData, error: versionError } = await supabase
         .from('page_versions')
         .select('content, status, view_count')
@@ -276,32 +275,11 @@ export default function GuidePage() {
       />
       <SchemaMarkup page={page} content={content as GuideContent} baseSlug={baseSlug} />
 
-      {/* Sticky mini-navbar */}
+      {/* Sticky mini-navbar — Change 1: logo replaced */}
       <div className="sticky top-0 z-50 bg-[#FAF6EF] border-b border-stone/10 shadow-sm">
         <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
           <a href={`/${language}`} className="flex items-center gap-2">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <circle cx="14" cy="14" r="3" fill="#E8820C"/>
-              {[0,45,90,135,180,225,270,315].map((deg, i) => {
-                const len = i % 2 === 0 ? 9 : 5;
-                const rad = (deg * Math.PI) / 180;
-                return (
-                  <line
-                    key={deg}
-                    x1={14 + 4 * Math.cos(rad)}
-                    y1={14 + 4 * Math.sin(rad)}
-                    x2={14 + (4 + len) * Math.cos(rad)}
-                    y2={14 + (4 + len) * Math.sin(rad)}
-                    stroke="#E8820C"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                );
-              })}
-            </svg>
-            <span className="font-heading font-semibold text-base" style={{ color: '#2C1810' }}>
-              <span style={{ color: '#E8820C' }}>Invest</span>Sahi
-            </span>
+            <img src="/investsahi-logo.png" alt="InvestSahi" className="h-8 w-auto" />
           </a>
           <div className="flex items-center gap-3">
             <a
@@ -320,7 +298,7 @@ export default function GuidePage() {
               style={{ background: '#25D366' }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347" />
               </svg>
               <span>{t.whatsapp}</span>
             </a>
@@ -338,7 +316,7 @@ export default function GuidePage() {
 
       <main className="pb-0" lang={language}>
 
-        {/* Hero */}
+        {/* Hero — Change 3: trust card replaces SVG */}
         <section className="bg-[#F5EDD8] py-12 md:py-16 px-4 md:px-8">
           <div className="max-w-6xl mx-auto w-full flex flex-col md:flex-row items-center gap-10">
             <div className="flex-1">
@@ -368,16 +346,30 @@ export default function GuidePage() {
                 )}
               </div>
             </div>
-            <div className="flex-shrink-0 opacity-15">
-              <svg width="160" height="160" viewBox="0 0 180 180" fill="none">
-                <circle cx="90" cy="90" r="12" fill="#E8820C" />
-                {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
-                  <line key={i} x1="90" y1="22" x2="90" y2={i % 2 === 0 ? "38" : "32"}
-                    stroke="#E8820C" strokeWidth="3" strokeLinecap="round"
-                    transform={`rotate(${angle} 90 90)`} />
-                ))}
-                <circle cx="90" cy="90" r="70" stroke="#E8820C" strokeWidth="2" fill="none" />
-              </svg>
+            <div className="flex-shrink-0 w-full md:w-auto">
+              <div className="bg-white rounded-xl shadow-md p-5 max-w-xs mx-auto md:mx-0">
+                <p className="font-heading text-sm text-[#6B7280] mb-4">SIP Growth at a Glance</p>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-sm font-body">
+                    <span className="text-[#2C1810]">₹500/mo</span>
+                    <span className="text-[#6B7280] text-xs">After 5 yrs</span>
+                    <span className="text-[#1B6B3A] font-semibold">₹41,000</span>
+                  </div>
+                  <div className="h-px bg-[#E5E7EB]" />
+                  <div className="flex items-center justify-between text-sm font-body">
+                    <span className="text-[#2C1810]">₹1,500/mo</span>
+                    <span className="text-[#6B7280] text-xs">After 10 yrs</span>
+                    <span className="text-[#1B6B3A] font-semibold">₹2,32,000</span>
+                  </div>
+                  <div className="h-px bg-[#E5E7EB]" />
+                  <div className="flex items-center justify-between text-sm font-body">
+                    <span className="text-[#2C1810]">₹2,500/mo</span>
+                    <span className="text-[#6B7280] text-xs">After 20 yrs</span>
+                    <span className="text-[#E8820C] font-bold">₹1.08 crore</span>
+                  </div>
+                </div>
+                <p className="font-body text-[10px] text-[#6B7280] italic mt-4">12% p.a. illustrative. Not guaranteed.</p>
+              </div>
             </div>
           </div>
         </section>
@@ -399,22 +391,24 @@ export default function GuidePage() {
           </div>
         </div>
 
-        {/* Story */}
+        {/* Story — Change 4: blockquote card */}
         {content.story_paragraph && (
           <section className="bg-white py-14 px-4 md:px-8">
             <div className="max-w-3xl mx-auto">
-              <div className="flex items-start gap-4">
-                <div className="text-6xl text-[#E8820C] opacity-20 font-serif leading-none flex-shrink-0 mt-[-8px]">"</div>
-                <div>
-                  <p className="font-body text-lg text-[#2C1810] leading-relaxed italic">{content.story_paragraph}</p>
-                  <p className="font-body text-sm text-[#2C1810] opacity-50 mt-3">{t.storyAttribution}</p>
+              <div className="bg-[#FFFDF9] border-l-4 border-[#E8820C] rounded-r-xl px-6 py-5">
+                <div className="flex items-start gap-4">
+                  <div className="text-6xl text-[#E8820C] opacity-30 font-serif leading-none flex-shrink-0 mt-[-8px]">"</div>
+                  <div>
+                    <p className="font-body text-lg text-[#2C1810] leading-relaxed italic">{content.story_paragraph}</p>
+                    <p className="font-body text-sm text-[#2C1810] opacity-50 mt-3">{t.storyAttribution}</p>
+                  </div>
                 </div>
               </div>
             </div>
           </section>
         )}
 
-        {/* Case Study */}
+        {/* Case Study — Change 5: colored left borders */}
         {content.case_study && (
           <section className="bg-[#F5EDD8] py-14 px-4 md:px-8">
             <div className="max-w-3xl mx-auto">
@@ -425,8 +419,8 @@ export default function GuidePage() {
                   { label: t.whatWeDid, text: content.case_study.strategy, color: '#1A6B9A' },
                   { label: t.result, text: content.case_study.result, color: '#1B6B3A' },
                 ].map(item => (
-                  <div key={item.label} className="bg-white rounded-xl p-6 shadow-sm">
-                    <div className="font-heading font-bold text-sm mb-2" style={{ color: item.color }}>{item.label}</div>
+                  <div key={item.label} className="bg-white rounded-xl p-6 shadow-sm" style={{ borderLeft: `4px solid ${item.color}` }}>
+                    <div className="font-heading font-bold text-xs uppercase tracking-wider mb-2" style={{ color: item.color }}>{item.label}</div>
                     <p className="font-body text-[#2C1810] text-sm leading-relaxed">{item.text}</p>
                   </div>
                 ))}
@@ -454,15 +448,15 @@ export default function GuidePage() {
           </section>
         )}
 
-        {/* Why Section */}
+        {/* Why Section — Change 6: bigger icons + hover */}
         <section className="bg-[#F5EDD8] py-14 px-4 md:px-8">
           <div className="max-w-4xl mx-auto">
             <h2 className="font-heading font-bold text-2xl md:text-3xl text-[#2C1810] text-center mb-10">{content.why_section.heading}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {content.why_section.points.map((point, i) => (
-                <div key={i} className="bg-white rounded-xl p-6 shadow-sm">
-                  <div className="w-8 h-8 rounded-full bg-[#1B6B3A]/10 flex items-center justify-center mb-3">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <div key={i} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                  <div className="w-10 h-10 rounded-full bg-[#1B6B3A]/10 flex items-center justify-center mb-3">
+                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
                       <path d="M3 8l3.5 3.5L13 4.5" stroke="#1B6B3A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
@@ -512,7 +506,7 @@ export default function GuidePage() {
           </div>
         </section>
 
-        {/* FAQs */}
+        {/* FAQs — Change 7: smooth transition */}
         {content.faqs && content.faqs.length > 0 && (
           <section className="bg-white py-14 px-4 md:px-8">
             <div className="max-w-3xl mx-auto">
@@ -525,8 +519,10 @@ export default function GuidePage() {
                       <span className="font-body font-semibold text-sm md:text-base text-[#2C1810] pr-4">{faq.question}</span>
                       <span className="text-[#E8820C] flex-shrink-0 text-xl font-bold">{openFaq === i ? '−' : '+'}</span>
                     </button>
-                    <div className={`px-4 py-4 bg-white transition-all ${openFaq === i ? 'block' : 'hidden'}`}>
-                      <p className="font-body text-[#2C1810] opacity-80 leading-relaxed text-sm">{faq.answer}</p>
+                    <div className={`overflow-hidden transition-all duration-300 ease-in-out ${openFaq === i ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                      <div className="px-4 py-4 bg-white">
+                        <p className="font-body text-[#2C1810] opacity-80 leading-relaxed text-sm">{faq.answer}</p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -559,18 +555,30 @@ export default function GuidePage() {
           </div>
         </section>
 
-        {/* Trust bar */}
+        {/* Trust bar — Change 8: SVG icons replace emojis */}
         <div className="w-full py-4 px-4 rounded-xl mt-8" style={{ background: '#F5EDD8' }}>
           <div className="max-w-4xl mx-auto flex flex-wrap gap-4 justify-center items-center text-center">
             {[
-              { icon: '🛡️', label: 'SEBI Compliant', sub: 'AMFI ARN: 322625' },
-              { icon: '📍', label: 'Bhubaneswar Office', sub: '604A, 6th Floor, Nexus Esplanade Mall' },
-              { icon: '🇮🇳', label: 'Odisha-first', sub: 'Serving families in Odisha' },
-              { icon: '💬', label: 'Odia & English', sub: 'Your language, your comfort' },
+              {
+                icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8820C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L4 7v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V7l-8-5z"/><path d="M9 12l2 2 4-4"/></svg>,
+                label: 'SEBI Compliant', sub: 'AMFI ARN: 322625'
+              },
+              {
+                icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8820C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>,
+                label: 'Bhubaneswar Office', sub: '604A, 6th Floor, Nexus Esplanade Mall'
+              },
+              {
+                icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8820C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>,
+                label: 'Odisha-first', sub: 'Serving families in Odisha'
+              },
+              {
+                icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8820C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>,
+                label: 'Odia & English', sub: 'Your language, your comfort'
+              },
             ].map(({ icon, label, sub }) => (
               <div key={label} className="flex flex-col items-center gap-0.5 min-w-[120px]">
-                <span className="text-xl">{icon}</span>
-                <span className="text-xs font-semibold text-stone">{label}</span>
+                {icon}
+                <span className="text-xs font-semibold text-stone mt-1">{label}</span>
                 <span className="text-[10px] text-stone/50">{sub}</span>
               </div>
             ))}
@@ -595,25 +603,15 @@ export default function GuidePage() {
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="bg-[#F5EDD8] py-8 px-4 md:px-8">
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="font-body text-xs text-[#2C1810] opacity-60 mb-1 break-words">© {new Date().getFullYear()} InvestSahi · Part of Sabiduria Capital Group</p>
-            <p className="font-body text-xs text-[#2C1810] opacity-60 mb-1 break-words">{BRAND.registration.amfi_arn} · IRDAI Reg: {BRAND.registration.irdai_reg}</p>
-            <p className="font-body text-xs text-[#2C1810] opacity-50 break-words">{BRAND.address.full} · Based in Bhubaneswar. Serving all of Odisha — in person and online.</p>
-          </div>
-        </footer>
-
       </main>
 
-
-      {/* Slim footer */}
-      <footer className="w-full mt-12 py-8 px-4" style={{ background: '#2C1810' }}>
+      {/* Change 9: Single dark footer with compliance lines merged */}
+      <footer className="w-full py-8 px-4" style={{ background: '#2C1810' }}>
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-wrap justify-between gap-6 mb-6">
             <div>
-              <div className="text-white font-heading font-semibold text-base mb-1">
-                <span style={{ color: '#E8820C' }}>Invest</span>Sahi
+              <div className="mb-1">
+                <img src="/investsahi-logo.png" alt="InvestSahi" className="h-7 w-auto brightness-0 invert" />
               </div>
               <p className="text-xs text-white/50">{t.slimTagline}</p>
               <a
@@ -645,10 +643,11 @@ export default function GuidePage() {
               </div>
             </div>
           </div>
-          <div className="border-t border-white/10 pt-4 text-[10px] text-white/30 text-center">
-            © 2026 InvestSahi · AMFI ARN: 322625 · Part of Sabiduria Capital Group
-            <br />
-            Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully.
+          <div className="border-t border-white/10 pt-4 text-[10px] text-white/30 text-center space-y-1">
+            <p>© {new Date().getFullYear()} InvestSahi · Part of Sabiduria Capital Group</p>
+            <p>{BRAND.registration.amfi_arn} · IRDAI Reg: {BRAND.registration.irdai_reg}</p>
+            <p>{BRAND.address.full} · Based in Bhubaneswar. Serving all of Odisha — in person and online.</p>
+            <p className="mt-2">Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully.</p>
           </div>
         </div>
       </footer>

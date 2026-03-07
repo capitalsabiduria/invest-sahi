@@ -855,7 +855,7 @@ const SeoManager = () => {
           .eq('audience_style', audience_style)
           .single();
         if (!dbVersion) throw new Error('Version row not found — try refreshing the page');
-        version = dbVersion as PageVersion;
+        version = dbVersion as unknown as PageVersion;
       }
       await supabase
         .from('page_versions' as any)

@@ -77,6 +77,7 @@ export type Database = {
           property_city: string | null
           property_type: string | null
           retire_age: number | null
+          source: string | null
           step_up: boolean | null
           target_institution: string | null
           timeline_years: number | null
@@ -100,6 +101,7 @@ export type Database = {
           property_city?: string | null
           property_type?: string | null
           retire_age?: number | null
+          source?: string | null
           step_up?: boolean | null
           target_institution?: string | null
           timeline_years?: number | null
@@ -123,6 +125,7 @@ export type Database = {
           property_city?: string | null
           property_type?: string | null
           retire_age?: number | null
+          source?: string | null
           step_up?: boolean | null
           target_institution?: string | null
           timeline_years?: number | null
@@ -185,6 +188,51 @@ export type Database = {
           title_en?: string | null
           title_or?: string | null
           type?: string
+        }
+        Relationships: []
+      }
+      crore_plan_leads: {
+        Row: {
+          created_at: string | null
+          current_age: number
+          id: string
+          monthly_investment: number
+          name: string | null
+          phone: string | null
+          preferred_contact: string | null
+          projected_corpus: number | null
+          source: string | null
+          status: string | null
+          target_corpus: number
+          years_to_goal: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_age: number
+          id?: string
+          monthly_investment: number
+          name?: string | null
+          phone?: string | null
+          preferred_contact?: string | null
+          projected_corpus?: number | null
+          source?: string | null
+          status?: string | null
+          target_corpus: number
+          years_to_goal?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          current_age?: number
+          id?: string
+          monthly_investment?: number
+          name?: string | null
+          phone?: string | null
+          preferred_contact?: string | null
+          projected_corpus?: number | null
+          source?: string | null
+          status?: string | null
+          target_corpus?: number
+          years_to_goal?: number | null
         }
         Relationships: []
       }
