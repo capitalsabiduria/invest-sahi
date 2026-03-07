@@ -279,12 +279,19 @@ export default function GuidePage() {
                   className="w-full sm:w-auto text-center bg-[#E8820C] text-white font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#C45C00] transition-colors duration-200">
                   {t.heroCtaPrimary}
                 </a>
-                <button
-                  onClick={() => { window.location.href = `/${language}/calculator`; }}
-                  className="w-full sm:w-auto text-center border-2 border-[#1B6B3A] text-[#1B6B3A] font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#1B6B3A] hover:text-white transition-colors duration-200"
-                >
-                  {t.heroCtaSecondary}
-                </button>
+                {slug?.includes('how-much-sip-for-1-crore') ? (
+                  <a href={`/${language}/crore-plan`}
+                    className="w-full sm:w-auto text-center bg-[#E8820C] text-white font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#C45C00] transition-colors duration-200">
+                    Build ₹1 Crore. Find out how.
+                  </a>
+                ) : (
+                  <button
+                    onClick={() => { window.location.href = `/${language}/calculator`; }}
+                    className="w-full sm:w-auto text-center border-2 border-[#1B6B3A] text-[#1B6B3A] font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#1B6B3A] hover:text-white transition-colors duration-200"
+                  >
+                    {t.heroCtaSecondary}
+                  </button>
+                )}
               </div>
             </div>
             <div className="flex-shrink-0 opacity-15">
@@ -469,24 +476,14 @@ export default function GuidePage() {
             <h2 className="font-heading font-bold text-3xl text-white mb-3">{content.cta_headline}</h2>
             <p className="font-body text-white opacity-90 mb-8">{content.cta_subline}</p>
             <div className="flex flex-wrap justify-center gap-4">
-              {slug?.includes('how-much-sip-for-1-crore') ? (
-                <a href={`/${language}/crore-plan`}>
-                  <button className="bg-[#E8820C] hover:bg-[#C45C00] text-white font-semibold px-8 py-4 rounded-full text-lg transition-colors w-full sm:w-auto">
-                    Build ₹1 Crore. Find out how.
-                  </button>
-                </a>
-              ) : (
-                <>
-                  <Link to={BOOKING_FORM_URL}
-                    className="bg-white text-[#E8820C] font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#F5EDD8] transition-colors">
-                    {t.bookCall}
-                  </Link>
-                  <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
-                    className="border-2 border-white text-white font-body px-6 py-3 rounded-lg hover:bg-white hover:text-[#E8820C] transition-colors">
-                    {t.whatsapp}
-                  </a>
-                </>
-              )}
+              <Link to={BOOKING_FORM_URL}
+                className="bg-white text-[#E8820C] font-body font-semibold px-6 py-3 rounded-lg hover:bg-[#F5EDD8] transition-colors">
+                {t.bookCall}
+              </Link>
+              <a href={BRAND.social.whatsapp_link} target="_blank" rel="noopener noreferrer"
+                className="border-2 border-white text-white font-body px-6 py-3 rounded-lg hover:bg-white hover:text-[#E8820C] transition-colors">
+                {t.whatsapp}
+              </a>
             </div>
           </div>
         </section>
