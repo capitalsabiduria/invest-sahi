@@ -60,6 +60,7 @@ const App = () => (
             <Route path="/admin" element={<AdminAuthGate><Admin /></AdminAuthGate>} />
             <Route path="/en/:slug" element={<PageWrap><GuidePage /></PageWrap>} />
             <Route path="/or/:slug" element={<PageWrap><GuidePage /></PageWrap>} />
+            <Route path="/mi/:slug" element={<PageWrap><GuidePage /></PageWrap>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>

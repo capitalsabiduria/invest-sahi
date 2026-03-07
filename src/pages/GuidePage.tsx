@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useLocation, Link, useNavigate } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import { Helmet } from 'react-helmet-async';
 import { supabase } from "@/integrations/supabase/client";
 import { BRAND } from "@/constants/brand";
@@ -147,20 +147,16 @@ function NotFound() {
 export default function GuidePage() {
   const { slug } = useParams<{ slug: string }>();
   const location = useLocation();
-  const navigate = useNavigate();
   const [page, setPage] = useState<SeoPage | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [pillDismissed, setPillDismissed] = useState(() => {
-    try { return sessionStorage.getItem('odia-pill-dismissed') === '1'; } catch { return false; }
-  });
-  const [scrolledPast, setScrolledPast] = useState(false);
-
-  const isOdia = location.pathname.startsWith('/or/');
-  const language = isOdia ? 'or' : 'en';
-  const audience_style = isOdia ? 'pure_odia' : 'standard';
-  const baseSlug = slug!;
+  const isPureOdia = location.pathname.startsWith('/or/');
+  const isMixed    = location.pathname.startsWith('/mi/');
+  const isOdia     = isPureOdia || isMixed;
+  const language   = isOdia ? 'or' : 'en';
+  const audience_style = isPureOdia ? 'pure_odia' : isMixed ? 'mixed' : 'standard';
+  const baseSlug   = slug!;
   const otherLangUrl = isOdia ? `/en/${slug}` : `/or/${slug}`;
 
   const t = {
@@ -185,11 +181,6 @@ export default function GuidePage() {
   };
 
   const BOOKING_FORM_URL = `/${language}/book`;
-
-  const dismissPill = () => {
-    setPillDismissed(true);
-    try { sessionStorage.setItem('odia-pill-dismissed', '1'); } catch {}
-  };
 
   useEffect(() => {
     if (!slug) return;
@@ -241,7 +232,7 @@ export default function GuidePage() {
     const hreflangs = [
       { lang: 'en-IN', href: `https://investsahi.in/en/${baseSlug}` },
       { lang: 'or', href: `https://investsahi.in/or/${baseSlug}` },
-      { lang: 'or-IN', href: `https://investsahi.in/or/${baseSlug}-odia` },
+      { lang: 'or-IN', href: `https://investsahi.in/mi/${baseSlug}` },
       { lang: 'x-default', href: `https://investsahi.in/en/${baseSlug}` },
     ];
 
@@ -267,11 +258,6 @@ export default function GuidePage() {
     };
   }, [baseSlug, location.pathname]);
 
-  useEffect(() => {
-    const handler = () => setScrolledPast(window.scrollY > 400);
-    window.addEventListener('scroll', handler, { passive: true });
-    return () => window.removeEventListener('scroll', handler);
-  }, []);
 
   if (loading) return <LoadingSpinner />;
   if (notFound || !page) return <NotFound />;
@@ -323,18 +309,28 @@ export default function GuidePage() {
               <span style={{ color: '#E8820C' }}>Invest</span>Sahi
             </span>
           </a>
-          <a
-            href="https://wa.me/919337370992?text=Hi, I found InvestSahi and want to know more"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium text-white"
-            style={{ background: '#25D366' }}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
-            </svg>
-            <span className="hidden sm:inline">WhatsApp Us</span>
-          </a>
+          <div className="flex items-center gap-3">
+            <a
+              href={otherLangUrl}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
+              style={{ background: '#F5EDD8', color: '#1A6B9A', border: '1px solid #1A6B9A33' }}
+            >
+              <span className="sm:hidden">{isOdia ? 'EN' : 'ଓ'}</span>
+              <span className="hidden sm:inline">{isOdia ? 'Read in English →' : 'ଓଡ଼ିଆରେ ପଢ଼ନ୍ତୁ →'}</span>
+            </a>
+            <a
+              href="https://wa.me/919337370992?text=Hi, I found InvestSahi and want to know more"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium text-white"
+              style={{ background: '#25D366' }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
+              </svg>
+              <span>WhatsApp Us</span>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -346,31 +342,12 @@ export default function GuidePage() {
         </a>
       </div>
 
-      <main className="pb-20 md:pb-0" lang={language}>
+      <main className="pb-0" lang={language}>
 
         {/* Hero */}
         <section className="bg-[#F5EDD8] py-12 md:py-16 px-4 md:px-8">
           <div className="max-w-6xl mx-auto w-full flex flex-col md:flex-row items-center gap-10">
             <div className="flex-1">
-              {/* Desktop dismissable language pill */}
-              {!pillDismissed && !scrolledPast && (
-                <div className="hidden md:flex items-center gap-2 mb-3 justify-end">
-                  <a
-                    href={otherLangUrl}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
-                    style={{ background: '#F5EDD8', color: '#1A6B9A', border: '1px solid #1A6B9A33' }}
-                  >
-                    {isOdia ? 'Read in English →' : 'ଓଡ଼ିଆରେ ପଢ଼ନ୍ତୁ →'}
-                  </a>
-                  <button
-                    onClick={dismissPill}
-                    className="text-stone/40 hover:text-stone/70 transition-colors text-xs leading-none"
-                    aria-label="Dismiss"
-                  >
-                    ×
-                  </button>
-                </div>
-              )}
               <h1 className="font-heading font-bold text-3xl md:text-5xl text-[#2C1810] leading-tight mb-4">
                 {content.hero_headline}
               </h1>
@@ -643,23 +620,6 @@ export default function GuidePage() {
 
       </main>
 
-      {/* Mobile FABs: Language + WhatsApp */}
-      <div className="fixed bottom-4 right-4 z-50 md:hidden flex items-center gap-3">
-        <button
-          onClick={() => navigate(otherLangUrl)}
-          className="w-14 h-14 rounded-full text-white text-sm font-semibold shadow-lg flex items-center justify-center"
-          style={{ background: '#1A6B9A' }}
-        >
-          {isOdia ? 'EN' : 'ଓ'}
-        </button>
-        <a href={buildWhatsAppUrl(baseSlug, language)} target="_blank" rel="noopener noreferrer"
-          className="w-14 h-14 rounded-full bg-[#1B6B3A] text-white font-body font-semibold shadow-lg flex items-center justify-center">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-            <path d="M11 1C5.477 1 1 5.477 1 11c0 1.89.525 3.655 1.438 5.163L1 21l4.837-1.438A9.956 9.956 0 0011 21c5.523 0 10-4.477 10-10S16.523 1 11 1z" fill="white" opacity="0.2" stroke="white" strokeWidth="1.5"/>
-            <path d="M7.5 8.5c.5 1 1.5 2.5 3 3.5s2.5 1.5 3 1.5c.3-.5.8-1.5.5-2-.5-.5-1.5-.5-1.5-.5s-.5 0-1 .5c-.3-.3-1-1-1.5-1.5-.5-.5-.5-1-.5-1s0-1-.5-1.5c-.5-.3-1.5 0-2 .5-.3.5 0 1.5 0 1.5z" fill="white"/>
-          </svg>
-        </a>
-      </div>
 
       {/* Slim footer */}
       <footer className="w-full mt-12 py-8 px-4" style={{ background: '#2C1810' }}>
