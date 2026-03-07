@@ -155,7 +155,7 @@ const About = () => {
             <p className="font-body text-foreground text-base leading-relaxed mb-3">
               {currentLang === 'or'
                 ? 'ଆମେ ଜାଣୁ ଅନେକ ଓଡ଼ିଆ ପରିବାର ଭୁଲ ନିଷ୍ପତ୍ତି ଏବଂ ଖରାପ ପରାମର୍ଶ ଯୋଗୁ ସଞ୍ଚୟ ହଜାଇଛନ୍ତି। ଆମେ ଏହା ଅସ୍ୱୀକାର କରୁ ନାହୁଁ।'
-                : 'We know many Odia families lost savings due to poor advice and wrong financial decisions. We do not pretend that did not happen.'}
+                : 'We know many families in Odisha lost savings due to poor advice and wrong financial decisions. We do not pretend that did not happen.'}
             </p>
             <p className="font-body text-foreground text-base leading-relaxed mb-3">
               {currentLang === 'or'
