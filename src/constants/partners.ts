@@ -1,18 +1,18 @@
 export const mutualFundLogos = [
-  { name: 'SBI Mutual Fund', src: 'https://github.com/capitalsabiduria/invest-sahi/blob/main/src/constants/SBI-Mutual-Fund-Logo.jpg' },
-  { name: 'HDFC Mutual Fund', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/HDFC_Bank_Logo.svg/200px-HDFC_Bank_Logo.svg.png' },
-  { name: 'ICICI Prudential', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/ICICI_Bank_Logo.svg/200px-ICICI_Bank_Logo.svg.png' },
-  { name: 'Nippon India', src: 'https://www.nipponindiamf.com/images/logo.png' },
-  { name: 'Axis Mutual Fund', src: 'https://www.axismf.com/assets/images/logo.png' },
-  { name: 'Mirae Asset', src: 'https://www.miraeassetmf.co.in/images/logo.png' },
-  { name: 'Parag Parikh', src: 'https://www.ppfas.com/images/logo.png' },
+  { name: 'SBI Mutual Fund', src: '/partners/sbi-mf.svg' },
+  { name: 'HDFC Mutual Fund', src: '/partners/hdfc-mf.svg' },
+  { name: 'ICICI Prudential', src: '/partners/icici-mf.svg' },
+  { name: 'Nippon India', src: '/partners/nippon-mf.svg' },
+  { name: 'Axis Mutual Fund', src: '/partners/axis-mf.svg' },
+  { name: 'Mirae Asset', src: '/partners/mirae-mf.svg' },
+  { name: 'Parag Parikh', src: '/partners/ppfas-mf.svg' },
 ];
 
 export const insuranceLogos = [
-  { name: 'HDFC Life', src: 'https://www.hdfclife.com/content/dam/hdfclifeinsurancecompany/logo.png' },
-  { name: 'SBI Life', src: 'https://www.sbilife.co.in/sites/SBILife/images/logo.png' },
-  { name: 'ICICI Prudential Life', src: 'https://www.iciciprulife.com/content/dam/icicipru/logo.png' },
-  { name: 'Star Health', src: 'https://www.starhealth.in/assets/images/logo.png' },
-  { name: 'Niva Bupa', src: 'https://www.nivabupa.com/images/logo.png' },
-  { name: 'Bajaj Allianz', src: 'https://www.bajajallianz.com/images/logo.png' },
+  { name: 'HDFC Life', src: '/partners/hdfc-life.svg' },
+  { name: 'SBI Life', src: '/partners/sbi-life.svg' },
+  { name: 'ICICI Prudential Life', src: '/partners/icici-life.svg' },
+  { name: 'Star Health', src: '/partners/star-health.svg' },
+  { name: 'Niva Bupa', src: '/partners/niva-bupa.svg' },
+  { name: 'Bajaj Allianz', src: '/partners/bajaj-allianz.svg' },
 ];

@@ -99,7 +99,7 @@ const StoriesSection = ({ lang }: { lang: string }) => {
                   <span className="text-xs border border-border rounded px-2 py-0.5 text-muted-foreground">EN</span>
                   <span className="text-xs border border-border rounded px-2 py-0.5 text-muted-foreground font-odia">ଓଡ଼ିଆ</span>
                 </div>
-                <Link to={`/${lang}/learn`} className="text-sm text-saffron font-medium hover:underline">
+                <Link to={`/${lang}/learn/${story.slug}`} className="text-sm text-saffron font-medium hover:underline">
                   {t('stories.readMore', 'Read story')} →
                 </Link>
               </div>
@@ -107,7 +107,7 @@ const StoriesSection = ({ lang }: { lang: string }) => {
           ))}
         </div>
         <div className="text-center mt-8">
-          <Link to={`/${lang}/learn`} className="text-sm font-medium text-saffron hover:underline">
+          <Link to={`/${lang}/learn?tab=stories`} className="text-sm font-medium text-saffron hover:underline">
             {t('stories.readAll', 'Read all stories')} →
           </Link>
         </div>
