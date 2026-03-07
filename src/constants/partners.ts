@@ -1,5 +1,5 @@
 export const mutualFundLogos = [
-  { name: 'SBI Mutual Fund', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/SBI_Mutual_Fund_Logo.svg/200px-SBI_Mutual_Fund_Logo.svg.png' },
+  { name: 'SBI Mutual Fund', src: 'https://github.com/capitalsabiduria/invest-sahi/blob/main/src/constants/sbi-mutual-fund-v1.avif' },
   { name: 'HDFC Mutual Fund', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/HDFC_Bank_Logo.svg/200px-HDFC_Bank_Logo.svg.png' },
   { name: 'ICICI Prudential', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/ICICI_Bank_Logo.svg/200px-ICICI_Bank_Logo.svg.png' },
   { name: 'Nippon India', src: 'https://www.nipponindiamf.com/images/logo.png' },
