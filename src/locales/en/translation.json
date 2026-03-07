@@ -57,7 +57,7 @@
     },
     "card3": {
       "title": "Protected & Regulated",
-      "item1": "AMFI Registered — ARN: XXXXXX",
+      "item1": "AMFI Registered — ARN: 322625",
       "item2": "Your money goes to SEBI-regulated funds, never to us",
       "item3": "Check your balance directly with the fund house anytime",
       "item4": "Physical office in Bhubaneswar — come visit us"
@@ -68,7 +68,7 @@
     "headline1": "Most people wait until they're \"rich enough\" to start investing.",
     "headline2": "InvestSahi was built right here in Odisha to prove them wrong.",
     "body": "Whether you're a teacher in Kendrapara funding your daughter's IIT dream, or an HR Manager in Bhubaneswar planning an early retirement — we give you the transparent, SEBI-registered roadmap to get there. Start with as little as ₹500 a month.",
-    "trust1": "SEBI Registered",
+    "trust1": "SEBI Compliant",
     "trust2": "AMFI Certified",
     "trust3": "IRDAI Licensed",
     "cta1": "Plan My Future →",
@@ -580,7 +580,7 @@
     },
     "reg": {
       "title": "Regulated & Registered",
-      "line1": "AMFI Registered — ARN: XXXXXX",
+      "line1": "AMFI Registered — ARN: 322625",
       "line2": "IRDAI Licensed",
       "note": "Your money goes to SEBI-regulated funds — never to us"
     },
@@ -657,11 +657,11 @@
       "group": "↗ Sabiduria Capital Group"
     },
     "rights": "All rights reserved.",
-    "copyright": "© 2026 InvestSahi | AMFI ARN: XXXXXX | IRDAI Reg: XXXXXX",
+    "copyright": "© 2026 InvestSahi | AMFI ARN: 322625 | IRDAI Reg: XXXXXX",
     "disclaimer": "Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully. InvestSahi is not a bank. Loans are subject to eligibility and credit assessment.",
     "learnInOdia.en": "Learn in Odia",
     "learnInOdia.or": "ଶିଖନ୍ତୁ",
-    "sebi": "SEBI Registered Investment Advisor"
+    "sebi": "SEBI Compliant"
   },
   "book": {
     "error": "Something went wrong. Please try again.",

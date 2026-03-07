@@ -73,7 +73,7 @@ const LandingHero = ({ lang }: { lang: string }) => {
   const { t } = useTranslation();
 
   const trustPills = [
-    t('landing.trust1', 'SEBI Registered'),
+    t('landing.trust1', 'SEBI Compliant'),
     t('landing.trust2', 'AMFI Certified'),
     t('landing.trust3', 'IRDAI Licensed'),
   ];
