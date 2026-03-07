@@ -1,5 +1,5 @@
 export const mutualFundLogos = [
-  { name: 'SBI Mutual Fund', src: '/partners/sbi-mf.svg' },
+  { name: 'SBI Mutual Fund', src: '/partners/SBI-Mutual-Fund-Logo.jpg' },
   { name: 'HDFC Mutual Fund', src: '/partners/hdfc-mf.svg' },
   { name: 'ICICI Prudential', src: '/partners/icici-mf.svg' },
   { name: 'Nippon India', src: '/partners/nippon-mf.svg' },
