@@ -159,9 +159,8 @@ export default function GuidePage() {
 
   const isOdia = location.pathname.startsWith('/or/');
   const language = isOdia ? 'or' : 'en';
-  const isOdiaFormal = slug?.endsWith('-odia');
-  const audience_style = !isOdia ? 'standard' : isOdiaFormal ? 'pure_odia' : 'mixed';
-  const baseSlug = isOdiaFormal ? slug!.replace(/-odia$/, '') : slug!;
+  const audience_style = isOdia ? 'pure_odia' : 'standard';
+  const baseSlug = slug!;
   const otherLangUrl = isOdia ? `/en/${slug}` : `/or/${slug}`;
 
   const t = {
