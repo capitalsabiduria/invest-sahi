@@ -157,10 +157,12 @@ export default function GuidePage() {
   });
   const [scrolledPast, setScrolledPast] = useState(false);
 
-  const isOdia = location.pathname.startsWith('/or/');
-  const language = isOdia ? 'or' : 'en';
-  const audience_style = isOdia ? 'pure_odia' : 'standard';
-  const baseSlug = slug!;
+  const isPureOdia = location.pathname.startsWith('/or/');
+  const isMixed    = location.pathname.startsWith('/mi/');
+  const isOdia     = isPureOdia || isMixed;
+  const language   = isOdia ? 'or' : 'en';
+  const audience_style = isPureOdia ? 'pure_odia' : isMixed ? 'mixed' : 'standard';
+  const baseSlug   = slug!;
   const otherLangUrl = isOdia ? `/en/${slug}` : `/or/${slug}`;
 
   const t = {
@@ -241,7 +243,7 @@ export default function GuidePage() {
     const hreflangs = [
       { lang: 'en-IN', href: `https://investsahi.in/en/${baseSlug}` },
       { lang: 'or', href: `https://investsahi.in/or/${baseSlug}` },
-      { lang: 'or-IN', href: `https://investsahi.in/or/${baseSlug}-odia` },
+      { lang: 'or-IN', href: `https://investsahi.in/mi/${baseSlug}` },
       { lang: 'x-default', href: `https://investsahi.in/en/${baseSlug}` },
     ];
 
