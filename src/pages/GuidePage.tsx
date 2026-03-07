@@ -152,7 +152,7 @@ export default function GuidePage() {
   const [notFound, setNotFound] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const isPureOdia = location.pathname.startsWith('/or/');
-  const isMixed    = location.pathname.startsWith('/mi/');
+  const isMixed    = location.pathname.startsWith('/odia/');
   const isOdia     = isPureOdia || isMixed;
   const language   = isOdia ? 'or' : 'en';
   const audience_style = isPureOdia ? 'pure_odia' : isMixed ? 'mixed' : 'standard';
@@ -232,7 +232,7 @@ export default function GuidePage() {
     const hreflangs = [
       { lang: 'en-IN', href: `https://investsahi.in/en/${baseSlug}` },
       { lang: 'or', href: `https://investsahi.in/or/${baseSlug}` },
-      { lang: 'or-IN', href: `https://investsahi.in/mi/${baseSlug}` },
+      { lang: 'or-IN', href: `https://investsahi.in/odia/${baseSlug}` },
       { lang: 'x-default', href: `https://investsahi.in/en/${baseSlug}` },
     ];
 
